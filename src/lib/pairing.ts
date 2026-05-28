@@ -33,14 +33,43 @@ const sameCategoryPenalty = (a: FontRecord, b: FontRecord) =>
 const widthClash = (a: FontRecord, b: FontRecord) =>
   a.width !== b.width && (a.width === "Condensed" || b.width === "Condensed") ? 8 : 0;
 
+const xhMap = { Low: 0, Medium: 1, High: 2, "Very high": 3 } as const;
+const contrastMap = { Low: 0, Medium: 1, High: 2, "Very high": 3 } as const;
+
+/** Two fonts are "too similar" when classification + subclassification +
+ * x-height + stroke contrast all line up — no hierarchy can emerge. */
+function similarityIndex(a: FontRecord, b: FontRecord): number {
+  let s = 0;
+  if (a.classification === b.classification) s += 3;
+  if (a.subclassification === b.subclassification) s += 3;
+  if (a.xHeight === b.xHeight) s += 1;
+  if (a.strokeContrast === b.strokeContrast) s += 1;
+  if (a.width === b.width) s += 1;
+  const sharedPersonality = a.personality.filter((p) => b.personality.includes(p)).length;
+  s += Math.min(2, sharedPersonality);
+  return s; // 0..11
+}
+
+/** Both fonts shouting in the same register = visual competition. */
+function competesForAttention(a: FontRecord, b: FontRecord): boolean {
+  return a.displayScore > 85 && b.displayScore > 85 && a.bodyTextScore < 70 && b.bodyTextScore < 70;
+}
+
+/** Generic guard: never propose a font as body/UI if it cannot perform there. */
+function unfitForSupport(secondary: FontRecord): boolean {
+  return (
+    secondary.classification === "Display" ||
+    secondary.bodyTextScore < 60 ||
+    secondary.readabilityScore < 70
+  );
+}
+
 function contrastScore(a: FontRecord, b: FontRecord) {
-  // formal contrast in classification + structure
   let s = 0;
   if (a.classification !== b.classification) s += 30;
-  const contrastMap = { Low: 0, Medium: 1, High: 2, "Very high": 3 } as const;
   s += Math.abs(contrastMap[a.strokeContrast] - contrastMap[b.strokeContrast]) * 8;
-  const xhMap = { Low: 0, Medium: 1, High: 2, "Very high": 3 } as const;
   s += Math.abs(xhMap[a.xHeight] - xhMap[b.xHeight]) * 4;
+  if (a.subclassification !== b.subclassification) s += 6;
   return s;
 }
 
@@ -48,19 +77,30 @@ function compatibilityScore(a: FontRecord, b: FontRecord) {
   let s = 100;
   s -= sameCategoryPenalty(a, b);
   s -= widthClash(a, b);
-  // both readable in their best roles
   s += (a.versatilityScore + b.versatilityScore) / 20;
+  // penalize near-twins (no hierarchy)
+  s -= similarityIndex(a, b) * 3;
+  // shared best-role overlap = redundant
+  const roleOverlap = a.bestRoles.filter((r) => b.bestRoles.includes(r)).length;
+  s -= roleOverlap * 4;
   return s;
 }
 
 function reliableScore(primary: FontRecord, secondary: FontRecord) {
-  // safe pair: differing categories, both readable, low risk
   let s = compatibilityScore(primary, secondary);
   s += secondary.readabilityScore / 4;
   s += secondary.bodyTextScore / 5;
+  s += secondary.uiScore / 8;
   if (secondary.pairingDifficulty === "Easy") s += 8;
   if (secondary.pairingDifficulty === "Hard") s -= 12;
-  if (secondary.classification === "Display") s -= 30; // displays aren't reliable seconds
+  if (secondary.classification === "Display") s -= 40;
+  if (secondary.readabilityScore < 75) s -= 20;
+  if (secondary.bodyTextScore < 75) s -= 12;
+  // weakRoles guard: never recommend body/UI if listed as weak
+  if (secondary.weakRoles.some((r) => /body|UI/i.test(r))) s -= 14;
+  // print/screen alignment helps system coherence
+  s -= Math.abs(primary.printScore - secondary.printScore) / 10;
+  s -= Math.abs(primary.screenScore - secondary.screenScore) / 10;
   return s;
 }
 
@@ -69,20 +109,25 @@ function editorialScore(primary: FontRecord, secondary: FontRecord) {
   s += contrastScore(primary, secondary) * 0.8;
   s += secondary.displayScore / 6;
   s += secondary.readabilityScore / 8;
+  // editorial benefits from a strong contrastTolerance
+  if (secondary.contrastTolerance === "High") s += 6;
   if (secondary.classification === "Display" && secondary.displayScore > 88) s += 10;
-  // editorial wants distinct categories
   if (primary.classification === secondary.classification) s -= 18;
+  // avoid two competing display voices
+  if (competesForAttention(primary, secondary)) s -= 20;
   return s;
 }
 
 function experimentalScore(primary: FontRecord, secondary: FontRecord) {
   let s = contrastScore(primary, secondary) * 1.2;
   s += secondary.displayScore / 5;
-  // reward strong personality / quirky character
   if (secondary.personality.some((p) => /expressive|characterful|quirky|retro|playful|warm/i.test(p))) s += 10;
   if (secondary.classification === "Display" || secondary.classification === "Mono") s += 8;
-  // mild penalty for boring neutrality
   if (secondary.personality.includes("neutral")) s -= 12;
+  // reward genuinely distinct sub-classification
+  if (primary.subclassification !== secondary.subclassification) s += 6;
+  // but still cap pure noise: if both fonts have <60 body/<60 ui, no usable hierarchy
+  if (secondary.bodyTextScore < 50 && primary.bodyTextScore < 50) s -= 10;
   return s;
 }
 
@@ -92,7 +137,8 @@ function pickRole(primary: FontRecord, secondary: FontRecord): [string, string] 
     primary.displayScore >= primary.bodyTextScore ? "Headlines & display" : "Body & primary text";
   let secondaryRole: string;
   if (secondary.classification === "Mono") secondaryRole = "Labels, captions, technical accents";
-  else if (secondary.bodyTextScore >= 85) secondaryRole = "Body text & long-form";
+  else if (secondary.bodyTextScore >= 85 && secondary.readabilityScore >= 80)
+    secondaryRole = "Body text & long-form";
   else if (secondary.uiScore >= 85) secondaryRole = "UI labels & interface text";
   else if (secondary.displayScore >= 85) secondaryRole = "Secondary headlines & subheads";
   else secondaryRole = "Supporting copy & metadata";
@@ -145,18 +191,57 @@ function buildPairing(
 ): Pairing {
   const [primaryRole, secondaryRole] = pickRole(primary, secondary);
   const sameCat = primary.classification === secondary.classification;
+  const similarity = similarityIndex(primary, secondary);
+  const competes = competesForAttention(primary, secondary);
+  const supportUnfit = unfitForSupport(secondary);
 
   let riskLevel: Pairing["riskLevel"];
   if (category === "Reliable System Pairing") riskLevel = sameCat ? "Medium" : "Low";
   else if (category === "Editorial Contrast Pairing") riskLevel = "Medium";
   else riskLevel = "High";
+  if (similarity >= 6) riskLevel = "High";
+  if (competes) riskLevel = "High";
 
   // normalize confidence to 0-100
-  const confidence = Math.max(40, Math.min(98, Math.round(rawScore)));
+  let confidence = Math.max(35, Math.min(98, Math.round(rawScore)));
+  if (similarity >= 6) confidence = Math.min(confidence, 55);
+  if (competes) confidence = Math.min(confidence, 50);
+  if (category === "Reliable System Pairing" && supportUnfit)
+    confidence = Math.min(confidence, 55);
 
   const contrastType = sameCat
     ? "Structural contrast within the same category"
     : `Category contrast — ${primary.classification.toLowerCase()} vs ${secondary.classification.toLowerCase()}`;
+
+  // base explanation, plus warnings appended when relevant
+  const warnings: string[] = [];
+  if (similarity >= 6) {
+    warnings.push(
+      `${primary.name} and ${secondary.name} share too many structural traits (classification, x-height and contrast) — hierarchy will not emerge from form alone, so it must be carried by size, weight and spacing.`,
+    );
+  }
+  if (competes) {
+    warnings.push(
+      `Both fonts behave as display voices with limited body-text performance — they compete for attention. Assign strict roles and keep one of them small.`,
+    );
+  }
+  if (category === "Reliable System Pairing" && supportUnfit) {
+    warnings.push(
+      `${secondary.name} is not a strong choice for body or UI text (readability ${secondary.readabilityScore}, body ${secondary.bodyTextScore}). Use a different secondary for system reliability.`,
+    );
+  }
+  if (
+    secondaryRole.startsWith("Body") &&
+    secondary.weakRoles.some((r) => /body/i.test(r))
+  ) {
+    warnings.push(
+      `${secondary.name} lists body text in its weak roles — avoid using it for long-form reading even if scores allow it.`,
+    );
+  }
+
+  const explanation =
+    explain(category, primary, secondary)! +
+    (warnings.length ? ` ⚠ ${warnings.join(" ")}` : "");
 
   return {
     name: `${primary.name} + ${secondary.name}`,
@@ -180,14 +265,35 @@ function buildPairing(
         : secondary.avoidContexts.slice(0, 2),
     riskLevel,
     confidence,
-    explanation: explain(category, primary, secondary)!,
+    explanation,
   };
 }
 
 export function buildRecommendations(primary: FontRecord): Pairing[] {
-  const reliable = rank(primary, reliableScore);
-  const editorial = rank(primary, editorialScore);
-  const experimental = rank(primary, experimentalScore);
+  // Pre-filter the universe to keep the recommendations defensible.
+  const reliablePool = FONTS.filter(
+    (f) =>
+      f.id !== primary.id &&
+      f.classification !== "Display" &&
+      f.readabilityScore >= 80 &&
+      f.bodyTextScore >= 70,
+  );
+  const editorialPool = FONTS.filter((f) => f.id !== primary.id);
+  const experimentalPool = FONTS.filter(
+    (f) => f.id !== primary.id && (f.displayScore >= 75 || f.classification === "Mono"),
+  );
+
+  const rankIn = (
+    pool: FontRecord[],
+    score: (a: FontRecord, b: FontRecord) => number,
+  ) =>
+    pool
+      .map((f) => ({ f, score: score(primary, f) }))
+      .sort((a, b) => b.score - a.score);
+
+  const reliable = rankIn(reliablePool.length ? reliablePool : FONTS.filter((f) => f.id !== primary.id), reliableScore);
+  const editorial = rankIn(editorialPool, editorialScore);
+  const experimental = rankIn(experimentalPool.length ? experimentalPool : editorialPool, experimentalScore);
 
   // pick top candidates, but avoid duplicates across the three slots
   const picked = new Set<string>();
