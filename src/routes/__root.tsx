@@ -72,11 +72,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "TypeMatch Studio — Typography pairing with design logic" },
+      {
+        name: "description",
+        content:
+          "Analyze free typefaces and build pairings based on contrast, legibility, hierarchy and context. No random matches.",
+      },
+      { name: "author", content: "TypeMatch Studio" },
+      { property: "og:title", content: "TypeMatch Studio" },
+      {
+        property: "og:description",
+        content:
+          "A professional analysis and pairing tool for free typefaces. Built on local typographic attributes, not random generators.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
@@ -85,6 +93,43 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: appCss,
+      },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href:
+          "https://fonts.googleapis.com/css2?" +
+          [
+            "family=Inter:wght@300;400;500;600;700",
+            "family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400",
+            "family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400",
+            "family=Roboto:wght@300;400;500;700",
+            "family=IBM+Plex+Sans:wght@300;400;500;600",
+            "family=Space+Grotesk:wght@400;500;600;700",
+            "family=DM+Sans:wght@400;500;700",
+            "family=Montserrat:wght@400;500;600;700",
+            "family=Work+Sans:wght@400;500;600;700",
+            "family=Manrope:wght@400;500;600;700",
+            "family=Archivo:wght@400;500;600;700",
+            "family=Public+Sans:wght@400;500;600;700",
+            "family=Source+Serif+4:wght@400;500;600;700",
+            "family=Libre+Baskerville:ital,wght@0,400;0,700;1,400",
+            "family=Merriweather:wght@400;700",
+            "family=Lora:ital,wght@0,400;0,500;0,600;1,400",
+            "family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700",
+            "family=IBM+Plex+Mono:wght@400;500;600",
+            "family=Space+Mono:wght@400;700",
+            "family=JetBrains+Mono:wght@400;500;700",
+            "family=Roboto+Mono:wght@400;500;700",
+            "family=Bebas+Neue&family=Archivo+Black&family=Oswald:wght@400;500;700&family=Anton",
+          ].join("&") +
+          "&display=swap",
+      },
+    ],
+    scripts: [
+      {
+        children: `(function(){try{var t=localStorage.getItem('tm-theme');var d=t?t==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.classList.add('dark');}catch(e){}})();`,
       },
     ],
   }),
