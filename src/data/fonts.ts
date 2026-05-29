@@ -1,6 +1,41 @@
 export type FontCategory = "Sans-serif" | "Serif" | "Mono" | "Display";
 export type Suitability = "Print" | "Screen" | "Both";
 
+export type Availability =
+  | "free"
+  | "open-source"
+  | "trial"
+  | "paid"
+  | "subscription"
+  | "inspiration-only";
+
+export type LicenseStatus = "safe" | "verify" | "license-required";
+
+export type SourceRole =
+  | "official-source"
+  | "marketplace"
+  | "inspiration"
+  | "directory"
+  | "implementation-reference";
+
+export type SourceType =
+  | "free-library"
+  | "open-source-foundry"
+  | "premium-foundry"
+  | "retail-marketplace"
+  | "subscription-library"
+  | "inspiration-platform"
+  | "directory";
+
+export type CatalogRole =
+  | "recommended-font"
+  | "premium-reference"
+  | "trial-reference"
+  | "inspiration-reference"
+  | "directory-reference";
+
+export type CommercialUse = true | false | "depends" | "requires license";
+
 export interface FontRecord {
   id: string;
   name: string;
@@ -8,7 +43,7 @@ export interface FontRecord {
   classification: FontCategory;
   subclassification: string;
   license: "Free";
-  sourceName: "Google Fonts" | "Fontshare" | "Fontsource" | "Official repository";
+  sourceName: string;
   sourceUrl: string;
   reference: string;
   personality: string[];
@@ -34,6 +69,22 @@ export interface FontRecord {
   avoidContexts: string[];
   /** Best fit medium derived from print/screen scores. */
   bestMedium: Suitability;
+  // ----- Extended licensing / catalogue metadata -----
+  foundry?: string;
+  availability?: Availability;
+  licenseStatus?: LicenseStatus;
+  licenseName?: string;
+  sourceRole?: SourceRole;
+  sourceType?: SourceType;
+  canPreviewInApp?: boolean;
+  canDownloadDirectly?: boolean;
+  canUseCommercially?: CommercialUse;
+  needsManualLicenseCheck?: boolean;
+  catalogRole?: CatalogRole;
+  warning?: string;
+  freeAlternatives?: string[];      // ids of free alternatives in this database
+  similarPremiumFonts?: string[];   // ids of related premium references
+  tags?: string[];
 }
 
 const f = (r: FontRecord): FontRecord => ({
@@ -44,6 +95,37 @@ const f = (r: FontRecord): FontRecord => ({
       : r.printScore > r.screenScore
         ? "Print"
         : "Screen",
+  // Sensible defaults for the free / open-source catalogue. Premium entries
+  // override these via `f()` argument.
+  availability:
+    r.availability ??
+    (r.sourceName === "Fontshare" ? "free" : "open-source"),
+  licenseStatus: r.licenseStatus ?? "safe",
+  licenseName:
+    r.licenseName ??
+    (r.sourceName === "Fontshare"
+      ? "Fontshare Free License"
+      : "SIL Open Font License"),
+  sourceRole: r.sourceRole ?? "official-source",
+  sourceType:
+    r.sourceType ??
+    (r.sourceName === "Fontshare"
+      ? "free-library"
+      : r.sourceName === "Google Fonts"
+        ? "free-library"
+        : r.sourceName === "Fontsource"
+          ? "free-library"
+          : "open-source-foundry"),
+  canPreviewInApp: r.canPreviewInApp ?? true,
+  canDownloadDirectly: r.canDownloadDirectly ?? false,
+  canUseCommercially: r.canUseCommercially ?? true,
+  needsManualLicenseCheck: r.needsManualLicenseCheck ?? false,
+  catalogRole: r.catalogRole ?? "recommended-font",
+  warning: r.warning ?? "",
+  freeAlternatives: r.freeAlternatives ?? [],
+  similarPremiumFonts: r.similarPremiumFonts ?? [],
+  foundry: r.foundry ?? `${r.sourceName}`,
+  tags: r.tags ?? [],
 });
 
 export const FONTS: FontRecord[] = [
