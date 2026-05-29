@@ -245,7 +245,19 @@ function buildPairing(
 
   const explanation =
     explain(category, primary, secondary)! +
-    (warnings.length ? ` ⚠ ${warnings.join(" ")}` : "");
+    (warnings.length ? ` ⚠ ${warnings.join(" ")}` : "") +
+    (isPremiumReference(secondary)
+      ? ` Note — ${secondary.name} is a premium reference and requires a commercial license. This is a conceptual pairing reference; verify licensing before use.`
+      : "");
+
+  const freeAlt = isPremiumReference(secondary)
+    ? (secondary.freeAlternatives ?? [])
+        .map((id) => FONTS_BY_ID[id])
+        .find((f) => f && !isPremiumReference(f)) ?? null
+    : null;
+
+  const licenseRequired =
+    isPremiumReference(primary) || isPremiumReference(secondary);
 
   return {
     name: `${primary.name} + ${secondary.name}`,
@@ -270,6 +282,8 @@ function buildPairing(
     riskLevel,
     confidence,
     explanation,
+    freeAlternative: freeAlt,
+    licenseRequired,
   };
 }
 
