@@ -1,5 +1,6 @@
 import type { Pairing } from "@/lib/pairing";
 import { Badge } from "./badge";
+import { LicenseBadges } from "./license-badges";
 
 function riskColor(level: Pairing["riskLevel"]) {
   if (level === "Low") return "border-border bg-secondary text-foreground";
@@ -9,6 +10,10 @@ function riskColor(level: Pairing["riskLevel"]) {
 
 export function PairingCard({ pairing, index }: { pairing: Pairing; index: number }) {
   const { primary, secondary } = pairing;
+  const primaryFamily =
+    primary.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : primary.family;
+  const secondaryFamily =
+    secondary.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : secondary.family;
   return (
     <article className="grid grid-cols-1 gap-0 border border-border bg-card lg:grid-cols-[1.05fr_1fr]">
       {/* Preview */}
@@ -23,13 +28,13 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
         <div>
           <p
             className="text-4xl leading-[1.05] tracking-tight sm:text-5xl"
-            style={{ fontFamily: primary.family }}
+            style={{ fontFamily: primaryFamily }}
           >
             A measured form
           </p>
           <p
             className="mt-3 text-sm leading-relaxed text-muted-foreground"
-            style={{ fontFamily: secondary.family }}
+            style={{ fontFamily: secondaryFamily }}
           >
             Set in {secondary.name} — supporting copy carries the reading
             rhythm while {primary.name} leads the editorial voice. Hierarchy
@@ -42,21 +47,23 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
             <span className="label-eyebrow">Primary</span>
             <p
               className="mt-1 text-xl"
-              style={{ fontFamily: primary.family }}
+              style={{ fontFamily: primaryFamily }}
             >
               {primary.name}
             </p>
             <p className="text-xs text-muted-foreground">{pairing.primaryRole}</p>
+            <div className="mt-2"><LicenseBadges font={primary} compact /></div>
           </div>
           <div>
             <span className="label-eyebrow">Secondary</span>
             <p
               className="mt-1 text-xl"
-              style={{ fontFamily: secondary.family }}
+              style={{ fontFamily: secondaryFamily }}
             >
               {secondary.name}
             </p>
             <p className="text-xs text-muted-foreground">{pairing.secondaryRole}</p>
+            <div className="mt-2"><LicenseBadges font={secondary} compact /></div>
           </div>
         </div>
       </div>
@@ -74,6 +81,22 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
         <div className="space-y-3 text-sm leading-relaxed">
           <p className="text-foreground">{pairing.explanation}</p>
         </div>
+
+        {pairing.licenseRequired && pairing.freeAlternative && (
+          <div className="border border-border bg-background p-3 text-xs">
+            <span className="label-eyebrow">Free alternative for {pairing.secondary.name}</span>
+            <p className="mt-1 text-foreground">
+              <a
+                href={`/?q=${encodeURIComponent(pairing.freeAlternative.name)}`}
+                className="underline-offset-4 hover:underline"
+                style={{ fontFamily: pairing.freeAlternative.family }}
+              >
+                {pairing.freeAlternative.name}
+              </a>{" "}
+              — similar functional role, no commercial license required.
+            </p>
+          </div>
+        )}
 
         <dl className="grid grid-cols-1 gap-3 border-t border-border pt-4 text-xs sm:grid-cols-2">
           <div>

@@ -4,6 +4,8 @@ import { ThemeToggle } from "./theme-toggle";
 const NAV = [
   { to: "/", label: "Analyze" },
   { to: "/library", label: "Library" },
+  { to: "/compare", label: "Compare" },
+  { to: "/licensing", label: "Licensing" },
   { to: "/method", label: "Method" },
 ] as const;
 

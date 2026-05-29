@@ -1,4 +1,4 @@
-import { FONTS, FONTS_BY_ID, type FontRecord } from "@/data/fonts";
+import { FONTS, FONTS_BY_ID, isPremiumReference, type FontRecord } from "@/data/fonts";
 
 export type PairingCategory =
   | "Reliable System Pairing"
@@ -20,6 +20,10 @@ export interface Pairing {
   riskLevel: "Low" | "Medium" | "High";
   confidence: number;
   explanation: string;
+  /** Free alternative for the secondary, when the secondary is a premium ref. */
+  freeAlternative?: FontRecord | null;
+  /** True if either side requires a commercial license. */
+  licenseRequired: boolean;
 }
 
 /* -----------------------------------------------------------
@@ -241,7 +245,19 @@ function buildPairing(
 
   const explanation =
     explain(category, primary, secondary)! +
-    (warnings.length ? ` ⚠ ${warnings.join(" ")}` : "");
+    (warnings.length ? ` ⚠ ${warnings.join(" ")}` : "") +
+    (isPremiumReference(secondary)
+      ? ` Note — ${secondary.name} is a premium reference and requires a commercial license. This is a conceptual pairing reference; verify licensing before use.`
+      : "");
+
+  const freeAlt = isPremiumReference(secondary)
+    ? (secondary.freeAlternatives ?? [])
+        .map((id) => FONTS_BY_ID[id])
+        .find((f) => f && !isPremiumReference(f)) ?? null
+    : null;
+
+  const licenseRequired =
+    isPremiumReference(primary) || isPremiumReference(secondary);
 
   return {
     name: `${primary.name} + ${secondary.name}`,
@@ -266,18 +282,25 @@ function buildPairing(
     riskLevel,
     confidence,
     explanation,
+    freeAlternative: freeAlt,
+    licenseRequired,
   };
 }
 
 export function buildRecommendations(primary: FontRecord): Pairing[] {
   // Pre-filter the universe to keep the recommendations defensible.
+  // Reliable system pairings prefer fonts the user can actually use without
+  // a commercial license — premium references are excluded.
   const reliablePool = FONTS.filter(
     (f) =>
       f.id !== primary.id &&
       f.classification !== "Display" &&
       f.readabilityScore >= 80 &&
-      f.bodyTextScore >= 70,
+      f.bodyTextScore >= 70 &&
+      !isPremiumReference(f),
   );
+  // Editorial and experimental pools may include premium references, but
+  // they are flagged and shown with a free alternative.
   const editorialPool = FONTS.filter((f) => f.id !== primary.id);
   const experimentalPool = FONTS.filter(
     (f) => f.id !== primary.id && (f.displayScore >= 75 || f.classification === "Mono"),
@@ -386,4 +409,107 @@ export function printScreenReasoning(font: FontRecord) {
 // utility to look up a font by id safely
 export function getFontById(id: string): FontRecord | undefined {
   return FONTS_BY_ID[id];
+}
+
+/* ------------------------------------------------------------------
+ * Side-by-side comparator — same attribute logic, simplified output.
+ * ------------------------------------------------------------------ */
+
+export interface ComparisonResult {
+  canWorkTogether: "Yes" | "Yes, with caution" | "Not recommended";
+  riskLevel: "Low" | "Medium" | "High";
+  roleSeparation: string;
+  why: string;
+  freeAlternatives: { for: FontRecord; alternatives: FontRecord[] }[];
+  licensingFlag: string | null;
+}
+
+export function compareFonts(a: FontRecord, b: FontRecord): ComparisonResult {
+  const similarity = similarityIndex(a, b);
+  const competes = competesForAttention(a, b);
+  const contrast = contrastScore(a, b);
+
+  let canWork: ComparisonResult["canWorkTogether"];
+  let risk: ComparisonResult["riskLevel"];
+
+  if (similarity >= 7) {
+    canWork = "Not recommended";
+    risk = "High";
+  } else if (similarity >= 5 || competes) {
+    canWork = "Yes, with caution";
+    risk = "High";
+  } else if (contrast >= 30) {
+    canWork = "Yes";
+    risk = "Low";
+  } else {
+    canWork = "Yes, with caution";
+    risk = "Medium";
+  }
+
+  // Role separation
+  let roleSeparation: string;
+  if (a.classification === "Display" && b.bodyTextScore >= 80) {
+    roleSeparation = `${a.name} for headlines & display, ${b.name} for body & UI.`;
+  } else if (b.classification === "Display" && a.bodyTextScore >= 80) {
+    roleSeparation = `${b.name} for headlines & display, ${a.name} for body & UI.`;
+  } else if (a.uiScore >= 88 && b.displayScore >= 80) {
+    roleSeparation = `${a.name} for UI / system text, ${b.name} for editorial headlines.`;
+  } else if (b.uiScore >= 88 && a.displayScore >= 80) {
+    roleSeparation = `${b.name} for UI / system text, ${a.name} for editorial headlines.`;
+  } else if (a.bodyTextScore > b.bodyTextScore) {
+    roleSeparation = `${b.name} for headlines, ${a.name} for supporting body text.`;
+  } else {
+    roleSeparation = `${a.name} for headlines, ${b.name} for supporting body text.`;
+  }
+
+  // Why
+  const reasons: string[] = [];
+  if (a.classification !== b.classification) {
+    reasons.push(
+      `Category contrast: ${a.classification.toLowerCase()} against ${b.classification.toLowerCase()} creates clear visual separation.`,
+    );
+  } else {
+    reasons.push(
+      `Same-category pairing — contrast must come from weight, scale and spacing rather than form.`,
+    );
+  }
+  if (a.xHeight !== b.xHeight) {
+    reasons.push(`Different x-heights (${a.xHeight} vs ${b.xHeight}) help visual hierarchy at small sizes.`);
+  }
+  if (a.strokeContrast !== b.strokeContrast) {
+    reasons.push(`Stroke-contrast difference (${a.strokeContrast} vs ${b.strokeContrast}) adds formal contrast.`);
+  }
+  if (competes) {
+    reasons.push(`Both fonts behave as display voices — they compete for attention and need strict role separation.`);
+  }
+  if (similarity >= 5) {
+    reasons.push(`Structural similarity is high — hierarchy will not emerge from form alone.`);
+  }
+
+  // Free alternatives where applicable
+  const freeAlternatives: ComparisonResult["freeAlternatives"] = [];
+  for (const font of [a, b]) {
+    if (isPremiumReference(font)) {
+      const alts = (font.freeAlternatives ?? [])
+        .map((id) => FONTS_BY_ID[id])
+        .filter((x): x is FontRecord => Boolean(x) && !isPremiumReference(x))
+        .slice(0, 4);
+      if (alts.length) freeAlternatives.push({ for: font, alternatives: alts });
+    }
+  }
+
+  let licensingFlag: string | null = null;
+  if (isPremiumReference(a) || isPremiumReference(b)) {
+    licensingFlag =
+      "This is a conceptual pairing reference. Verify licensing before use — at least one font requires a commercial license.";
+  }
+
+  return {
+    canWorkTogether: canWork,
+    riskLevel: risk,
+    roleSeparation,
+    why: reasons.join(" "),
+    freeAlternatives,
+    licensingFlag,
+  };
 }

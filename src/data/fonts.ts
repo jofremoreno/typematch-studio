@@ -1,6 +1,41 @@
 export type FontCategory = "Sans-serif" | "Serif" | "Mono" | "Display";
 export type Suitability = "Print" | "Screen" | "Both";
 
+export type Availability =
+  | "free"
+  | "open-source"
+  | "trial"
+  | "paid"
+  | "subscription"
+  | "inspiration-only";
+
+export type LicenseStatus = "safe" | "verify" | "license-required";
+
+export type SourceRole =
+  | "official-source"
+  | "marketplace"
+  | "inspiration"
+  | "directory"
+  | "implementation-reference";
+
+export type SourceType =
+  | "free-library"
+  | "open-source-foundry"
+  | "premium-foundry"
+  | "retail-marketplace"
+  | "subscription-library"
+  | "inspiration-platform"
+  | "directory";
+
+export type CatalogRole =
+  | "recommended-font"
+  | "premium-reference"
+  | "trial-reference"
+  | "inspiration-reference"
+  | "directory-reference";
+
+export type CommercialUse = true | false | "depends" | "requires license";
+
 export interface FontRecord {
   id: string;
   name: string;
@@ -8,7 +43,7 @@ export interface FontRecord {
   classification: FontCategory;
   subclassification: string;
   license: "Free";
-  sourceName: "Google Fonts" | "Fontshare" | "Fontsource" | "Official repository";
+  sourceName: string;
   sourceUrl: string;
   reference: string;
   personality: string[];
@@ -34,6 +69,22 @@ export interface FontRecord {
   avoidContexts: string[];
   /** Best fit medium derived from print/screen scores. */
   bestMedium: Suitability;
+  // ----- Extended licensing / catalogue metadata -----
+  foundry?: string;
+  availability?: Availability;
+  licenseStatus?: LicenseStatus;
+  licenseName?: string;
+  sourceRole?: SourceRole;
+  sourceType?: SourceType;
+  canPreviewInApp?: boolean;
+  canDownloadDirectly?: boolean;
+  canUseCommercially?: CommercialUse;
+  needsManualLicenseCheck?: boolean;
+  catalogRole?: CatalogRole;
+  warning?: string;
+  freeAlternatives?: string[];      // ids of free alternatives in this database
+  similarPremiumFonts?: string[];   // ids of related premium references
+  tags?: string[];
 }
 
 const f = (r: FontRecord): FontRecord => ({
@@ -44,6 +95,37 @@ const f = (r: FontRecord): FontRecord => ({
       : r.printScore > r.screenScore
         ? "Print"
         : "Screen",
+  // Sensible defaults for the free / open-source catalogue. Premium entries
+  // override these via `f()` argument.
+  availability:
+    r.availability ??
+    (r.sourceName === "Fontshare" ? "free" : "open-source"),
+  licenseStatus: r.licenseStatus ?? "safe",
+  licenseName:
+    r.licenseName ??
+    (r.sourceName === "Fontshare"
+      ? "Fontshare Free License"
+      : "SIL Open Font License"),
+  sourceRole: r.sourceRole ?? "official-source",
+  sourceType:
+    r.sourceType ??
+    (r.sourceName === "Fontshare"
+      ? "free-library"
+      : r.sourceName === "Google Fonts"
+        ? "free-library"
+        : r.sourceName === "Fontsource"
+          ? "free-library"
+          : "open-source-foundry"),
+  canPreviewInApp: r.canPreviewInApp ?? true,
+  canDownloadDirectly: r.canDownloadDirectly ?? false,
+  canUseCommercially: r.canUseCommercially ?? true,
+  needsManualLicenseCheck: r.needsManualLicenseCheck ?? false,
+  catalogRole: r.catalogRole ?? "recommended-font",
+  warning: r.warning ?? "",
+  freeAlternatives: r.freeAlternatives ?? [],
+  similarPremiumFonts: r.similarPremiumFonts ?? [],
+  foundry: r.foundry ?? `${r.sourceName}`,
+  tags: r.tags ?? [],
 });
 
 export const FONTS: FontRecord[] = [
@@ -1270,9 +1352,543 @@ export const FONTS: FontRecord[] = [
   }),
 ];
 
+/* -------------------------------------------------------------------------
+ * Premium / Trial / Subscription references
+ *
+ * These entries DO NOT load the real typeface — they are informational
+ * references only. canPreviewInApp is always false, so previews fall back
+ * to a system stack and the UI shows a "Fallback preview" notice.
+ *
+ * No font files (.otf / .ttf / .woff / .woff2) are shipped or imported.
+ * ------------------------------------------------------------------------- */
+
+const ref = (r: FontRecord): FontRecord => f(r);
+
+const PREMIUM_REFERENCES: FontRecord[] = [
+  ref({
+    id: "gt-america", name: "GT America", family: "system-ui, sans-serif",
+    classification: "Sans-serif", subclassification: "Neo-grotesque / Swiss-American hybrid",
+    license: "Free", // legacy field — see availability below
+    sourceName: "Grilli Type", sourceUrl: "https://www.grillitype.com/typeface/gt-america",
+    reference: "Grilli Type's neo-grotesque bridging European grotesques and American gothics.",
+    personality: ["neutral", "versatile", "swiss", "contemporary"],
+    xHeight: "High", strokeContrast: "Low", aperture: "Moderate", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Refined neo-grotesque",
+    bestRoles: ["Brand systems", "Editorial", "UI"], weakRoles: ["Highly expressive display"],
+    readabilityScore: 92, displayScore: 80, bodyTextScore: 88, uiScore: 92,
+    printScore: 90, screenScore: 92, versatilityScore: 94,
+    contrastTolerance: "Medium", pairingDifficulty: "Easy",
+    recommendedContexts: ["Tech brands", "Editorial systems", "Wayfinding"],
+    avoidContexts: ["Projects without budget for licensing"],
+    bestMedium: "Both",
+    foundry: "Grilli Type", availability: "paid", licenseStatus: "license-required",
+    licenseName: "Grilli Type EULA", sourceRole: "official-source", sourceType: "premium-foundry",
+    canPreviewInApp: false, canDownloadDirectly: false, canUseCommercially: "requires license",
+    needsManualLicenseCheck: true, catalogRole: "premium-reference",
+    freeAlternatives: ["inter", "public-sans", "ibm-plex-sans", "satoshi", "general-sans"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "helvetica-now", name: "Helvetica Now", family: "system-ui, sans-serif",
+    classification: "Sans-serif", subclassification: "Neo-grotesque (modern Helvetica)",
+    license: "Free", sourceName: "Monotype",
+    sourceUrl: "https://www.monotype.com/fonts/helvetica-now",
+    reference: "Monotype's modern reinterpretation of Helvetica with optical sizes.",
+    personality: ["neutral", "swiss", "iconic"],
+    xHeight: "High", strokeContrast: "Low", aperture: "Moderate", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Iconic Swiss neo-grotesque",
+    bestRoles: ["Corporate identity", "Editorial", "UI"], weakRoles: ["Expressive display"],
+    readabilityScore: 93, displayScore: 78, bodyTextScore: 90, uiScore: 92,
+    printScore: 92, screenScore: 92, versatilityScore: 94,
+    contrastTolerance: "Medium", pairingDifficulty: "Easy",
+    recommendedContexts: ["Corporate", "Editorial", "Wayfinding"],
+    avoidContexts: ["Unlicensed commercial work"], bestMedium: "Both",
+    foundry: "Monotype", availability: "paid", licenseStatus: "license-required",
+    licenseName: "Monotype EULA", sourceRole: "official-source", sourceType: "premium-foundry",
+    canPreviewInApp: false, canDownloadDirectly: false, canUseCommercially: "requires license",
+    needsManualLicenseCheck: true, catalogRole: "premium-reference",
+    freeAlternatives: ["inter", "public-sans", "ibm-plex-sans", "roboto"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "graphik", name: "Graphik", family: "system-ui, sans-serif",
+    classification: "Sans-serif", subclassification: "Geometric humanist sans",
+    license: "Free", sourceName: "Commercial Type",
+    sourceUrl: "https://commercialtype.com/catalog/graphik",
+    reference: "Christian Schwartz's quiet geometric sans, widely used in editorial design.",
+    personality: ["quiet", "modern", "editorial"],
+    xHeight: "High", strokeContrast: "Low", aperture: "Open", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Quiet geometric warmth",
+    bestRoles: ["Editorial", "Brand systems"], weakRoles: ["Hard expressive display"],
+    readabilityScore: 92, displayScore: 80, bodyTextScore: 90, uiScore: 88,
+    printScore: 92, screenScore: 90, versatilityScore: 92,
+    contrastTolerance: "Medium", pairingDifficulty: "Easy",
+    recommendedContexts: ["Editorial", "Cultural brands"], avoidContexts: ["Unlicensed work"],
+    bestMedium: "Both",
+    foundry: "Commercial Type", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["inter", "satoshi", "dm-sans", "work-sans"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "founders-grotesk", name: "Founders Grotesk", family: "system-ui, sans-serif",
+    classification: "Sans-serif", subclassification: "Early grotesque revival",
+    license: "Free", sourceName: "Klim Type Foundry",
+    sourceUrl: "https://klim.co.nz/retail-fonts/founders-grotesk/",
+    reference: "Kris Sowersby's revival of early 20th-century British grotesques.",
+    personality: ["confident", "editorial", "historical"],
+    xHeight: "High", strokeContrast: "Low", aperture: "Moderate", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Quietly confident grotesque",
+    bestRoles: ["Editorial display", "Brand systems"], weakRoles: ["Dense UI"],
+    readabilityScore: 88, displayScore: 88, bodyTextScore: 84, uiScore: 84,
+    printScore: 92, screenScore: 88, versatilityScore: 90,
+    contrastTolerance: "Medium", pairingDifficulty: "Easy",
+    recommendedContexts: ["Cultural brands", "Editorial"], avoidContexts: ["Unlicensed work"],
+    bestMedium: "Both",
+    foundry: "Klim Type Foundry", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["archivo", "public-sans", "ibm-plex-sans", "space-grotesk"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "neue-montreal", name: "Neue Montreal", family: "system-ui, sans-serif",
+    classification: "Sans-serif", subclassification: "Modern neutral grotesque",
+    license: "Free", sourceName: "Pangram Pangram",
+    sourceUrl: "https://pangrampangram.com/products/neue-montreal",
+    reference: "Pangram Pangram's modern grotesque, widely used in contemporary identity.",
+    personality: ["modern", "neutral", "characterful"],
+    xHeight: "High", strokeContrast: "Low", aperture: "Moderate", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Contemporary neutrality",
+    bestRoles: ["Identity", "Editorial"], weakRoles: ["Highly expressive display"],
+    readabilityScore: 90, displayScore: 84, bodyTextScore: 86, uiScore: 88,
+    printScore: 90, screenScore: 92, versatilityScore: 92,
+    contrastTolerance: "Medium", pairingDifficulty: "Easy",
+    recommendedContexts: ["Studio identities", "Editorial sites"], avoidContexts: ["Unlicensed work"],
+    bestMedium: "Both",
+    foundry: "Pangram Pangram", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["general-sans", "satoshi", "switzer", "plus-jakarta-sans"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "canela", name: "Canela", family: "ui-serif, Georgia, serif",
+    classification: "Serif", subclassification: "Modern transitional / display serif",
+    license: "Free", sourceName: "Commercial Type",
+    sourceUrl: "https://commercialtype.com/catalog/canela",
+    reference: "Miguel Reyes' display serif sitting between modern and old-style.",
+    personality: ["elegant", "editorial", "modern-classical"],
+    xHeight: "Medium", strokeContrast: "High", aperture: "Moderate", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Elegant display serif",
+    bestRoles: ["Editorial display", "Luxury identity"], weakRoles: ["UI", "Dense body"],
+    readabilityScore: 80, displayScore: 92, bodyTextScore: 70, uiScore: 56,
+    printScore: 94, screenScore: 84, versatilityScore: 78,
+    contrastTolerance: "High", pairingDifficulty: "Moderate",
+    recommendedContexts: ["Fashion", "Editorial covers"], avoidContexts: ["Unlicensed work"],
+    bestMedium: "Print",
+    foundry: "Commercial Type", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["cormorant-garamond", "playfair-display", "fraunces", "lora"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "tiempos", name: "Tiempos", family: "ui-serif, Georgia, serif",
+    classification: "Serif", subclassification: "Contemporary text serif",
+    license: "Free", sourceName: "Klim Type Foundry",
+    sourceUrl: "https://klim.co.nz/retail-fonts/tiempos-text/",
+    reference: "Kris Sowersby's contemporary serif derived from Galaxie Copernicus.",
+    personality: ["editorial", "modern", "reliable"],
+    xHeight: "Medium", strokeContrast: "Medium", aperture: "Moderate", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Contemporary editorial serif",
+    bestRoles: ["Editorial body", "Long-form reading"], weakRoles: ["Dense UI"],
+    readabilityScore: 92, displayScore: 78, bodyTextScore: 92, uiScore: 70,
+    printScore: 94, screenScore: 88, versatilityScore: 90,
+    contrastTolerance: "Medium", pairingDifficulty: "Easy",
+    recommendedContexts: ["Magazines", "Long-form editorial"], avoidContexts: ["Unlicensed work"],
+    bestMedium: "Both",
+    foundry: "Klim Type Foundry", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["source-serif-4", "libre-baskerville", "merriweather", "lora"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "pp-mori", name: "PP Mori", family: "system-ui, sans-serif",
+    classification: "Sans-serif", subclassification: "Geometric humanist sans",
+    license: "Free", sourceName: "Pangram Pangram",
+    sourceUrl: "https://pangrampangram.com/products/mori",
+    reference: "Pangram Pangram's warm geometric sans with a slight humanist touch.",
+    personality: ["warm", "geometric", "contemporary"],
+    xHeight: "High", strokeContrast: "Low", aperture: "Open", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Warm contemporary geometric",
+    bestRoles: ["Identity", "Editorial"], weakRoles: ["Dense UI"],
+    readabilityScore: 88, displayScore: 84, bodyTextScore: 84, uiScore: 84,
+    printScore: 88, screenScore: 90, versatilityScore: 88,
+    contrastTolerance: "Medium", pairingDifficulty: "Easy",
+    recommendedContexts: ["Studio brand systems"], avoidContexts: ["Unlicensed work"],
+    bestMedium: "Both",
+    foundry: "Pangram Pangram", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["dm-sans", "satoshi", "plus-jakarta-sans"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "pp-neue-machina", name: "PP Neue Machina", family: "system-ui, sans-serif",
+    classification: "Display", subclassification: "Techno geometric display",
+    license: "Free", sourceName: "Pangram Pangram",
+    sourceUrl: "https://pangrampangram.com/products/neue-machina",
+    reference: "Pangram Pangram's techno geometric display.",
+    personality: ["techno", "futuristic", "engineered"],
+    xHeight: "High", strokeContrast: "Low", aperture: "Moderate", width: "Normal",
+    rhythm: "Mechanical", spacing: "Normal", opticalFeeling: "Engineered techno voice",
+    bestRoles: ["Display", "Tech / Web3 identity"], weakRoles: ["Body text", "UI"],
+    readabilityScore: 68, displayScore: 92, bodyTextScore: 56, uiScore: 58,
+    printScore: 86, screenScore: 90, versatilityScore: 66,
+    contrastTolerance: "High", pairingDifficulty: "Moderate",
+    recommendedContexts: ["Tech display", "Campaigns"], avoidContexts: ["Long-form body"],
+    bestMedium: "Both",
+    foundry: "Pangram Pangram", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["space-grotesk", "unbounded", "anybody"],
+    tags: ["premium-reference", "license-required", "display-only"],
+  }),
+  ref({
+    id: "editorial-new", name: "Editorial New", family: "ui-serif, Georgia, serif",
+    classification: "Serif", subclassification: "Modern editorial serif",
+    license: "Free", sourceName: "Pangram Pangram",
+    sourceUrl: "https://pangrampangram.com/products/editorial-new",
+    reference: "Pangram Pangram's contemporary editorial serif.",
+    personality: ["editorial", "elegant", "modern"],
+    xHeight: "Medium", strokeContrast: "High", aperture: "Moderate", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Contemporary editorial elegance",
+    bestRoles: ["Editorial display", "Luxury identity"], weakRoles: ["UI"],
+    readabilityScore: 80, displayScore: 92, bodyTextScore: 74, uiScore: 56,
+    printScore: 94, screenScore: 86, versatilityScore: 78,
+    contrastTolerance: "High", pairingDifficulty: "Moderate",
+    recommendedContexts: ["Fashion", "Magazines"], avoidContexts: ["Unlicensed work"],
+    bestMedium: "Print",
+    foundry: "Pangram Pangram", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["fraunces", "playfair-display", "cormorant-garamond"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "suisse-intl", name: "Suisse Int'l", family: "system-ui, sans-serif",
+    classification: "Sans-serif", subclassification: "Swiss neo-grotesque",
+    license: "Free", sourceName: "Swiss Typefaces",
+    sourceUrl: "https://www.swisstypefaces.com/fonts/suisse/",
+    reference: "Swiss Typefaces' clean modern Swiss grotesque.",
+    personality: ["swiss", "neutral", "precise"],
+    xHeight: "High", strokeContrast: "Low", aperture: "Moderate", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Swiss precision",
+    bestRoles: ["Brand systems", "Editorial"], weakRoles: ["Expressive display"],
+    readabilityScore: 92, displayScore: 80, bodyTextScore: 90, uiScore: 92,
+    printScore: 92, screenScore: 92, versatilityScore: 94,
+    contrastTolerance: "Medium", pairingDifficulty: "Easy",
+    recommendedContexts: ["Cultural brands", "Editorial"], avoidContexts: ["Unlicensed work"],
+    bestMedium: "Both",
+    foundry: "Swiss Typefaces", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["inter", "public-sans", "ibm-plex-sans"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "druk", name: "Druk", family: "system-ui, sans-serif",
+    classification: "Display", subclassification: "Wide / condensed display family",
+    license: "Free", sourceName: "Commercial Type",
+    sourceUrl: "https://commercialtype.com/catalog/druk",
+    reference: "Berton Hasebe's compressed display family for editorial impact.",
+    personality: ["bold", "editorial", "impactful"],
+    xHeight: "High", strokeContrast: "Low", aperture: "Closed", width: "Condensed",
+    rhythm: "Regular", spacing: "Tight", opticalFeeling: "High-impact editorial",
+    bestRoles: ["Display", "Editorial covers"], weakRoles: ["Body", "UI"],
+    readabilityScore: 64, displayScore: 96, bodyTextScore: 40, uiScore: 40,
+    printScore: 94, screenScore: 88, versatilityScore: 60,
+    contrastTolerance: "High", pairingDifficulty: "Moderate",
+    recommendedContexts: ["Magazine covers", "Posters"], avoidContexts: ["Body text"],
+    bestMedium: "Print",
+    foundry: "Commercial Type", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["archivo-black", "league-gothic", "bebas-neue"],
+    tags: ["premium-reference", "license-required", "display-only"],
+  }),
+  ref({
+    id: "aeonik", name: "Aeonik", family: "system-ui, sans-serif",
+    classification: "Sans-serif", subclassification: "Geometric sans",
+    license: "Free", sourceName: "CoType Foundry",
+    sourceUrl: "https://cotypefoundry.com/fonts/aeonik",
+    reference: "CoType Foundry's modern geometric sans with strong identity work usage.",
+    personality: ["modern", "geometric", "neutral"],
+    xHeight: "High", strokeContrast: "Low", aperture: "Open", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Modern geometric calm",
+    bestRoles: ["Identity", "UI"], weakRoles: ["Expressive display"],
+    readabilityScore: 90, displayScore: 82, bodyTextScore: 86, uiScore: 90,
+    printScore: 88, screenScore: 92, versatilityScore: 92,
+    contrastTolerance: "Medium", pairingDifficulty: "Easy",
+    recommendedContexts: ["Tech brands", "Identity"], avoidContexts: ["Unlicensed work"],
+    bestMedium: "Both",
+    foundry: "CoType Foundry", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["dm-sans", "satoshi", "general-sans"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "gt-sectra", name: "GT Sectra", family: "ui-serif, Georgia, serif",
+    classification: "Serif", subclassification: "Contemporary display serif",
+    license: "Free", sourceName: "Grilli Type",
+    sourceUrl: "https://www.grillitype.com/typeface/gt-sectra",
+    reference: "Grilli Type's contemporary display serif influenced by scalpel-cut forms.",
+    personality: ["editorial", "sharp", "contemporary"],
+    xHeight: "Medium", strokeContrast: "High", aperture: "Moderate", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Sharp editorial serif",
+    bestRoles: ["Editorial display", "Cultural identity"], weakRoles: ["Dense UI"],
+    readabilityScore: 84, displayScore: 92, bodyTextScore: 80, uiScore: 60,
+    printScore: 94, screenScore: 88, versatilityScore: 82,
+    contrastTolerance: "High", pairingDifficulty: "Moderate",
+    recommendedContexts: ["Magazines", "Cultural brands"], avoidContexts: ["Unlicensed work"],
+    bestMedium: "Print",
+    foundry: "Grilli Type", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["fraunces", "playfair-display", "cormorant-garamond"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "displaay-roobert", name: "Roobert", family: "system-ui, sans-serif",
+    classification: "Sans-serif", subclassification: "Geometric sans",
+    license: "Free", sourceName: "Displaay",
+    sourceUrl: "https://displaay.net/typeface/roobert/",
+    reference: "Displaay's geometric sans, originally drawn for Roosevelt Island branding.",
+    personality: ["geometric", "warm", "characterful"],
+    xHeight: "High", strokeContrast: "Low", aperture: "Open", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Warm geometric clarity",
+    bestRoles: ["Identity", "UI"], weakRoles: ["Expressive display"],
+    readabilityScore: 88, displayScore: 82, bodyTextScore: 84, uiScore: 88,
+    printScore: 88, screenScore: 92, versatilityScore: 90,
+    contrastTolerance: "Medium", pairingDifficulty: "Easy",
+    recommendedContexts: ["Tech brands", "Identity"], avoidContexts: ["Unlicensed work"],
+    bestMedium: "Both",
+    foundry: "Displaay", availability: "paid", licenseStatus: "license-required",
+    sourceType: "premium-foundry", canPreviewInApp: false, canDownloadDirectly: false,
+    canUseCommercially: "requires license", needsManualLicenseCheck: true,
+    catalogRole: "premium-reference",
+    freeAlternatives: ["dm-sans", "plus-jakarta-sans", "satoshi"],
+    tags: ["premium-reference", "license-required"],
+  }),
+  ref({
+    id: "adobe-fonts-source-library", name: "Adobe Fonts Library", family: "system-ui, sans-serif",
+    classification: "Sans-serif", subclassification: "Subscription library reference",
+    license: "Free", sourceName: "Adobe Fonts",
+    sourceUrl: "https://fonts.adobe.com/",
+    reference: "Adobe Fonts is a subscription library bundled with Creative Cloud. Many premium foundries distribute selected families through it.",
+    personality: ["library", "subscription"],
+    xHeight: "Medium", strokeContrast: "Medium", aperture: "Moderate", width: "Normal",
+    rhythm: "Regular", spacing: "Normal", opticalFeeling: "Subscription-based access to many premium families",
+    bestRoles: ["License access"], weakRoles: [],
+    readabilityScore: 80, displayScore: 80, bodyTextScore: 80, uiScore: 80,
+    printScore: 80, screenScore: 80, versatilityScore: 80,
+    contrastTolerance: "Medium", pairingDifficulty: "Easy",
+    recommendedContexts: ["Studios with Creative Cloud subscription"],
+    avoidContexts: ["Open-source-only projects"],
+    bestMedium: "Both",
+    foundry: "Adobe", availability: "subscription", licenseStatus: "license-required",
+    sourceType: "subscription-library", sourceRole: "marketplace",
+    canPreviewInApp: false, canDownloadDirectly: false, canUseCommercially: "depends",
+    needsManualLicenseCheck: true, catalogRole: "inspiration-reference",
+    freeAlternatives: ["inter", "ibm-plex-sans", "source-serif-4"],
+    tags: ["subscription", "license-required"],
+  }),
+];
+
+// Premium / trial / subscription references are appended after the free
+// catalogue. Library filters drive what users see.
+FONTS.push(...PREMIUM_REFERENCES);
+
 export const FONTS_BY_ID: Record<string, FontRecord> = Object.fromEntries(
   FONTS.map((f) => [f.id, f]),
 );
+
+/* -------------------------------------------------------------------------
+ * Source directory — information about font libraries and foundries.
+ * Purely informational; no downloads, no scraping.
+ * ------------------------------------------------------------------------- */
+
+export interface SourceEntry {
+  name: string;
+  type: string;
+  licenseConfidence: "High" | "Medium" | "Low" | "Varies";
+  role: string;
+  notes: string;
+  officialUrl: string;
+  category: "free" | "premium" | "directory" | "subscription";
+}
+
+export const SOURCES: SourceEntry[] = [
+  // Free / open-source
+  { name: "Google Fonts", type: "Free font library", licenseConfidence: "High",
+    role: "Free commercial font source", category: "free",
+    notes: "Largest free open-source library. OFL or Apache licensed. Safe for commercial use.",
+    officialUrl: "https://fonts.google.com/" },
+  { name: "Fontshare", type: "Free font library", licenseConfidence: "High",
+    role: "Free commercial font source", category: "free",
+    notes: "Curated free family library by Indian Type Foundry — free for personal and commercial use.",
+    officialUrl: "https://www.fontshare.com/" },
+  { name: "Fontsource", type: "Self-host implementation library", licenseConfidence: "High",
+    role: "Implementation reference for self-hosting open-source fonts", category: "free",
+    notes: "Packages open-source typefaces as npm modules. TypeMatch links here as reference only — no fonts are auto-installed.",
+    officialUrl: "https://fontsource.org/" },
+  { name: "Collletttivo", type: "Open-source foundry", licenseConfidence: "High",
+    role: "Free commercial font source (SIL OFL)", category: "free",
+    notes: "Italian collective releasing open-source typefaces under the SIL Open Font License.",
+    officialUrl: "https://collletttivo.it/" },
+  { name: "The League of Moveable Type", type: "Open-source foundry", licenseConfidence: "High",
+    role: "Free commercial font source", category: "free",
+    notes: "Pioneer open-source foundry. Verify per-typeface license details.",
+    officialUrl: "https://www.theleagueofmoveabletype.com/" },
+  { name: "Velvetyne", type: "Open-source experimental foundry", licenseConfidence: "Medium",
+    role: "Experimental free typefaces", category: "free",
+    notes: "Experimental and characterful open-source typefaces — verify per-typeface license.",
+    officialUrl: "https://velvetyne.fr/" },
+  // Directories
+  { name: "Open Foundry", type: "Curated directory", licenseConfidence: "Varies",
+    role: "Discovery directory for open-source typefaces", category: "directory",
+    notes: "Editorial directory — always click through to verify each typeface's license.",
+    officialUrl: "https://open-foundry.com/" },
+  { name: "Free Faces", type: "Curated directory", licenseConfidence: "Varies",
+    role: "Discovery directory for free typefaces", category: "directory",
+    notes: "Discovery archive — license terms vary, manual verification required.",
+    officialUrl: "https://www.freefaces.gallery/" },
+  { name: "Font Squirrel", type: "Curated directory", licenseConfidence: "Varies",
+    role: "Discovery directory for free commercial-use fonts", category: "directory",
+    notes: "Curated commercial-use free fonts — license terms vary per typeface.",
+    officialUrl: "https://www.fontsquirrel.com/" },
+  // Premium foundries
+  { name: "Grilli Type", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "Swiss foundry behind GT America, GT Sectra and others.",
+    officialUrl: "https://www.grillitype.com/" },
+  { name: "Klim Type Foundry", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "Kris Sowersby's foundry — Founders Grotesk, Tiempos, Söhne.",
+    officialUrl: "https://klim.co.nz/" },
+  { name: "Pangram Pangram", type: "Premium foundry (some free)", licenseConfidence: "High",
+    role: "Premium reference and selected free fonts", category: "premium",
+    notes: "Modern foundry — Neue Montreal, PP Mori, PP Editorial New.",
+    officialUrl: "https://pangrampangram.com/" },
+  { name: "VJ Type", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "Independent foundry by Vincent Cherubini.",
+    officialUrl: "https://vj-type.com/" },
+  { name: "Type Network", type: "Premium marketplace", licenseConfidence: "High",
+    role: "Premium reference marketplace", category: "premium",
+    notes: "Distribution network bundling many independent foundries.",
+    officialUrl: "https://www.typenetwork.com/" },
+  { name: "Typotheque", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "Multilingual research-driven foundry.",
+    officialUrl: "https://www.typotheque.com/" },
+  { name: "Commercial Type", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "Christian Schwartz and Paul Barnes — Graphik, Canela, Druk.",
+    officialUrl: "https://commercialtype.com/" },
+  { name: "Displaay", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "Czech foundry — Roobert, Wremena.",
+    officialUrl: "https://displaay.net/" },
+  { name: "Sharp Type", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "Lucas Sharp's foundry — Sharp Grotesk, Sharp Sans.",
+    officialUrl: "https://sharptype.co/" },
+  { name: "Production Type", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "International foundry distributing custom and retail families.",
+    officialUrl: "https://productiontype.com/" },
+  { name: "Adobe Fonts", type: "Subscription library", licenseConfidence: "High",
+    role: "Subscription access to many premium foundries", category: "subscription",
+    notes: "Included with Creative Cloud. License depends on subscription tier and usage.",
+    officialUrl: "https://fonts.adobe.com/" },
+  { name: "ABC Dinamo", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "Swiss foundry with progressive licensing.",
+    officialUrl: "https://abcdinamo.com/" },
+  { name: "TypeTogether", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "International foundry focused on editorial families.",
+    officialUrl: "https://www.type-together.com/" },
+  { name: "Colophon Foundry", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "UK/US foundry — Apercu and others.",
+    officialUrl: "https://www.colophon-foundry.org/" },
+  { name: "Lineto", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "Swiss foundry behind Akkurat, LL Brown, LL Replica.",
+    officialUrl: "https://lineto.com/" },
+  { name: "Future Fonts", type: "Premium / work-in-progress marketplace", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "Marketplace for fonts sold while still in development.",
+    officialUrl: "https://www.futurefonts.xyz/" },
+  { name: "Ohno Type Co.", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "James Edmondson's expressive foundry.",
+    officialUrl: "https://ohnotype.co/" },
+  { name: "Blaze Type", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "French foundry with editorial sans and serifs.",
+    officialUrl: "https://www.blazetype.eu/" },
+  { name: "Schick Toikka", type: "Premium foundry", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "Berlin/Helsinki foundry.",
+    officialUrl: "https://schick-toikka.com/" },
+  { name: "Hoefler&Co", type: "Premium foundry (now Monotype)", licenseConfidence: "High",
+    role: "Premium reference (license required)", category: "premium",
+    notes: "Foundry now distributed through Monotype.",
+    officialUrl: "https://www.monotype.com/foundries/hoefler-and-co" },
+];
+
+/* -------------------------------------------------------------------------
+ * Helpers
+ * ------------------------------------------------------------------------- */
+
+export function isPremiumReference(f: FontRecord): boolean {
+  return (
+    f.availability === "paid" ||
+    f.availability === "trial" ||
+    f.availability === "subscription" ||
+    f.availability === "inspiration-only"
+  );
+}
+
+export function getFreeAlternatives(f: FontRecord, limit = 4): FontRecord[] {
+  const ids = f.freeAlternatives ?? [];
+  const out: FontRecord[] = [];
+  for (const id of ids) {
+    const r = FONTS_BY_ID[id];
+    if (r && !isPremiumReference(r)) out.push(r);
+    if (out.length >= limit) break;
+  }
+  return out;
+}
 
 export function findFontByQuery(query: string): FontRecord | null {
   const q = query.trim().toLowerCase();
