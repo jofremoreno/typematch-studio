@@ -1,5 +1,5 @@
 import type { FontRecord } from "@/data/fonts";
-import { isPremiumReference } from "@/data/fonts";
+import { FONTS_BY_ID, isPremiumReference } from "@/data/fonts";
 import { Badge } from "./badge";
 import {
   LicenseBadges,
