@@ -1,4 +1,4 @@
-import { FONTS, FONTS_BY_ID, type FontRecord } from "@/data/fonts";
+import { FONTS, FONTS_BY_ID, isPremiumReference, type FontRecord } from "@/data/fonts";
 
 export type PairingCategory =
   | "Reliable System Pairing"
@@ -20,6 +20,10 @@ export interface Pairing {
   riskLevel: "Low" | "Medium" | "High";
   confidence: number;
   explanation: string;
+  /** Free alternative for the secondary, when the secondary is a premium ref. */
+  freeAlternative?: FontRecord | null;
+  /** True if either side requires a commercial license. */
+  licenseRequired: boolean;
 }
 
 /* -----------------------------------------------------------
@@ -271,13 +275,18 @@ function buildPairing(
 
 export function buildRecommendations(primary: FontRecord): Pairing[] {
   // Pre-filter the universe to keep the recommendations defensible.
+  // Reliable system pairings prefer fonts the user can actually use without
+  // a commercial license — premium references are excluded.
   const reliablePool = FONTS.filter(
     (f) =>
       f.id !== primary.id &&
       f.classification !== "Display" &&
       f.readabilityScore >= 80 &&
-      f.bodyTextScore >= 70,
+      f.bodyTextScore >= 70 &&
+      !isPremiumReference(f),
   );
+  // Editorial and experimental pools may include premium references, but
+  // they are flagged and shown with a free alternative.
   const editorialPool = FONTS.filter((f) => f.id !== primary.id);
   const experimentalPool = FONTS.filter(
     (f) => f.id !== primary.id && (f.displayScore >= 75 || f.classification === "Mono"),
