@@ -108,9 +108,10 @@ export function FontOverview({ font }: { font: FontRecord }) {
 }
 
 function FreeAlternativesInline({ font }: { font: FontRecord }) {
-  // Lazy import to avoid coupling
-  const ids = font.freeAlternatives ?? [];
-  if (!ids.length) return null;
+  const alts = (font.freeAlternatives ?? [])
+    .map((id) => FONTS_BY_ID[id])
+    .filter(Boolean);
+  if (!alts.length) return null;
   return (
     <div className="mt-8 border border-border bg-card p-5">
       <span className="label-eyebrow">Free alternatives</span>
@@ -119,13 +120,14 @@ function FreeAlternativesInline({ font }: { font: FontRecord }) {
         They do not reproduce the exact tone or proportions of {font.name}.
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
-        {ids.map((id) => (
+        {alts.map((a) => (
           <a
-            key={id}
-            href={`/?q=${encodeURIComponent(id)}`}
+            key={a.id}
+            href={`/?q=${encodeURIComponent(a.name)}`}
             className="border border-border bg-background px-3 py-1.5 text-xs text-foreground hover:border-foreground"
+            style={{ fontFamily: a.family }}
           >
-            {id}
+            {a.name}
           </a>
         ))}
       </div>
