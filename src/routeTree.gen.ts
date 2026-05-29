@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as MethodRouteImport } from './routes/method'
 import { Route as LicensingRouteImport } from './routes/licensing'
 import { Route as LibraryRouteImport } from './routes/library'
+import { Route as CompareRouteImport } from './routes/compare'
 import { Route as IndexRouteImport } from './routes/index'
 
 const MethodRoute = MethodRouteImport.update({
@@ -29,6 +30,11 @@ const LibraryRoute = LibraryRouteImport.update({
   path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/compare': typeof CompareRoute
   '/library': typeof LibraryRoute
   '/licensing': typeof LicensingRoute
   '/method': typeof MethodRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/compare': typeof CompareRoute
   '/library': typeof LibraryRoute
   '/licensing': typeof LicensingRoute
   '/method': typeof MethodRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/compare': typeof CompareRoute
   '/library': typeof LibraryRoute
   '/licensing': typeof LicensingRoute
   '/method': typeof MethodRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/library' | '/licensing' | '/method'
+  fullPaths: '/' | '/compare' | '/library' | '/licensing' | '/method'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/library' | '/licensing' | '/method'
-  id: '__root__' | '/' | '/library' | '/licensing' | '/method'
+  to: '/' | '/compare' | '/library' | '/licensing' | '/method'
+  id: '__root__' | '/' | '/compare' | '/library' | '/licensing' | '/method'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CompareRoute: typeof CompareRoute
   LibraryRoute: typeof LibraryRoute
   LicensingRoute: typeof LicensingRoute
   MethodRoute: typeof MethodRoute
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CompareRoute: CompareRoute,
   LibraryRoute: LibraryRoute,
   LicensingRoute: LicensingRoute,
   MethodRoute: MethodRoute,
