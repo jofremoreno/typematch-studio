@@ -87,7 +87,7 @@ export interface FontRecord {
   tags?: string[];
 }
 
-export const f = (r: FontRecord): FontRecord => ({
+const f = (r: FontRecord): FontRecord => ({
   ...r,
   bestMedium:
     Math.abs(r.printScore - r.screenScore) < 8
