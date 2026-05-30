@@ -27,12 +27,15 @@ function matchesAvailability(f: { availability?: string }, a: AvailabilityFilter
   return true;
 }
 
+const PAGE_SIZE = 40;
+
 export function FontLibrary() {
   const [category, setCategory] = useState<CategoryFilter>("All");
   const [availability, setAvailability] = useState<AvailabilityFilter>("All");
   const [preview, setPreview] = useState<PreviewFilter>("All");
   const [source, setSource] = useState<string>("All");
   const [query, setQuery] = useState("");
+  const [visible, setVisible] = useState(PAGE_SIZE);
 
   const sources = useMemo(
     () => ["All", ...Array.from(new Set(FONTS.map((f) => f.sourceName))).sort()],
@@ -51,6 +54,11 @@ export function FontLibrary() {
       return true;
     });
   }, [category, availability, preview, source, query]);
+
+  // Reset visible window on any filter change.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useMemo(() => setVisible(PAGE_SIZE), [category, availability, preview, source, query]);
+  const shown = fonts.slice(0, visible);
 
   const FilterRow = ({
     label,
@@ -103,7 +111,7 @@ export function FontLibrary() {
       <FilterRow label="Source" options={sources} value={source} onChange={setSource} />
 
       <div className="mt-6 grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-3">
-        {fonts.map((f, i) => {
+        {shown.map((f, i) => {
           const previewFamily =
             f.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : f.family;
           return (
@@ -116,19 +124,21 @@ export function FontLibrary() {
                 ((i + 1) % 2 !== 0 ? "sm:border-r lg:border-r " : "")
               }
             >
-              <header className="flex items-center justify-between">
+              <header className="ui-text flex items-center justify-between">
                 <span className="label-eyebrow">{f.classification}</span>
                 <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
                   {availabilityLabel(f)} · {f.sourceName}
                 </span>
               </header>
-              <p
-                className="text-5xl leading-none tracking-tight"
-                style={{ fontFamily: previewFamily }}
-              >
-                {f.name}
-              </p>
-              <div className="space-y-3">
+              <div className="type-preview">
+                <p
+                  className="text-5xl leading-none tracking-tight"
+                  style={{ fontFamily: previewFamily }}
+                >
+                  {f.name}
+                </p>
+              </div>
+              <div className="ui-text space-y-3">
                 <LicenseBadges font={f} compact />
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>{isPremiumReference(f) ? "Premium reference" : `Best for ${f.bestMedium.toLowerCase()}`}</span>
@@ -145,6 +155,18 @@ export function FontLibrary() {
           );
         })}
       </div>
+
+      {visible < fonts.length && (
+        <div className="ui-text mt-8 flex items-center justify-center">
+          <button
+            type="button"
+            onClick={() => setVisible((v) => v + PAGE_SIZE)}
+            className="border border-border bg-card px-5 py-2 text-xs uppercase tracking-widest text-foreground hover:border-foreground"
+          >
+            Load more — {Math.min(PAGE_SIZE, fonts.length - visible)} of {fonts.length - visible}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
