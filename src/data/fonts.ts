@@ -1725,6 +1725,13 @@ const PREMIUM_REFERENCES: FontRecord[] = [
 // catalogue. Library filters drive what users see.
 FONTS.push(...PREMIUM_REFERENCES);
 
+// Extended catalogue (auto-generated additions). Imported here so that
+// FONTS_BY_ID below picks them up automatically. Import is placed below
+// the array declarations to keep module-evaluation order safe.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+import { EXTRA_FREE, EXTRA_PREMIUM } from "./fonts-extended";
+FONTS.push(...EXTRA_FREE, ...EXTRA_PREMIUM);
+
 export const FONTS_BY_ID: Record<string, FontRecord> = Object.fromEntries(
   FONTS.map((f) => [f.id, f]),
 );

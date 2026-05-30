@@ -96,6 +96,35 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+
+  /* ----- Badge token system (light) ----- */
+  --badge-safe-bg:        oklch(0.95 0.05 150);
+  --badge-safe-fg:        oklch(0.32 0.08 150);
+  --badge-safe-border:    oklch(0.85 0.06 150);
+  --badge-warning-bg:     oklch(0.96 0.08 80);
+  --badge-warning-fg:     oklch(0.36 0.10 65);
+  --badge-warning-border: oklch(0.85 0.10 80);
+  --badge-danger-bg:      oklch(0.94 0.06 25);
+  --badge-danger-fg:      oklch(0.40 0.15 25);
+  --badge-danger-border:  oklch(0.84 0.10 25);
+  --badge-trial-bg:       oklch(0.95 0.07 50);
+  --badge-trial-fg:       oklch(0.38 0.12 45);
+  --badge-trial-border:   oklch(0.85 0.10 50);
+  --badge-sub-bg:         oklch(0.95 0.04 240);
+  --badge-sub-fg:         oklch(0.36 0.10 250);
+  --badge-sub-border:     oklch(0.85 0.06 240);
+  --badge-screen-bg:      oklch(0.95 0.04 220);
+  --badge-screen-fg:      oklch(0.34 0.10 230);
+  --badge-screen-border:  oklch(0.85 0.06 220);
+  --badge-print-bg:       oklch(0.95 0.04 290);
+  --badge-print-fg:       oklch(0.36 0.10 290);
+  --badge-print-border:   oklch(0.85 0.06 290);
+  --badge-display-bg:     oklch(0.95 0.05 340);
+  --badge-display-fg:     oklch(0.38 0.12 345);
+  --badge-display-border: oklch(0.85 0.08 340);
+  --badge-exp-bg:         oklch(0.94 0.06 305);
+  --badge-exp-fg:         oklch(0.38 0.12 305);
+  --badge-exp-border:     oklch(0.83 0.09 305);
 }
 
 .dark {
@@ -131,6 +160,35 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+
+  /* ----- Badge token system (dark) ----- */
+  --badge-safe-bg:        oklch(0.28 0.04 150);
+  --badge-safe-fg:        oklch(0.86 0.10 150);
+  --badge-safe-border:    oklch(0.40 0.06 150);
+  --badge-warning-bg:     oklch(0.30 0.06 80);
+  --badge-warning-fg:     oklch(0.88 0.12 85);
+  --badge-warning-border: oklch(0.42 0.08 80);
+  --badge-danger-bg:      oklch(0.30 0.07 25);
+  --badge-danger-fg:      oklch(0.86 0.12 25);
+  --badge-danger-border:  oklch(0.44 0.10 25);
+  --badge-trial-bg:       oklch(0.30 0.07 50);
+  --badge-trial-fg:       oklch(0.88 0.12 55);
+  --badge-trial-border:   oklch(0.44 0.10 50);
+  --badge-sub-bg:         oklch(0.28 0.04 240);
+  --badge-sub-fg:         oklch(0.86 0.10 240);
+  --badge-sub-border:     oklch(0.42 0.06 240);
+  --badge-screen-bg:      oklch(0.28 0.04 220);
+  --badge-screen-fg:      oklch(0.86 0.10 225);
+  --badge-screen-border:  oklch(0.42 0.06 220);
+  --badge-print-bg:       oklch(0.28 0.05 290);
+  --badge-print-fg:       oklch(0.86 0.10 290);
+  --badge-print-border:   oklch(0.42 0.07 290);
+  --badge-display-bg:     oklch(0.30 0.06 340);
+  --badge-display-fg:     oklch(0.88 0.12 340);
+  --badge-display-border: oklch(0.44 0.08 340);
+  --badge-exp-bg:         oklch(0.30 0.06 305);
+  --badge-exp-fg:         oklch(0.88 0.12 305);
+  --badge-exp-border:     oklch(0.44 0.09 305);
 }
 
 @layer base {
@@ -178,4 +236,44 @@
   height: 1px;
   background-color: var(--color-border);
   width: 100%;
+}
+
+/* ---- UI vs typeface-preview separation ----
+ * Every "this is a font specimen" surface uses .type-preview, which:
+ *  - sits in a container with a subtle background and dashed border,
+ *  - shows a small uppercase "Typeface preview" eyebrow,
+ *  - never inherits the UI font from .font-ui parents.
+ * The complementary .ui-text class forces the interface font + colour
+ * even inside cards that contain a preview. */
+.type-preview {
+  position: relative;
+  background-color: var(--color-card);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem 1.25rem 1rem;
+}
+.type-preview::before {
+  content: "Typeface preview";
+  position: absolute;
+  top: 0.5rem;
+  left: 0.75rem;
+  font-family: "Inter", sans-serif;
+  font-size: 0.5625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+  opacity: 0.75;
+}
+.type-preview > * {
+  margin-top: 0.75rem;
+}
+.ui-text {
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif !important;
+  color: var(--color-foreground);
+}
+.ui-note {
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  color: var(--color-muted-foreground);
+  font-size: 0.8125rem;
+  line-height: 1.55;
 }
