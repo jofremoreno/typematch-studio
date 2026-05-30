@@ -1,9 +1,9 @@
 // Auto-generated extended fonts. No font files are shipped or downloaded.
 // Premium entries are informational references only with canPreviewInApp: false.
-import { f, type FontRecord } from "./fonts";
+import type { FontRecord } from "./fonts";
 
 export const EXTRA_FREE: FontRecord[] = [
-  f({
+  {
     id: "open-sans",
     name: "Open Sans",
     family: "'Open Sans', ui-sans-serif, system-ui, sans-serif",
@@ -50,8 +50,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "lato",
     name: "Lato",
     family: "'Lato', ui-sans-serif, system-ui, sans-serif",
@@ -98,8 +98,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "poppins",
     name: "Poppins",
     family: "'Poppins', ui-sans-serif, system-ui, sans-serif",
@@ -146,8 +146,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "nunito-sans",
     name: "Nunito Sans",
     family: "'Nunito Sans', ui-sans-serif, system-ui, sans-serif",
@@ -194,8 +194,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "source-sans-3",
     name: "Source Sans 3",
     family: "'Source Sans 3', ui-sans-serif, system-ui, sans-serif",
@@ -242,8 +242,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "rubik",
     name: "Rubik",
     family: "'Rubik', ui-sans-serif, system-ui, sans-serif",
@@ -290,8 +290,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "cabin",
     name: "Cabin",
     family: "'Cabin', ui-sans-serif, system-ui, sans-serif",
@@ -338,8 +338,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "assistant",
     name: "Assistant",
     family: "'Assistant', ui-sans-serif, system-ui, sans-serif",
@@ -386,8 +386,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "mulish",
     name: "Mulish",
     family: "'Mulish', ui-sans-serif, system-ui, sans-serif",
@@ -434,8 +434,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "arimo",
     name: "Arimo",
     family: "'Arimo', ui-sans-serif, system-ui, sans-serif",
@@ -482,8 +482,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "lexend",
     name: "Lexend",
     family: "'Lexend', ui-sans-serif, system-ui, sans-serif",
@@ -530,8 +530,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "titillium-web",
     name: "Titillium Web",
     family: "'Titillium Web', ui-sans-serif, system-ui, sans-serif",
@@ -578,8 +578,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "maven-pro",
     name: "Maven Pro",
     family: "'Maven Pro', ui-sans-serif, system-ui, sans-serif",
@@ -626,8 +626,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "figtree",
     name: "Figtree",
     family: "'Figtree', ui-sans-serif, system-ui, sans-serif",
@@ -674,8 +674,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "onest",
     name: "Onest",
     family: "'Onest', ui-sans-serif, system-ui, sans-serif",
@@ -722,8 +722,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "hind",
     name: "Hind",
     family: "'Hind', ui-sans-serif, system-ui, sans-serif",
@@ -770,8 +770,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "roboto-slab",
     name: "Roboto Slab",
     family: "'Roboto Slab', ui-serif, Georgia, serif",
@@ -818,8 +818,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "ibm-plex-serif",
     name: "IBM Plex Serif",
     family: "'IBM Plex Serif', ui-serif, Georgia, serif",
@@ -866,8 +866,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "noto-serif",
     name: "Noto Serif",
     family: "'Noto Serif', ui-serif, Georgia, serif",
@@ -914,8 +914,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "cardo",
     name: "Cardo",
     family: "'Cardo', ui-serif, Georgia, serif",
@@ -962,8 +962,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "domine",
     name: "Domine",
     family: "'Domine', ui-serif, Georgia, serif",
@@ -1010,8 +1010,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "arvo",
     name: "Arvo",
     family: "'Arvo', ui-serif, Georgia, serif",
@@ -1058,8 +1058,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "prata",
     name: "Prata",
     family: "'Prata', ui-serif, Georgia, serif",
@@ -1106,8 +1106,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "bodoni-moda",
     name: "Bodoni Moda",
     family: "'Bodoni Moda', ui-serif, Georgia, serif",
@@ -1154,8 +1154,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "instrument-serif",
     name: "Instrument Serif",
     family: "'Instrument Serif', ui-serif, Georgia, serif",
@@ -1202,8 +1202,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "noto-sans-mono",
     name: "Noto Sans Mono",
     family: "'Noto Sans Mono', ui-monospace, monospace",
@@ -1250,8 +1250,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["mono"],
-  }),
-  f({
+  },
+  {
     id: "red-hat-mono",
     name: "Red Hat Mono",
     family: "'Red Hat Mono', ui-monospace, monospace",
@@ -1298,8 +1298,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["mono"],
-  }),
-  f({
+  },
+  {
     id: "ubuntu-mono",
     name: "Ubuntu Mono",
     family: "'Ubuntu Mono', ui-monospace, monospace",
@@ -1346,8 +1346,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["mono"],
-  }),
-  f({
+  },
+  {
     id: "commit-mono",
     name: "Commit Mono",
     family: "'Commit Mono', ui-monospace, monospace",
@@ -1394,8 +1394,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["mono"],
-  }),
-  f({
+  },
+  {
     id: "changa",
     name: "Changa",
     family: "'Changa', ui-sans-serif, system-ui, sans-serif",
@@ -1442,8 +1442,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "abril-fatface",
     name: "Abril Fatface",
     family: "'Abril Fatface', ui-sans-serif, system-ui, sans-serif",
@@ -1490,8 +1490,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "alfa-slab-one",
     name: "Alfa Slab One",
     family: "'Alfa Slab One', ui-sans-serif, system-ui, sans-serif",
@@ -1538,8 +1538,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "righteous",
     name: "Righteous",
     family: "'Righteous', ui-sans-serif, system-ui, sans-serif",
@@ -1586,8 +1586,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "staatliches",
     name: "Staatliches",
     family: "'Staatliches', ui-sans-serif, system-ui, sans-serif",
@@ -1634,8 +1634,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "fjalla-one",
     name: "Fjalla One",
     family: "'Fjalla One', ui-sans-serif, system-ui, sans-serif",
@@ -1682,8 +1682,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "teko",
     name: "Teko",
     family: "'Teko', ui-sans-serif, system-ui, sans-serif",
@@ -1730,8 +1730,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "sora",
     name: "Sora",
     family: "'Sora', ui-sans-serif, system-ui, sans-serif",
@@ -1778,8 +1778,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "kanit",
     name: "Kanit",
     family: "'Kanit', ui-sans-serif, system-ui, sans-serif",
@@ -1826,8 +1826,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "instrument-sans",
     name: "Instrument Sans",
     family: "'Instrument Sans', ui-sans-serif, system-ui, sans-serif",
@@ -1874,8 +1874,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "climate-crisis",
     name: "Climate Crisis",
     family: "'Climate Crisis', ui-sans-serif, system-ui, sans-serif",
@@ -1922,8 +1922,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "bowlby-one-sc",
     name: "Bowlby One SC",
     family: "'Bowlby One SC', ui-sans-serif, system-ui, sans-serif",
@@ -1970,8 +1970,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "league-spartan",
     name: "League Spartan",
     family: "'League Spartan', ui-sans-serif, system-ui, sans-serif",
@@ -2018,8 +2018,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "league-gothic",
     name: "League Gothic",
     family: "'League Gothic', ui-sans-serif, system-ui, sans-serif",
@@ -2066,8 +2066,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "cabinet-grotesk",
     name: "Cabinet Grotesk",
     family: "'Cabinet Grotesk', ui-sans-serif, system-ui, sans-serif",
@@ -2114,8 +2114,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "supreme",
     name: "Supreme",
     family: "'Supreme', ui-sans-serif, system-ui, sans-serif",
@@ -2162,8 +2162,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "array",
     name: "Array",
     family: "'Array', ui-sans-serif, system-ui, sans-serif",
@@ -2210,8 +2210,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "clash-grotesk",
     name: "Clash Grotesk",
     family: "'Clash Grotesk', ui-sans-serif, system-ui, sans-serif",
@@ -2258,8 +2258,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "clash-display",
     name: "Clash Display",
     family: "'Clash Display', ui-sans-serif, system-ui, sans-serif",
@@ -2306,8 +2306,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "author",
     name: "Author",
     family: "'Author', ui-serif, Georgia, serif",
@@ -2354,8 +2354,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "bespoke-sans",
     name: "Bespoke Sans",
     family: "'Bespoke Sans', ui-sans-serif, system-ui, sans-serif",
@@ -2402,8 +2402,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "bespoke-stencil",
     name: "Bespoke Stencil",
     family: "'Bespoke Stencil', ui-sans-serif, system-ui, sans-serif",
@@ -2450,8 +2450,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "chillax",
     name: "Chillax",
     family: "'Chillax', ui-sans-serif, system-ui, sans-serif",
@@ -2498,8 +2498,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "panchang",
     name: "Panchang",
     family: "'Panchang', ui-sans-serif, system-ui, sans-serif",
@@ -2546,8 +2546,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "ranade",
     name: "Ranade",
     family: "'Ranade', ui-sans-serif, system-ui, sans-serif",
@@ -2594,8 +2594,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "sentient",
     name: "Sentient",
     family: "'Sentient', ui-serif, Georgia, serif",
@@ -2642,8 +2642,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "gambetta",
     name: "Gambetta",
     family: "'Gambetta', ui-serif, Georgia, serif",
@@ -2690,8 +2690,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "boska",
     name: "Boska",
     family: "'Boska', ui-serif, Georgia, serif",
@@ -2738,8 +2738,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "zodiak",
     name: "Zodiak",
     family: "'Zodiak', ui-serif, Georgia, serif",
@@ -2786,8 +2786,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "rowan",
     name: "Rowan",
     family: "'Rowan', ui-serif, Georgia, serif",
@@ -2834,8 +2834,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "synonym",
     name: "Synonym",
     family: "'Synonym', ui-sans-serif, system-ui, sans-serif",
@@ -2882,8 +2882,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "technor",
     name: "Technor",
     family: "'Technor', ui-sans-serif, system-ui, sans-serif",
@@ -2930,8 +2930,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "trench-slab",
     name: "Trench Slab",
     family: "'Trench Slab', ui-serif, Georgia, serif",
@@ -2978,8 +2978,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "recia",
     name: "Recia",
     family: "'Recia', ui-serif, Georgia, serif",
@@ -3026,8 +3026,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "kola",
     name: "Kola",
     family: "'Kola', ui-sans-serif, system-ui, sans-serif",
@@ -3074,8 +3074,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "erode",
     name: "Erode",
     family: "'Erode', ui-serif, Georgia, serif",
@@ -3122,8 +3122,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "bonny",
     name: "Bonny",
     family: "'Bonny', ui-sans-serif, system-ui, sans-serif",
@@ -3170,8 +3170,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "pilcrow-rounded",
     name: "Pilcrow Rounded",
     family: "'Pilcrow Rounded', ui-sans-serif, system-ui, sans-serif",
@@ -3218,8 +3218,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "excon",
     name: "Excon",
     family: "'Excon', ui-sans-serif, system-ui, sans-serif",
@@ -3266,8 +3266,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "aktura",
     name: "Aktura",
     family: "'Aktura', ui-sans-serif, system-ui, sans-serif",
@@ -3314,8 +3314,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "amulya",
     name: "Amulya",
     family: "'Amulya', ui-sans-serif, system-ui, sans-serif",
@@ -3362,8 +3362,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "comico",
     name: "Comico",
     family: "'Comico', ui-sans-serif, system-ui, sans-serif",
@@ -3410,8 +3410,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "telma",
     name: "Telma",
     family: "'Telma', ui-sans-serif, system-ui, sans-serif",
@@ -3458,8 +3458,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "apfel-grotezk",
     name: "Apfel Grotezk",
     family: "'Apfel Grotezk', ui-sans-serif, system-ui, sans-serif",
@@ -3506,8 +3506,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "coconat",
     name: "Coconat",
     family: "'Coconat', ui-sans-serif, system-ui, sans-serif",
@@ -3554,8 +3554,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "sporting-grotesque",
     name: "Sporting Grotesque",
     family: "'Sporting Grotesque', ui-sans-serif, system-ui, sans-serif",
@@ -3602,8 +3602,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "absans",
     name: "Absans",
     family: "'Absans', ui-sans-serif, system-ui, sans-serif",
@@ -3650,8 +3650,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "ronzino",
     name: "Ronzino",
     family: "'Ronzino', ui-sans-serif, system-ui, sans-serif",
@@ -3698,8 +3698,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "sinistre",
     name: "Sinistre",
     family: "'Sinistre', ui-sans-serif, system-ui, sans-serif",
@@ -3746,8 +3746,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "lack",
     name: "Lack",
     family: "'Lack', ui-sans-serif, system-ui, sans-serif",
@@ -3794,8 +3794,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "basteleur",
     name: "Basteleur",
     family: "'Basteleur', ui-serif, Georgia, serif",
@@ -3842,8 +3842,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "messapia",
     name: "Messapia",
     family: "'Messapia', ui-sans-serif, system-ui, sans-serif",
@@ -3890,8 +3890,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "redaction",
     name: "Redaction",
     family: "'Redaction', ui-serif, Georgia, serif",
@@ -3938,8 +3938,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "lineal",
     name: "Lineal",
     family: "'Lineal', ui-sans-serif, system-ui, sans-serif",
@@ -3986,8 +3986,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "avara",
     name: "Avara",
     family: "'Avara', ui-sans-serif, system-ui, sans-serif",
@@ -4034,8 +4034,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "compagnon",
     name: "Compagnon",
     family: "'Compagnon', ui-serif, Georgia, serif",
@@ -4082,8 +4082,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "pilowlava",
     name: "Pilowlava",
     family: "'Pilowlava', ui-sans-serif, system-ui, sans-serif",
@@ -4130,8 +4130,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "authentic-sans",
     name: "Authentic Sans",
     family: "'Authentic Sans', ui-sans-serif, system-ui, sans-serif",
@@ -4178,8 +4178,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "format-1452",
     name: "Format 1452",
     family: "'Format 1452', ui-sans-serif, system-ui, sans-serif",
@@ -4226,8 +4226,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "junction",
     name: "Junction",
     family: "'Junction', ui-sans-serif, system-ui, sans-serif",
@@ -4274,8 +4274,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "fanwood-text",
     name: "Fanwood Text",
     family: "'Fanwood Text', ui-serif, Georgia, serif",
@@ -4322,8 +4322,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "sorts-mill-goudy",
     name: "Sorts Mill Goudy",
     family: "'Sorts Mill Goudy', ui-serif, Georgia, serif",
@@ -4370,8 +4370,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "chunkfive",
     name: "ChunkFive",
     family: "'ChunkFive', ui-sans-serif, system-ui, sans-serif",
@@ -4418,8 +4418,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "orbitron",
     name: "Orbitron",
     family: "'Orbitron', ui-sans-serif, system-ui, sans-serif",
@@ -4466,8 +4466,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "blackout",
     name: "Blackout",
     family: "'Blackout', ui-sans-serif, system-ui, sans-serif",
@@ -4514,8 +4514,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "ostrich-sans",
     name: "Ostrich Sans",
     family: "'Ostrich Sans', ui-sans-serif, system-ui, sans-serif",
@@ -4562,8 +4562,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "goudy-bookletter-1911",
     name: "Goudy Bookletter 1911",
     family: "'Goudy Bookletter 1911', ui-serif, Georgia, serif",
@@ -4610,8 +4610,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "linden-hill",
     name: "Linden Hill",
     family: "'Linden Hill', ui-serif, Georgia, serif",
@@ -4658,8 +4658,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "prociono",
     name: "Prociono",
     family: "'Prociono', ui-serif, Georgia, serif",
@@ -4706,8 +4706,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "sniglet",
     name: "Sniglet",
     family: "'Sniglet', ui-sans-serif, system-ui, sans-serif",
@@ -4754,8 +4754,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "knewave",
     name: "Knewave",
     family: "'Knewave', ui-sans-serif, system-ui, sans-serif",
@@ -4802,8 +4802,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["display"],
-  }),
-  f({
+  },
+  {
     id: "bagnard",
     name: "Bagnard",
     family: "'Bagnard', ui-serif, Georgia, serif",
@@ -4850,8 +4850,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "vg5000",
     name: "VG5000",
     family: "'VG5000', ui-sans-serif, system-ui, sans-serif",
@@ -4898,8 +4898,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "terminal-grotesque",
     name: "Terminal Grotesque",
     family: "'Terminal Grotesque', ui-sans-serif, system-ui, sans-serif",
@@ -4946,8 +4946,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "le-murmure",
     name: "Le Murmure",
     family: "'Le Murmure', ui-sans-serif, system-ui, sans-serif",
@@ -4994,8 +4994,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "anthony",
     name: "Anthony",
     family: "'Anthony', ui-sans-serif, system-ui, sans-serif",
@@ -5042,8 +5042,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "cirrus-cumulus",
     name: "Cirrus Cumulus",
     family: "'Cirrus Cumulus', ui-sans-serif, system-ui, sans-serif",
@@ -5090,8 +5090,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "happy-times",
     name: "Happy Times",
     family: "'Happy Times', ui-sans-serif, system-ui, sans-serif",
@@ -5138,8 +5138,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "trickster",
     name: "Trickster",
     family: "'Trickster', ui-sans-serif, system-ui, sans-serif",
@@ -5186,8 +5186,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "picnic",
     name: "PicNic",
     family: "'PicNic', ui-sans-serif, system-ui, sans-serif",
@@ -5234,8 +5234,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "millimetre",
     name: "Millimetre",
     family: "'Millimetre', ui-sans-serif, system-ui, sans-serif",
@@ -5282,8 +5282,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "ouroboros",
     name: "Ouroboros",
     family: "'Ouroboros', ui-sans-serif, system-ui, sans-serif",
@@ -5330,8 +5330,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "mourier",
     name: "Mourier",
     family: "'Mourier', ui-monospace, monospace",
@@ -5378,8 +5378,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["mono"],
-  }),
-  f({
+  },
+  {
     id: "steps-mono",
     name: "Steps Mono",
     family: "'Steps Mono', ui-monospace, monospace",
@@ -5426,8 +5426,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["mono"],
-  }),
-  f({
+  },
+  {
     id: "savate",
     name: "Savate",
     family: "'Savate', ui-sans-serif, system-ui, sans-serif",
@@ -5474,8 +5474,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "solide-mirage",
     name: "Solide Mirage",
     family: "'Solide Mirage', ui-sans-serif, system-ui, sans-serif",
@@ -5522,8 +5522,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["experimental", "display"],
-  }),
-  f({
+  },
+  {
     id: "karrik",
     name: "Karrik",
     family: "'Karrik', ui-serif, Georgia, serif",
@@ -5570,8 +5570,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "minipax",
     name: "Minipax",
     family: "'Minipax', ui-serif, Georgia, serif",
@@ -5618,8 +5618,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "libertinus-serif",
     name: "Libertinus Serif",
     family: "'Libertinus Serif', ui-serif, Georgia, serif",
@@ -5666,8 +5666,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "libertinus-sans",
     name: "Libertinus Sans",
     family: "'Libertinus Sans', ui-sans-serif, system-ui, sans-serif",
@@ -5714,8 +5714,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "libertinus-mono",
     name: "Libertinus Mono",
     family: "'Libertinus Mono', ui-monospace, monospace",
@@ -5762,8 +5762,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: ["mono"],
-  }),
-  f({
+  },
+  {
     id: "museo-slab",
     name: "Museo Slab",
     family: "'Museo Slab', ui-serif, Georgia, serif",
@@ -5810,8 +5810,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "gentium",
     name: "Gentium",
     family: "'Gentium', ui-serif, Georgia, serif",
@@ -5858,8 +5858,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "pt-sans",
     name: "PT Sans",
     family: "'PT Sans', ui-sans-serif, system-ui, sans-serif",
@@ -5906,8 +5906,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "pt-serif",
     name: "PT Serif",
     family: "'PT Serif', ui-serif, Georgia, serif",
@@ -5954,8 +5954,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "aller",
     name: "Aller",
     family: "'Aller', ui-sans-serif, system-ui, sans-serif",
@@ -6002,8 +6002,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "quicksand",
     name: "Quicksand",
     family: "'Quicksand', ui-sans-serif, system-ui, sans-serif",
@@ -6050,8 +6050,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "droid-sans",
     name: "Droid Sans",
     family: "'Droid Sans', ui-sans-serif, system-ui, sans-serif",
@@ -6098,8 +6098,8 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
-  f({
+  },
+  {
     id: "droid-serif",
     name: "Droid Serif",
     family: "'Droid Serif', ui-serif, Georgia, serif",
@@ -6146,11 +6146,11 @@ export const EXTRA_FREE: FontRecord[] = [
     freeAlternatives: [],
     similarPremiumFonts: [],
     tags: [],
-  }),
+  },
 ];
 
 export const EXTRA_PREMIUM: FontRecord[] = [
-  f({
+  {
     id: "gt-super",
     name: "GT Super",
     family: "ui-serif, Georgia, serif",
@@ -6197,8 +6197,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["fraunces", "playfair-display", "libre-bodoni"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "gt-walsheim",
     name: "GT Walsheim",
     family: "system-ui, sans-serif",
@@ -6245,8 +6245,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["dm-sans", "plus-jakarta-sans", "work-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "gt-alpina",
     name: "GT Alpina",
     family: "ui-serif, Georgia, serif",
@@ -6293,8 +6293,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["source-serif-4", "newsreader", "spectral"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "gt-eesti",
     name: "GT Eesti",
     family: "system-ui, sans-serif",
@@ -6341,8 +6341,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["dm-sans", "plus-jakarta-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "gt-flexa",
     name: "GT Flexa",
     family: "system-ui, sans-serif",
@@ -6389,8 +6389,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["inter", "public-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "gt-pressura",
     name: "GT Pressura",
     family: "ui-monospace, SFMono-Regular, monospace",
@@ -6437,8 +6437,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["ibm-plex-mono", "jetbrains-mono"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "gt-maru",
     name: "GT Maru",
     family: "system-ui, sans-serif",
@@ -6485,8 +6485,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["nunito-sans", "quicksand"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "gt-planar",
     name: "GT Planar",
     family: "system-ui, sans-serif",
@@ -6533,8 +6533,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["space-grotesk", "syne"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "tiempos-headline",
     name: "Tiempos Headline",
     family: "ui-serif, Georgia, serif",
@@ -6581,8 +6581,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["fraunces", "playfair-display"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "national-2",
     name: "National 2",
     family: "system-ui, sans-serif",
@@ -6629,8 +6629,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["public-sans", "inter", "work-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "domaine-display",
     name: "Domaine Display",
     family: "ui-serif, Georgia, serif",
@@ -6677,8 +6677,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["playfair-display", "libre-bodoni"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "domaine-text",
     name: "Domaine Text",
     family: "ui-serif, Georgia, serif",
@@ -6725,8 +6725,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["source-serif-4", "spectral", "newsreader"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "calibre",
     name: "Calibre",
     family: "system-ui, sans-serif",
@@ -6773,8 +6773,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["manrope", "dm-sans", "work-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "sohne",
     name: "Sohne",
     family: "system-ui, sans-serif",
@@ -6821,8 +6821,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["inter", "public-sans", "work-sans", "geist-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "epicene-display",
     name: "Epicene Display",
     family: "ui-serif, Georgia, serif",
@@ -6869,8 +6869,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["playfair-display", "libre-bodoni"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "pp-neue-montreal",
     name: "PP Neue Montreal",
     family: "system-ui, sans-serif",
@@ -6917,8 +6917,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["general-sans", "satoshi", "switzer", "plus-jakarta-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "pp-editorial-new",
     name: "PP Editorial New",
     family: "ui-serif, Georgia, serif",
@@ -6965,8 +6965,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["fraunces", "playfair-display", "cormorant-garamond"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "pp-right-grotesk",
     name: "PP Right Grotesk",
     family: "system-ui, sans-serif",
@@ -7013,8 +7013,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["space-grotesk", "syne"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "pp-telegraf",
     name: "PP Telegraf",
     family: "system-ui, sans-serif",
@@ -7061,8 +7061,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["space-grotesk", "unbounded"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "pp-pangram-sans",
     name: "PP Pangram Sans",
     family: "system-ui, sans-serif",
@@ -7109,8 +7109,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["dm-sans", "plus-jakarta-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "pp-supply-mono",
     name: "PP Supply Mono",
     family: "ui-monospace, SFMono-Regular, monospace",
@@ -7157,8 +7157,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["jetbrains-mono", "ibm-plex-mono", "space-mono"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "pp-neue-world",
     name: "PP Neue World",
     family: "system-ui, sans-serif",
@@ -7205,8 +7205,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["unbounded", "syne", "anybody"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "pp-formula",
     name: "PP Formula",
     family: "system-ui, sans-serif",
@@ -7253,8 +7253,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["unbounded", "space-grotesk"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "dahlia",
     name: "Dahlia",
     family: "ui-serif, Georgia, serif",
@@ -7301,8 +7301,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["fraunces", "cormorant-garamond"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "voyage",
     name: "Voyage",
     family: "ui-serif, Georgia, serif",
@@ -7349,8 +7349,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["playfair-display", "libre-bodoni"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "kobe",
     name: "Kobe",
     family: "system-ui, sans-serif",
@@ -7397,8 +7397,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["inter", "public-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "migra",
     name: "Migra",
     family: "ui-serif, Georgia, serif",
@@ -7445,8 +7445,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["fraunces", "playfair-display"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "canopee",
     name: "Canopee",
     family: "ui-serif, Georgia, serif",
@@ -7493,8 +7493,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["fraunces", "cormorant-garamond"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "surt",
     name: "Surt",
     family: "system-ui, sans-serif",
@@ -7541,8 +7541,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["unbounded", "syne"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "druk-wide",
     name: "Druk Wide",
     family: "system-ui, sans-serif",
@@ -7589,8 +7589,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["anton", "archivo-black", "bebas-neue", "oswald"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "mercury-text",
     name: "Mercury Text",
     family: "ui-serif, Georgia, serif",
@@ -7637,8 +7637,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["source-serif-4", "spectral", "newsreader"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "knockout",
     name: "Knockout",
     family: "system-ui, sans-serif",
@@ -7685,8 +7685,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["anton", "archivo-black", "oswald"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "freight-text",
     name: "Freight Text",
     family: "ui-serif, Georgia, serif",
@@ -7733,8 +7733,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["source-serif-4", "spectral"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "freight-sans",
     name: "Freight Sans",
     family: "system-ui, sans-serif",
@@ -7781,8 +7781,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["work-sans", "public-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "benton-sans",
     name: "Benton Sans",
     family: "system-ui, sans-serif",
@@ -7829,8 +7829,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["inter", "public-sans", "work-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "publico",
     name: "Publico",
     family: "ui-serif, Georgia, serif",
@@ -7877,8 +7877,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["source-serif-4", "newsreader"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "fedra-sans",
     name: "Fedra Sans",
     family: "system-ui, sans-serif",
@@ -7925,8 +7925,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["public-sans", "work-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "fedra-serif",
     name: "Fedra Serif",
     family: "ui-serif, Georgia, serif",
@@ -7973,8 +7973,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["source-serif-4", "spectral"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "greta-sans",
     name: "Greta Sans",
     family: "system-ui, sans-serif",
@@ -8021,8 +8021,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["inter", "public-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "lava",
     name: "Lava",
     family: "ui-serif, Georgia, serif",
@@ -8069,8 +8069,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["spectral", "literata"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "november",
     name: "November",
     family: "system-ui, sans-serif",
@@ -8117,8 +8117,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["public-sans", "inter"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "reckless",
     name: "Reckless",
     family: "ui-serif, Georgia, serif",
@@ -8165,8 +8165,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["fraunces", "spectral"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "matter",
     name: "Matter",
     family: "system-ui, sans-serif",
@@ -8213,8 +8213,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["inter", "satoshi", "public-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "ginto",
     name: "Ginto",
     family: "system-ui, sans-serif",
@@ -8261,8 +8261,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["archivo", "work-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "tobias",
     name: "Tobias",
     family: "ui-serif, Georgia, serif",
@@ -8309,8 +8309,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["playfair-display", "libre-bodoni"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "whyte",
     name: "Whyte",
     family: "system-ui, sans-serif",
@@ -8357,8 +8357,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["satoshi", "general-sans", "inter"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "romie",
     name: "Romie",
     family: "ui-serif, Georgia, serif",
@@ -8405,8 +8405,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["fraunces", "spectral"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "arizona",
     name: "Arizona",
     family: "system-ui, sans-serif",
@@ -8453,8 +8453,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["space-grotesk", "syne"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "bagoss",
     name: "Bagoss",
     family: "system-ui, sans-serif",
@@ -8501,8 +8501,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["syne", "unbounded"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "sharp-grotesk",
     name: "Sharp Grotesk",
     family: "system-ui, sans-serif",
@@ -8549,8 +8549,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["inter", "public-sans", "archivo"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "sharp-sans",
     name: "Sharp Sans",
     family: "system-ui, sans-serif",
@@ -8597,8 +8597,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["dm-sans", "plus-jakarta-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "ogg",
     name: "Ogg",
     family: "ui-serif, Georgia, serif",
@@ -8645,8 +8645,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["playfair-display", "cormorant-garamond"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "beatrice",
     name: "Beatrice",
     family: "system-ui, sans-serif",
@@ -8693,8 +8693,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["inter", "public-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "garnett",
     name: "Garnett",
     family: "system-ui, sans-serif",
@@ -8741,8 +8741,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["satoshi", "general-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "doyle",
     name: "Doyle",
     family: "system-ui, sans-serif",
@@ -8789,8 +8789,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["dm-sans", "plus-jakarta-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "abc-diatype",
     name: "ABC Diatype",
     family: "system-ui, sans-serif",
@@ -8837,8 +8837,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["inter", "satoshi", "public-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "abc-favorit",
     name: "ABC Favorit",
     family: "system-ui, sans-serif",
@@ -8885,8 +8885,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["archivo", "work-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "abc-monument-grotesk",
     name: "ABC Monument Grotesk",
     family: "system-ui, sans-serif",
@@ -8933,8 +8933,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["archivo", "public-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "abc-arizona",
     name: "ABC Arizona",
     family: "ui-serif, Georgia, serif",
@@ -8981,8 +8981,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["fraunces", "playfair-display"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "abc-gravity",
     name: "ABC Gravity",
     family: "system-ui, sans-serif",
@@ -9029,8 +9029,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["unbounded", "anybody"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "abc-oracle",
     name: "ABC Oracle",
     family: "system-ui, sans-serif",
@@ -9077,8 +9077,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["dm-sans", "plus-jakarta-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "abc-whyte",
     name: "ABC Whyte",
     family: "system-ui, sans-serif",
@@ -9125,8 +9125,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["satoshi", "general-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "acumin",
     name: "Acumin",
     family: "system-ui, sans-serif",
@@ -9173,8 +9173,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["inter", "public-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required", "subscription"],
-  }),
-  f({
+  },
+  {
     id: "minion-pro",
     name: "Minion Pro",
     family: "ui-serif, Georgia, serif",
@@ -9221,8 +9221,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["source-serif-4", "eb-garamond"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required", "subscription"],
-  }),
-  f({
+  },
+  {
     id: "myriad-pro",
     name: "Myriad Pro",
     family: "system-ui, sans-serif",
@@ -9269,8 +9269,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["public-sans", "work-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required", "subscription"],
-  }),
-  f({
+  },
+  {
     id: "adobe-garamond",
     name: "Adobe Garamond",
     family: "ui-serif, Georgia, serif",
@@ -9317,8 +9317,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["eb-garamond", "cormorant-garamond"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required", "subscription"],
-  }),
-  f({
+  },
+  {
     id: "kepler",
     name: "Kepler",
     family: "ui-serif, Georgia, serif",
@@ -9365,8 +9365,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["spectral", "newsreader"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required", "subscription"],
-  }),
-  f({
+  },
+  {
     id: "apercu",
     name: "Apercu",
     family: "system-ui, sans-serif",
@@ -9413,8 +9413,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["satoshi", "public-sans", "work-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "basis-grotesque",
     name: "Basis Grotesque",
     family: "system-ui, sans-serif",
@@ -9461,8 +9461,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["public-sans", "work-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "relative",
     name: "Relative",
     family: "system-ui, sans-serif",
@@ -9509,8 +9509,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["dm-sans", "plus-jakarta-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "value-serif",
     name: "Value Serif",
     family: "ui-serif, Georgia, serif",
@@ -9557,8 +9557,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["source-serif-4", "spectral"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "circular",
     name: "Circular",
     family: "system-ui, sans-serif",
@@ -9605,8 +9605,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["dm-sans", "plus-jakarta-sans", "outfit"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "akkurat",
     name: "Akkurat",
     family: "system-ui, sans-serif",
@@ -9653,8 +9653,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["inter", "public-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "brown",
     name: "Brown",
     family: "system-ui, sans-serif",
@@ -9701,8 +9701,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["dm-sans", "plus-jakarta-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "ll-bradford",
     name: "LL Bradford",
     family: "ui-serif, Georgia, serif",
@@ -9749,8 +9749,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["source-serif-4", "spectral"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "ll-supreme",
     name: "LL Supreme",
     family: "system-ui, sans-serif",
@@ -9797,8 +9797,8 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["satoshi", "public-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
-  f({
+  },
+  {
     id: "ll-riforma",
     name: "LL Riforma",
     family: "system-ui, sans-serif",
@@ -9845,5 +9845,5 @@ export const EXTRA_PREMIUM: FontRecord[] = [
     freeAlternatives: ["inter", "public-sans"],
     similarPremiumFonts: [],
     tags: ["premium-reference", "license-required"],
-  }),
+  },
 ];
