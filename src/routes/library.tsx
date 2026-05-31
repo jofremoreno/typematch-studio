@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/typematch/header";
 import { FontLibrary } from "@/components/typematch/font-library";
+import { SavedPairings } from "@/components/typematch/saved-pairings";
 
 export const Route = createFileRoute("/library")({
   head: () => ({
@@ -30,6 +31,9 @@ function LibraryPage() {
         </p>
         <div className="mt-10">
           <FontLibrary />
+        </div>
+        <div className="mt-16">
+          <SavedPairings />
         </div>
       </main>
     </div>
