@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { FONTS, type FontCategory, isPremiumReference } from "@/data/fonts";
 import { LicenseBadges, availabilityLabel } from "./license-badges";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ChevronDown } from "lucide-react";
 
 type CategoryFilter = "All" | FontCategory;
 type AvailabilityFilter =
@@ -36,6 +38,7 @@ export function FontLibrary() {
   const [source, setSource] = useState<string>("All");
   const [query, setQuery] = useState("");
   const [visible, setVisible] = useState(PAGE_SIZE);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const sources = useMemo(
     () => ["All", ...Array.from(new Set(FONTS.map((f) => f.sourceName))).sort()],
@@ -59,6 +62,19 @@ export function FontLibrary() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useMemo(() => setVisible(PAGE_SIZE), [category, availability, preview, source, query]);
   const shown = fonts.slice(0, visible);
+
+  const activeCount =
+    (category !== "All" ? 1 : 0) +
+    (availability !== "All" ? 1 : 0) +
+    (preview !== "All" ? 1 : 0) +
+    (source !== "All" ? 1 : 0);
+
+  const clearFilters = () => {
+    setCategory("All");
+    setAvailability("All");
+    setPreview("All");
+    setSource("All");
+  };
 
   const FilterRow = ({
     label,
