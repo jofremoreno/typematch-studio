@@ -121,10 +121,39 @@ export function FontLibrary() {
         </span>
       </div>
 
-      <FilterRow label="Category" options={CATEGORIES} value={category} onChange={(v) => setCategory(v as CategoryFilter)} />
-      <FilterRow label="Availability" options={AVAILS} value={availability} onChange={(v) => setAvailability(v as AvailabilityFilter)} />
-      <FilterRow label="Preview" options={PREVIEWS} value={preview} onChange={(v) => setPreview(v as PreviewFilter)} />
-      <FilterRow label="Source" options={sources} value={source} onChange={setSource} />
+      <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen}>
+        <div className="flex items-center justify-between gap-3 border-b border-border py-2.5">
+          <CollapsibleTrigger className="ui-text group flex flex-1 items-center gap-3 text-left">
+            <ChevronDown
+              className={
+                "h-3.5 w-3.5 text-muted-foreground transition-transform " +
+                (filtersOpen ? "rotate-0" : "-rotate-90")
+              }
+            />
+            <span className="label-eyebrow">Filters</span>
+            <span className="text-xs text-muted-foreground">
+              {activeCount > 0
+                ? `${activeCount} active`
+                : "Category · Availability · Preview · Source"}
+            </span>
+          </CollapsibleTrigger>
+          {activeCount > 0 && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="ui-text text-[10px] uppercase tracking-widest text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              Clear filters
+            </button>
+          )}
+        </div>
+        <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+          <FilterRow label="Category" options={CATEGORIES} value={category} onChange={(v) => setCategory(v as CategoryFilter)} />
+          <FilterRow label="Availability" options={AVAILS} value={availability} onChange={(v) => setAvailability(v as AvailabilityFilter)} />
+          <FilterRow label="Preview" options={PREVIEWS} value={preview} onChange={(v) => setPreview(v as PreviewFilter)} />
+          <FilterRow label="Source" options={sources} value={source} onChange={setSource} />
+        </CollapsibleContent>
+      </Collapsible>
 
       <div className="mt-6 grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-3">
         {shown.map((f, i) => {
