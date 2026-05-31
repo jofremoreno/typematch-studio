@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { FONTS, type FontCategory, isPremiumReference } from "@/data/fonts";
 import { LicenseBadges, availabilityLabel } from "./license-badges";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ChevronDown } from "lucide-react";
 
 type CategoryFilter = "All" | FontCategory;
 type AvailabilityFilter =
@@ -36,6 +38,7 @@ export function FontLibrary() {
   const [source, setSource] = useState<string>("All");
   const [query, setQuery] = useState("");
   const [visible, setVisible] = useState(PAGE_SIZE);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const sources = useMemo(
     () => ["All", ...Array.from(new Set(FONTS.map((f) => f.sourceName))).sort()],
@@ -59,6 +62,19 @@ export function FontLibrary() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useMemo(() => setVisible(PAGE_SIZE), [category, availability, preview, source, query]);
   const shown = fonts.slice(0, visible);
+
+  const activeCount =
+    (category !== "All" ? 1 : 0) +
+    (availability !== "All" ? 1 : 0) +
+    (preview !== "All" ? 1 : 0) +
+    (source !== "All" ? 1 : 0);
+
+  const clearFilters = () => {
+    setCategory("All");
+    setAvailability("All");
+    setPreview("All");
+    setSource("All");
+  };
 
   const FilterRow = ({
     label,
@@ -105,10 +121,39 @@ export function FontLibrary() {
         </span>
       </div>
 
-      <FilterRow label="Category" options={CATEGORIES} value={category} onChange={(v) => setCategory(v as CategoryFilter)} />
-      <FilterRow label="Availability" options={AVAILS} value={availability} onChange={(v) => setAvailability(v as AvailabilityFilter)} />
-      <FilterRow label="Preview" options={PREVIEWS} value={preview} onChange={(v) => setPreview(v as PreviewFilter)} />
-      <FilterRow label="Source" options={sources} value={source} onChange={setSource} />
+      <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen}>
+        <div className="flex items-center justify-between gap-3 border-b border-border py-2.5">
+          <CollapsibleTrigger className="ui-text group flex flex-1 items-center gap-3 text-left">
+            <ChevronDown
+              className={
+                "h-3.5 w-3.5 text-muted-foreground transition-transform " +
+                (filtersOpen ? "rotate-0" : "-rotate-90")
+              }
+            />
+            <span className="label-eyebrow">Filters</span>
+            <span className="text-xs text-muted-foreground">
+              {activeCount > 0
+                ? `${activeCount} active`
+                : "Category · Availability · Preview · Source"}
+            </span>
+          </CollapsibleTrigger>
+          {activeCount > 0 && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="ui-text text-[10px] uppercase tracking-widest text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              Clear filters
+            </button>
+          )}
+        </div>
+        <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+          <FilterRow label="Category" options={CATEGORIES} value={category} onChange={(v) => setCategory(v as CategoryFilter)} />
+          <FilterRow label="Availability" options={AVAILS} value={availability} onChange={(v) => setAvailability(v as AvailabilityFilter)} />
+          <FilterRow label="Preview" options={PREVIEWS} value={preview} onChange={(v) => setPreview(v as PreviewFilter)} />
+          <FilterRow label="Source" options={sources} value={source} onChange={setSource} />
+        </CollapsibleContent>
+      </Collapsible>
 
       <div className="mt-6 grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-3">
         {shown.map((f, i) => {
