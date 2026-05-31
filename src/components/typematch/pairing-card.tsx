@@ -1,4 +1,7 @@
 import type { Pairing } from "@/lib/pairing";
+import { pairingReasons } from "@/lib/pairing";
+import { useSavedPairings } from "@/lib/saved-pairings";
+import { Bookmark, BookmarkCheck } from "lucide-react";
 import { Badge } from "./badge";
 import { LicenseBadges } from "./license-badges";
 
@@ -10,6 +13,9 @@ function riskColor(level: Pairing["riskLevel"]) {
 
 export function PairingCard({ pairing, index }: { pairing: Pairing; index: number }) {
   const { primary, secondary } = pairing;
+  const { save, isSaved } = useSavedPairings();
+  const saved = isSaved(pairing);
+  const reasons = pairingReasons(pairing);
   const primaryFamily =
     primary.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : primary.family;
   const secondaryFamily =
@@ -82,6 +88,21 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
           <p className="text-foreground">{pairing.explanation}</p>
         </div>
 
+        <div className="border-t border-border pt-4">
+          <span className="label-eyebrow">Why this pairing works</span>
+          <ul className="mt-3 space-y-2 text-xs leading-relaxed">
+            {reasons.map((r) => (
+              <li key={r.label} className="text-foreground">
+                <span className="font-mono-ui text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                  {r.label}
+                </span>
+                <span className="mx-2 text-muted-foreground">·</span>
+                <span>{r.detail}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         {pairing.licenseRequired && pairing.freeAlternative && (
           <div className="border border-border bg-background p-3 text-xs">
             <span className="label-eyebrow">Free alternative for {pairing.secondary.name}</span>
@@ -130,6 +151,19 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
               ))}
             </ul>
           </div>
+        </div>
+
+        <div className="flex items-center justify-end border-t border-border pt-4">
+          <button
+            type="button"
+            onClick={() => !saved && save(pairing)}
+            disabled={saved}
+            aria-pressed={saved}
+            className="inline-flex items-center gap-2 border border-border bg-background px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] text-foreground transition-colors hover:border-foreground disabled:cursor-default disabled:opacity-70"
+          >
+            {saved ? <BookmarkCheck size={12} /> : <Bookmark size={12} />}
+            {saved ? "Saved" : "Save pairing"}
+          </button>
         </div>
       </div>
     </article>
