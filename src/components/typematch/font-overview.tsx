@@ -91,7 +91,6 @@ export function FontOverview({ font }: { font: FontRecord }) {
           </p>
         </div>
       )}
-      </div>
 
       {notice && (
         <div className="mt-6 border-l-2 border-accent bg-card p-4 text-xs leading-relaxed text-muted-foreground">
