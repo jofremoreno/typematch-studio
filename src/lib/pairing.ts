@@ -513,3 +513,84 @@ export function compareFonts(a: FontRecord, b: FontRecord): ComparisonResult {
     licensingFlag,
   };
 }
+
+/* ------------------------------------------------------------------
+ * "Why this pairing works" — short data-driven bullets per pairing.
+ * Derived strictly from font attributes (no random text).
+ * ------------------------------------------------------------------ */
+
+export interface PairingReason {
+  label: string;
+  detail: string;
+}
+
+export function pairingReasons(pairing: Pairing): PairingReason[] {
+  const { primary: p, secondary: s, riskLevel } = pairing;
+  const reasons: PairingReason[] = [];
+
+  // Category contrast
+  if (p.classification !== s.classification) {
+    reasons.push({
+      label: "Category contrast",
+      detail: `${p.classification} against ${s.classification} creates clear visual separation between the two voices.`,
+    });
+  } else if (p.subclassification !== s.subclassification) {
+    reasons.push({
+      label: "Category contrast",
+      detail: `Same classification but different subclassification (${p.subclassification} vs ${s.subclassification}) — contrast comes from form details and must be reinforced by weight and scale.`,
+    });
+  } else {
+    reasons.push({
+      label: "Category contrast",
+      detail: `Same classification and subclassification — hierarchy must come from weight, scale and spacing, not form.`,
+    });
+  }
+
+  // Role separation
+  reasons.push({
+    label: "Role separation",
+    detail: `${p.name} carries ${pairing.primaryRole.toLowerCase()}, ${s.name} carries ${pairing.secondaryRole.toLowerCase()}. Roles do not overlap.`,
+  });
+
+  // Readability
+  const readPivot = Math.max(p.readabilityScore, s.readabilityScore);
+  const readWho = p.readabilityScore >= s.readabilityScore ? p.name : s.name;
+  if (readPivot >= 80) {
+    reasons.push({
+      label: "Readability",
+      detail: `${readWho} keeps the reading layer stable (readability ${readPivot}), which protects the pairing at body and UI sizes.`,
+    });
+  } else {
+    reasons.push({
+      label: "Readability",
+      detail: `Neither face is a strong reading workhorse (top readability ${readPivot}). Keep long-form text short and rely on scale for hierarchy.`,
+    });
+  }
+
+  // Personality fit
+  const shared = p.personality.filter((x) => s.personality.includes(x));
+  if (shared.length) {
+    reasons.push({
+      label: "Personality fit",
+      detail: `Both share a ${shared.slice(0, 2).join(" / ")} character, so the voice stays coherent while the forms differ.`,
+    });
+  } else {
+    reasons.push({
+      label: "Personality fit",
+      detail: `Personalities diverge — ${p.personality.slice(0, 2).join(" / ")} against ${s.personality.slice(0, 2).join(" / ")} — adding tension that must be managed through scale and spacing.`,
+    });
+  }
+
+  // Risk level (always last, so it stays visible)
+  reasons.push({
+    label: "Risk level",
+    detail:
+      riskLevel === "Low"
+        ? "Low risk — safe to deploy across system and editorial work."
+        : riskLevel === "Medium"
+          ? "Medium risk — works when roles, scale and spacing are controlled."
+          : "High risk — use only in expressive contexts with strict role assignment.",
+  });
+
+  return reasons;
+}
