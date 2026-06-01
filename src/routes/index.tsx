@@ -69,7 +69,7 @@ function Index() {
 
         <div className="hairline" />
 
-        {!query && <EmptyState />}
+        {/* {!query && <EmptyState />} */}
 
         {query && !font && (
           <div className="py-12">
