@@ -67,8 +67,6 @@ function Index() {
           </div>
         </section>
 
-        <div className="hairline" />
-
         {/* {!query && <EmptyState />} */}
 
         {query && !font && (
@@ -91,7 +89,7 @@ function Index() {
           </article>
         )}
 
-        <section id="library" className="pt-20 scroll-mt-24">
+        <section id="library" className="pt-16 scroll-mt-24">
           <div className="hairline mb-12" />
           <span className="label-eyebrow">Library</span>
           <h2 className="font-editorial mt-3 max-w-3xl text-[clamp(1.875rem,4vw,3rem)] leading-[1.05] tracking-tight">
