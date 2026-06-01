@@ -4,8 +4,7 @@ import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 
 const NAV = [
-  { to: "/", label: "Analyze" },
-  { to: "/library", label: "Library" },
+  { to: "/", label: "Explore" },
   { to: "/compare", label: "Compare" },
   { to: "/licensing", label: "Licensing" },
   { to: "/method", label: "Method" },
