@@ -13,6 +13,8 @@ import { PairingPreview } from "@/components/typematch/pairing-preview";
 import { MethodSection } from "@/components/typematch/method-section";
 import { EmptyState } from "@/components/typematch/empty-state";
 import { NotFoundState } from "@/components/typematch/not-found-state";
+import { FontLibrary } from "@/components/typematch/font-library";
+import { SavedPairings } from "@/components/typematch/saved-pairings";
 import { findFontByQuery } from "@/data/fonts";
 import { Link } from "@tanstack/react-router";
 
@@ -22,11 +24,11 @@ export const Route = createFileRoute("/")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Analyze — TypeMatch Studio" },
+      { title: "Explore — TypeMatch Studio" },
       {
         name: "description",
         content:
-          "Analyze free typefaces and build pairings based on contrast, legibility and context. No random matches.",
+          "Explore free typefaces, analyze them, and build pairings based on contrast, legibility and context.",
       },
     ],
   }),
@@ -55,9 +57,9 @@ function Index() {
             <FontSearch defaultValue={query} />
           </div>
           <div className="mt-6 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-            <Link to="/library" className="border border-border bg-card px-3 py-1.5 text-foreground hover:border-foreground">
-              Explore free library →
-            </Link>
+            <a href="#library" className="border border-border bg-card px-3 py-1.5 text-foreground hover:border-foreground">
+              Jump to library ↓
+            </a>
             <p className="max-w-lg leading-relaxed">
               No random matches. No paid-font database. Every recommendation is
               based on local typographic attributes.
@@ -88,6 +90,24 @@ function Index() {
             <MethodSection />
           </article>
         )}
+
+        <section id="library" className="pt-20 scroll-mt-24">
+          <div className="hairline mb-12" />
+          <span className="label-eyebrow">Library</span>
+          <h2 className="font-editorial mt-3 max-w-3xl text-[clamp(1.875rem,4vw,3rem)] leading-[1.05] tracking-tight">
+            Explore the type library
+          </h2>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
+            Browse local typefaces, filter by use, license and source, then
+            analyze or compare.
+          </p>
+          <div className="mt-10">
+            <FontLibrary />
+          </div>
+          <div className="mt-16">
+            <SavedPairings />
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
