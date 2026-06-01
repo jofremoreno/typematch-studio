@@ -44,7 +44,7 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main className="mx-auto w-full max-w-7xl px-5 pb-24 sm:px-8">
-        <section className="pb-12 pt-16 sm:pt-24">
+        <section className="pb-6 pt-16 sm:pb-8 sm:pt-24">
           <span className="label-eyebrow">A typography tool, not a generator</span>
           <h1 className="font-editorial mt-4 max-w-4xl text-[clamp(2.5rem,6.5vw,5rem)] leading-[0.98] tracking-tight">
             Typography pairing with design logic.
@@ -89,7 +89,7 @@ function Index() {
           </article>
         )}
 
-        <section id="library" className="pt-16 scroll-mt-24">
+        <section id="library" className="pt-6 scroll-mt-24 sm:pt-10">
           <div className="hairline mb-12" />
           <span className="label-eyebrow">Library</span>
           <h2 className="font-editorial mt-3 max-w-3xl text-[clamp(1.875rem,4vw,3rem)] leading-[1.05] tracking-tight">
