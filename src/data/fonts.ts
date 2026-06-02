@@ -1901,7 +1901,7 @@ export const SOURCES: SourceEntry[] = [
     officialUrl: "https://productiontype.com/" },
   { name: "Adobe Fonts", type: "Subscription library", licenseConfidence: "High",
     role: "Subscription access to many premium foundries", category: "subscription",
-    notes: "Included with Creative Cloud. License depends on subscription tier and usage.",
+    notes: "Adobe Fonts is available through Adobe services or Creative Cloud access. Usage depends on Adobe Fonts licensing and the user's active access. TypeMatch Studio lists Adobe Fonts as an informational reference only and does not distribute, self-host or serve Adobe font files.",
     officialUrl: "https://fonts.adobe.com/" },
   { name: "ABC Dinamo", type: "Premium foundry", licenseConfidence: "High",
     role: "Premium reference (license required)", category: "premium",
