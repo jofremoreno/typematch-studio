@@ -77,6 +77,9 @@ export function sourceButtonLabel(font: FontRecord): string {
 
 /** Standard licensing notice copy per availability. */
 export function licensingNotice(font: FontRecord): string | null {
+  if (font.availability === "pay-what-you-want") {
+    return "Pay-what-you-want family. Free weights may be available, but usage depends on the official license — verify before any commercial use.";
+  }
   if (!isPremiumReference(font)) return null;
   switch (font.availability) {
     case "trial":
