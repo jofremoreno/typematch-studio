@@ -2,9 +2,7 @@ import type { Pairing } from "@/lib/pairing";
 import { pairingReasons } from "@/lib/pairing";
 import { useSavedPairings } from "@/lib/saved-pairings";
 import { Bookmark, BookmarkCheck, ExternalLink } from "lucide-react";
-import { Badge } from "./badge";
-import { LicenseBadges } from "./license-badges";
-import { sourceButtonLabel } from "./license-badges";
+import { LicenseBadges, sourceButtonLabel } from "./license-badges";
 import type { FontRecord } from "@/data/fonts";
 
 function SourceLink({ font, label }: { font: FontRecord; label: string }) {
