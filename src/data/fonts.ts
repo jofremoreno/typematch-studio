@@ -1998,7 +1998,8 @@ export function isPremiumReference(f: FontRecord): boolean {
     f.availability === "paid" ||
     f.availability === "trial" ||
     f.availability === "subscription" ||
-    f.availability === "inspiration-only"
+    f.availability === "inspiration-only" ||
+    f.availability === "pay-what-you-want"
   );
 }
 
