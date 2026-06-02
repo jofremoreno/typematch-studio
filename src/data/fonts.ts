@@ -1733,6 +1733,73 @@ FONTS.push(...PREMIUM_REFERENCES);
 import { EXTRA_FREE, EXTRA_PREMIUM } from "./fonts-extended";
 FONTS.push(...EXTRA_FREE, ...EXTRA_PREMIUM);
 
+/* -------------------------------------------------------------------------
+ * Atipo Foundry — informational references only.
+ *
+ * Atipo offers free weights and pay-what-you-want families. TypeMatch
+ * Studio lists them as informational references and never distributes,
+ * converts, self-hosts or serves Atipo font files.
+ * ------------------------------------------------------------------------- */
+
+const ATIPO_WARNING =
+  "Atipo fonts may include free weights or pay-what-you-want families, but usage depends on the official license. Do not redistribute, convert or self-host font files unless the license allows it.";
+
+const atipoRef = (id: string, name: string, classification: FontCategory, sub: string, tags: string[] = []): FontRecord =>
+  f({
+    id,
+    name,
+    family: "ui-sans-serif, system-ui, sans-serif",
+    classification,
+    subclassification: sub,
+    license: "Free",
+    sourceName: "Atipo Foundry",
+    sourceUrl: "https://www.atipofoundry.com/",
+    reference: `${name} by Atipo Foundry. Informational reference only — verify the official license before use.`,
+    personality: ["informational"],
+    xHeight: "Medium", strokeContrast: "Medium", aperture: "Moderate", width: "Normal",
+    rhythm: "Regular", spacing: "Normal",
+    opticalFeeling: "Informational reference",
+    bestRoles: [], weakRoles: [],
+    readabilityScore: 0, displayScore: 0, bodyTextScore: 0, uiScore: 0,
+    printScore: 0, screenScore: 0, versatilityScore: 0,
+    contrastTolerance: "Medium", pairingDifficulty: "Moderate",
+    recommendedContexts: [], avoidContexts: [],
+    bestMedium: "Both",
+    foundry: "Atipo Foundry",
+    availability: "pay-what-you-want",
+    licenseStatus: "verify",
+    licenseName: "Atipo license",
+    sourceRole: "official-source",
+    sourceType: "premium-foundry",
+    canPreviewInApp: false,
+    canDownloadDirectly: false,
+    canUseCommercially: "depends",
+    needsManualLicenseCheck: true,
+    catalogRole: "inspiration-reference",
+    warning: ATIPO_WARNING,
+    freeAlternatives: classification === "Serif"
+      ? ["source-serif-4", "cormorant-garamond", "playfair-display"]
+      : classification === "Display"
+        ? ["archivo", "space-grotesk"]
+        : ["inter", "public-sans", "ibm-plex-sans", "work-sans"],
+    tags: ["Atipo Foundry", "Pay what you want", "Needs license check", "Fallback preview", ...tags],
+  });
+
+const ATIPO_REFERENCES: FontRecord[] = [
+  atipoRef("atipo-azo-sans", "Azo Sans", "Sans-serif", "Geometric sans"),
+  atipoRef("atipo-geomanist", "Geomanist", "Sans-serif", "Geometric sans"),
+  atipoRef("atipo-uni-sans", "Uni Sans", "Sans-serif", "Geometric sans"),
+  atipoRef("atipo-nordvest", "Nordvest", "Serif", "Contemporary serif"),
+  atipoRef("atipo-quincy-cf", "Quincy CF", "Serif", "Editorial serif"),
+  atipoRef("atipo-krub", "Krub", "Sans-serif", "Humanist sans"),
+  atipoRef("atipo-bariol", "Bariol", "Sans-serif", "Rounded humanist sans"),
+  atipoRef("atipo-pacifico-display", "Caderno Display", "Display", "Editorial display"),
+  atipoRef("atipo-belia", "Belia", "Display", "Display script"),
+  atipoRef("atipo-cassannet", "Cassannet", "Display", "Art-deco geometric display"),
+];
+
+FONTS.push(...ATIPO_REFERENCES);
+
 export const FONTS_BY_ID: Record<string, FontRecord> = Object.fromEntries(
   FONTS.map((f) => [f.id, f]),
 );
