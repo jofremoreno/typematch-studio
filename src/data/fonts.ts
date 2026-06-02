@@ -7,7 +7,8 @@ export type Availability =
   | "trial"
   | "paid"
   | "subscription"
-  | "inspiration-only";
+  | "inspiration-only"
+  | "pay-what-you-want";
 
 export type LicenseStatus = "safe" | "verify" | "license-required";
 
