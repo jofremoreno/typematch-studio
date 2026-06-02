@@ -1939,7 +1939,55 @@ export const SOURCES: SourceEntry[] = [
     role: "Premium reference (license required)", category: "premium",
     notes: "Foundry now distributed through Monotype.",
     officialUrl: "https://www.monotype.com/foundries/hoefler-and-co" },
+  { name: "Atipo Foundry", type: "Independent foundry", licenseConfidence: "Medium",
+    role: "Pay what you want / free weights — verify license", category: "premium",
+    notes: "Atipo offers free weights and pay-what-you-want families, but usage depends on the official license. TypeMatch Studio lists Atipo as an informational reference only and does not distribute, convert, self-host or serve Atipo font files.",
+    officialUrl: "https://www.atipofoundry.com/" },
 ];
+
+/* -------------------------------------------------------------------------
+ * Adobe Fonts foundry directory — informational references only.
+ *
+ * Adobe Fonts is a subscription library. The entries below describe
+ * foundries whose work is distributed through Adobe Fonts. TypeMatch
+ * Studio does not list individual font cards for these foundries —
+ * usage depends on Adobe Fonts licensing and active access.
+ * ------------------------------------------------------------------------- */
+
+export interface AdobeFoundryEntry {
+  name: string;
+  slug: string;
+}
+
+export const ADOBE_FOUNDRIES_DIRECTORY_URL = "https://fonts.adobe.com/foundries";
+
+export const ADOBE_FOUNDRIES: AdobeFoundryEntry[] = [
+  "Aerotype","Ahmet Altun","Alibabá","Alphabet Soup","Antonio Di Spigna","Atlas Fonts",
+  "AG Typography Institute","Adam Ladd","Adobe Originals","Ajimin","Alan Meeks","Altertype",
+  "Anatoletype","Arphic Types","ArrowType","Betatype","BluHead Studio","Briefcase Type",
+  "Bijou Type","Black[Foundry]","Blackletra","Blambot","Blaze Type","Bold Monday",
+  "Borges Lettering & Design","Buro Destruct","CakeType","Chandler Van De Water",
+  "Character Type","Christopher Slye","Colección American Type Founders","César Puertas",
+  "Código abierto","CAST","CJ Type","CSTM Fonts","CabargaType","Cadson Demak","Canada Type",
+  "Capitalics","Carter & Cone","Casa tipográfica Fort","Casa tipográfica P22",
+  "Casa tipográfica Revolver","Casa tipográfica Signal","Casa tipográfica exljbris",
+  "Chank Co","Comicraft","Connary Fagen","Contrast Foundry","DSType","Dalton Maag",
+  "Daniel Rhatigan","Designer Studio","DJR","DX Korea","Dai Nippon Printing","Darden Studio",
+  "Dave Rowland Type","Debi Sementelli","Delve Fonts","Design Signal","Design210",
+  "Dharma Type","DizajnDesign","Dunwich Type Founders","Emily Spadoni","Elefonts",
+  "Ellen Luff Type Foundry","Emigre","EuropaType","Filmotype","Fonthead","Fontself",
+  "FONT1000","FSD","Famira Fonts","Fer Cozzi","Floodfonts","Font Diner","FontFont",
+  "Fontador","Fontef","Fontfabric","Fontpartners","FounderType","Foundry5",
+  "Frere-Jones Type","Fuente Seiwa-do","Fuentes Gradeo","Fuentes HVD","Fuentes MAC Rhino",
+  "Fuentes de dispositivos","Google","G-Type","GarageFonts","Greg Thompson","Hypertype",
+  "Hakusyu Fonts","Hamilton Wood Type Collection",
+].map((name) => ({
+  name,
+  slug: name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, ""),
+}));
 
 /* -------------------------------------------------------------------------
  * Helpers
