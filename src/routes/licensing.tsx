@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/typematch/header";
-import { SOURCES } from "@/data/fonts";
+import { SOURCES, ADOBE_FOUNDRIES, ADOBE_FOUNDRIES_DIRECTORY_URL } from "@/data/fonts";
 import { ExternalLink } from "lucide-react";
 
 export const Route = createFileRoute("/licensing")({
@@ -95,6 +95,43 @@ function LicensingPage() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section className="mt-16">
+          <span className="label-eyebrow">Adobe Fonts — foundry directory</span>
+          <h2 className="font-editorial mt-3 text-3xl tracking-tight sm:text-4xl">
+            Foundries distributed through Adobe Fonts.
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Adobe Fonts is a subscription library. The foundries below are
+            referenced for informational purposes only. TypeMatch Studio does
+            not distribute, self-host or serve Adobe font files. Usage depends
+            on Adobe Fonts licensing and active access — always verify on the
+            official source.
+          </p>
+          <a
+            href={ADOBE_FOUNDRIES_DIRECTORY_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-flex items-center gap-1 text-xs text-foreground underline-offset-4 hover:underline"
+          >
+            fonts.adobe.com/foundries <ExternalLink size={12} />
+          </a>
+          <ul className="mt-8 grid grid-cols-2 gap-x-6 gap-y-2 text-xs sm:grid-cols-3 lg:grid-cols-4">
+            {ADOBE_FOUNDRIES.map((foundry) => (
+              <li
+                key={foundry.slug}
+                className="flex items-baseline justify-between gap-2 border-b border-border py-2"
+              >
+                <span className="text-foreground">{foundry.name}</span>
+                <span className="label-eyebrow text-[9px]">Foundry ref</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 max-w-2xl text-[11px] leading-relaxed text-muted-foreground">
+            Partial listing. Each foundry is referenced under Adobe Fonts as a
+            subscription source. Verify license and active access before use.
+          </p>
         </section>
       </main>
     </div>
