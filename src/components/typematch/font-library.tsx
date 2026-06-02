@@ -12,11 +12,12 @@ type AvailabilityFilter =
   | "Open Source"
   | "Trial"
   | "Paid"
-  | "Subscription";
+  | "Subscription"
+  | "Pay what you want";
 type PreviewFilter = "All" | "Can preview in app" | "Fallback preview only";
 
 const CATEGORIES: CategoryFilter[] = ["All", "Sans-serif", "Serif", "Mono", "Display"];
-const AVAILS: AvailabilityFilter[] = ["All", "Free", "Open Source", "Trial", "Paid", "Subscription"];
+const AVAILS: AvailabilityFilter[] = ["All", "Free", "Open Source", "Trial", "Paid", "Subscription", "Pay what you want"];
 const PREVIEWS: PreviewFilter[] = ["All", "Can preview in app", "Fallback preview only"];
 
 function matchesAvailability(f: { availability?: string }, a: AvailabilityFilter): boolean {
@@ -26,6 +27,7 @@ function matchesAvailability(f: { availability?: string }, a: AvailabilityFilter
   if (a === "Trial") return f.availability === "trial";
   if (a === "Paid") return f.availability === "paid";
   if (a === "Subscription") return f.availability === "subscription";
+  if (a === "Pay what you want") return f.availability === "pay-what-you-want";
   return true;
 }
 
@@ -186,11 +188,17 @@ export function FontLibrary() {
               <div className="ui-text space-y-3">
                 <LicenseBadges font={f} compact />
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{isPremiumReference(f) ? "Premium reference" : `Best for ${f.bestMedium.toLowerCase()}`}</span>
+                  <span>
+                    {f.availability === "pay-what-you-want"
+                      ? "Informational reference"
+                      : isPremiumReference(f)
+                        ? "Premium reference"
+                        : `Best for ${f.bestMedium.toLowerCase()}`}
+                  </span>
                   <Link
                     to="/"
                     search={{ q: f.name } as never}
-                    className="inline-flex items-center gap-1 text-foreground underline-offset-4 hover:underline"
+                    className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-background px-2.5 py-1 text-[11px] uppercase tracking-[0.14em] text-foreground transition-colors hover:border-foreground hover:bg-secondary"
                   >
                     Analyze →
                   </Link>

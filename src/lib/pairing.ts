@@ -288,6 +288,18 @@ function buildPairing(
 }
 
 export function buildRecommendations(primary: FontRecord): Pairing[] {
+  return buildExtendedRecommendations(primary, new Set(), 1);
+}
+
+/**
+ * Build N pairings per category, skipping any secondary fonts already in
+ * `excludeIds`. Used by the "Show more pairings" control.
+ */
+export function buildExtendedRecommendations(
+  primary: FontRecord,
+  excludeIds: Set<string>,
+  perCategory = 1,
+): Pairing[] {
   // Pre-filter the universe to keep the recommendations defensible.
   // Reliable system pairings prefer fonts the user can actually use without
   // a commercial license — premium references are excluded.
@@ -318,27 +330,29 @@ export function buildRecommendations(primary: FontRecord): Pairing[] {
   const editorial = rankIn(editorialPool, editorialScore);
   const experimental = rankIn(experimentalPool.length ? experimentalPool : editorialPool, experimentalScore);
 
-  // pick top candidates, but avoid duplicates across the three slots
-  const picked = new Set<string>();
-  const pickFrom = (list: typeof reliable) => {
+  const picked = new Set<string>(excludeIds);
+  const pickN = (list: typeof reliable, n: number) => {
+    const out: typeof reliable = [];
     for (const item of list) {
-      if (!picked.has(item.f.id)) {
-        picked.add(item.f.id);
-        return item;
-      }
+      if (picked.has(item.f.id)) continue;
+      picked.add(item.f.id);
+      out.push(item);
+      if (out.length >= n) break;
     }
-    return list[0];
+    return out;
   };
 
-  const r = pickFrom(reliable);
-  const e = pickFrom(editorial);
-  const x = pickFrom(experimental);
+  const rs = pickN(reliable, perCategory);
+  const es = pickN(editorial, perCategory);
+  const xs = pickN(experimental, perCategory);
 
-  return [
-    buildPairing(primary, r.f, "Reliable System Pairing", r.score),
-    buildPairing(primary, e.f, "Editorial Contrast Pairing", e.score),
-    buildPairing(primary, x.f, "Experimental / High Character Pairing", x.score),
-  ];
+  const out: Pairing[] = [];
+  for (let i = 0; i < perCategory; i++) {
+    if (rs[i]) out.push(buildPairing(primary, rs[i].f, "Reliable System Pairing", rs[i].score));
+    if (es[i]) out.push(buildPairing(primary, es[i].f, "Editorial Contrast Pairing", es[i].score));
+    if (xs[i]) out.push(buildPairing(primary, xs[i].f, "Experimental / High Character Pairing", xs[i].score));
+  }
+  return out;
 }
 
 /* ------------------------------------------------------------------

@@ -27,11 +27,16 @@ export function LicenseBadges({ font, compact = false }: { font: FontRecord; com
     case "inspiration-only":
       labels.push("Inspiration");
       break;
+    case "pay-what-you-want":
+      labels.push("Pay what you want", "Free weights available");
+      break;
     default:
       labels.push("Free");
   }
   if (font.needsManualLicenseCheck) labels.push("Verify license");
   if (font.catalogRole === "premium-reference") labels.push("Premium reference");
+  if (font.sourceName === "Atipo Foundry") labels.unshift("Atipo Foundry");
+  if (font.sourceName === "Adobe Fonts" && !labels.includes("Adobe Fonts")) labels.unshift("Adobe Fonts");
   if (font.canPreviewInApp === false) labels.push("Fallback preview");
 
   const list = compact ? labels.slice(0, 3) : labels;
@@ -53,6 +58,7 @@ export function availabilityLabel(font: FontRecord): string {
     case "paid": return "Paid";
     case "subscription": return "Subscription";
     case "inspiration-only": return "Inspiration";
+    case "pay-what-you-want": return "Pay what you want";
     default: return "Free";
   }
 }
@@ -64,12 +70,16 @@ export function sourceButtonLabel(font: FontRecord): string {
     case "paid": return "View official source";
     case "subscription": return "View subscription source";
     case "inspiration-only": return "View reference";
+    case "pay-what-you-want": return "View official source";
     default: return "View source";
   }
 }
 
 /** Standard licensing notice copy per availability. */
 export function licensingNotice(font: FontRecord): string | null {
+  if (font.availability === "pay-what-you-want") {
+    return "Pay-what-you-want family. Free weights may be available, but usage depends on the official license — verify before any commercial use.";
+  }
   if (!isPremiumReference(font)) return null;
   switch (font.availability) {
     case "trial":

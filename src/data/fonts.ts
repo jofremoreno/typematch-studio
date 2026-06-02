@@ -7,7 +7,8 @@ export type Availability =
   | "trial"
   | "paid"
   | "subscription"
-  | "inspiration-only";
+  | "inspiration-only"
+  | "pay-what-you-want";
 
 export type LicenseStatus = "safe" | "verify" | "license-required";
 
@@ -1732,6 +1733,73 @@ FONTS.push(...PREMIUM_REFERENCES);
 import { EXTRA_FREE, EXTRA_PREMIUM } from "./fonts-extended";
 FONTS.push(...EXTRA_FREE, ...EXTRA_PREMIUM);
 
+/* -------------------------------------------------------------------------
+ * Atipo Foundry — informational references only.
+ *
+ * Atipo offers free weights and pay-what-you-want families. TypeMatch
+ * Studio lists them as informational references and never distributes,
+ * converts, self-hosts or serves Atipo font files.
+ * ------------------------------------------------------------------------- */
+
+const ATIPO_WARNING =
+  "Atipo fonts may include free weights or pay-what-you-want families, but usage depends on the official license. Do not redistribute, convert or self-host font files unless the license allows it.";
+
+const atipoRef = (id: string, name: string, classification: FontCategory, sub: string, tags: string[] = []): FontRecord =>
+  f({
+    id,
+    name,
+    family: "ui-sans-serif, system-ui, sans-serif",
+    classification,
+    subclassification: sub,
+    license: "Free",
+    sourceName: "Atipo Foundry",
+    sourceUrl: "https://www.atipofoundry.com/",
+    reference: `${name} by Atipo Foundry. Informational reference only — verify the official license before use.`,
+    personality: ["informational"],
+    xHeight: "Medium", strokeContrast: "Medium", aperture: "Moderate", width: "Normal",
+    rhythm: "Regular", spacing: "Normal",
+    opticalFeeling: "Informational reference",
+    bestRoles: [], weakRoles: [],
+    readabilityScore: 0, displayScore: 0, bodyTextScore: 0, uiScore: 0,
+    printScore: 0, screenScore: 0, versatilityScore: 0,
+    contrastTolerance: "Medium", pairingDifficulty: "Moderate",
+    recommendedContexts: [], avoidContexts: [],
+    bestMedium: "Both",
+    foundry: "Atipo Foundry",
+    availability: "pay-what-you-want",
+    licenseStatus: "verify",
+    licenseName: "Atipo license",
+    sourceRole: "official-source",
+    sourceType: "premium-foundry",
+    canPreviewInApp: false,
+    canDownloadDirectly: false,
+    canUseCommercially: "depends",
+    needsManualLicenseCheck: true,
+    catalogRole: "inspiration-reference",
+    warning: ATIPO_WARNING,
+    freeAlternatives: classification === "Serif"
+      ? ["source-serif-4", "cormorant-garamond", "playfair-display"]
+      : classification === "Display"
+        ? ["archivo", "space-grotesk"]
+        : ["inter", "public-sans", "ibm-plex-sans", "work-sans"],
+    tags: ["Atipo Foundry", "Pay what you want", "Needs license check", "Fallback preview", ...tags],
+  });
+
+const ATIPO_REFERENCES: FontRecord[] = [
+  atipoRef("atipo-azo-sans", "Azo Sans", "Sans-serif", "Geometric sans"),
+  atipoRef("atipo-geomanist", "Geomanist", "Sans-serif", "Geometric sans"),
+  atipoRef("atipo-uni-sans", "Uni Sans", "Sans-serif", "Geometric sans"),
+  atipoRef("atipo-nordvest", "Nordvest", "Serif", "Contemporary serif"),
+  atipoRef("atipo-quincy-cf", "Quincy CF", "Serif", "Editorial serif"),
+  atipoRef("atipo-krub", "Krub", "Sans-serif", "Humanist sans"),
+  atipoRef("atipo-bariol", "Bariol", "Sans-serif", "Rounded humanist sans"),
+  atipoRef("atipo-pacifico-display", "Caderno Display", "Display", "Editorial display"),
+  atipoRef("atipo-belia", "Belia", "Display", "Display script"),
+  atipoRef("atipo-cassannet", "Cassannet", "Display", "Art-deco geometric display"),
+];
+
+FONTS.push(...ATIPO_REFERENCES);
+
 export const FONTS_BY_ID: Record<string, FontRecord> = Object.fromEntries(
   FONTS.map((f) => [f.id, f]),
 );
@@ -1833,7 +1901,7 @@ export const SOURCES: SourceEntry[] = [
     officialUrl: "https://productiontype.com/" },
   { name: "Adobe Fonts", type: "Subscription library", licenseConfidence: "High",
     role: "Subscription access to many premium foundries", category: "subscription",
-    notes: "Included with Creative Cloud. License depends on subscription tier and usage.",
+    notes: "Adobe Fonts is available through Adobe services or Creative Cloud access. Usage depends on Adobe Fonts licensing and the user's active access. TypeMatch Studio lists Adobe Fonts as an informational reference only and does not distribute, self-host or serve Adobe font files.",
     officialUrl: "https://fonts.adobe.com/" },
   { name: "ABC Dinamo", type: "Premium foundry", licenseConfidence: "High",
     role: "Premium reference (license required)", category: "premium",
@@ -1871,7 +1939,55 @@ export const SOURCES: SourceEntry[] = [
     role: "Premium reference (license required)", category: "premium",
     notes: "Foundry now distributed through Monotype.",
     officialUrl: "https://www.monotype.com/foundries/hoefler-and-co" },
+  { name: "Atipo Foundry", type: "Independent foundry", licenseConfidence: "Medium",
+    role: "Pay what you want / free weights — verify license", category: "premium",
+    notes: "Atipo offers free weights and pay-what-you-want families, but usage depends on the official license. TypeMatch Studio lists Atipo as an informational reference only and does not distribute, convert, self-host or serve Atipo font files.",
+    officialUrl: "https://www.atipofoundry.com/" },
 ];
+
+/* -------------------------------------------------------------------------
+ * Adobe Fonts foundry directory — informational references only.
+ *
+ * Adobe Fonts is a subscription library. The entries below describe
+ * foundries whose work is distributed through Adobe Fonts. TypeMatch
+ * Studio does not list individual font cards for these foundries —
+ * usage depends on Adobe Fonts licensing and active access.
+ * ------------------------------------------------------------------------- */
+
+export interface AdobeFoundryEntry {
+  name: string;
+  slug: string;
+}
+
+export const ADOBE_FOUNDRIES_DIRECTORY_URL = "https://fonts.adobe.com/foundries";
+
+export const ADOBE_FOUNDRIES: AdobeFoundryEntry[] = [
+  "Aerotype","Ahmet Altun","Alibabá","Alphabet Soup","Antonio Di Spigna","Atlas Fonts",
+  "AG Typography Institute","Adam Ladd","Adobe Originals","Ajimin","Alan Meeks","Altertype",
+  "Anatoletype","Arphic Types","ArrowType","Betatype","BluHead Studio","Briefcase Type",
+  "Bijou Type","Black[Foundry]","Blackletra","Blambot","Blaze Type","Bold Monday",
+  "Borges Lettering & Design","Buro Destruct","CakeType","Chandler Van De Water",
+  "Character Type","Christopher Slye","Colección American Type Founders","César Puertas",
+  "Código abierto","CAST","CJ Type","CSTM Fonts","CabargaType","Cadson Demak","Canada Type",
+  "Capitalics","Carter & Cone","Casa tipográfica Fort","Casa tipográfica P22",
+  "Casa tipográfica Revolver","Casa tipográfica Signal","Casa tipográfica exljbris",
+  "Chank Co","Comicraft","Connary Fagen","Contrast Foundry","DSType","Dalton Maag",
+  "Daniel Rhatigan","Designer Studio","DJR","DX Korea","Dai Nippon Printing","Darden Studio",
+  "Dave Rowland Type","Debi Sementelli","Delve Fonts","Design Signal","Design210",
+  "Dharma Type","DizajnDesign","Dunwich Type Founders","Emily Spadoni","Elefonts",
+  "Ellen Luff Type Foundry","Emigre","EuropaType","Filmotype","Fonthead","Fontself",
+  "FONT1000","FSD","Famira Fonts","Fer Cozzi","Floodfonts","Font Diner","FontFont",
+  "Fontador","Fontef","Fontfabric","Fontpartners","FounderType","Foundry5",
+  "Frere-Jones Type","Fuente Seiwa-do","Fuentes Gradeo","Fuentes HVD","Fuentes MAC Rhino",
+  "Fuentes de dispositivos","Google","G-Type","GarageFonts","Greg Thompson","Hypertype",
+  "Hakusyu Fonts","Hamilton Wood Type Collection",
+].map((name) => ({
+  name,
+  slug: name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, ""),
+}));
 
 /* -------------------------------------------------------------------------
  * Helpers
@@ -1882,7 +1998,8 @@ export function isPremiumReference(f: FontRecord): boolean {
     f.availability === "paid" ||
     f.availability === "trial" ||
     f.availability === "subscription" ||
-    f.availability === "inspiration-only"
+    f.availability === "inspiration-only" ||
+    f.availability === "pay-what-you-want"
   );
 }
 

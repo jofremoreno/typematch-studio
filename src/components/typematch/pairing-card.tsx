@@ -1,9 +1,23 @@
 import type { Pairing } from "@/lib/pairing";
 import { pairingReasons } from "@/lib/pairing";
 import { useSavedPairings } from "@/lib/saved-pairings";
-import { Bookmark, BookmarkCheck } from "lucide-react";
-import { Badge } from "./badge";
-import { LicenseBadges } from "./license-badges";
+import { Bookmark, BookmarkCheck, ExternalLink } from "lucide-react";
+import { LicenseBadges, sourceButtonLabel } from "./license-badges";
+import type { FontRecord } from "@/data/fonts";
+
+function SourceLink({ font, label }: { font: FontRecord; label: string }) {
+  if (!font.sourceUrl) return null;
+  return (
+    <a
+      href={font.sourceUrl}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex items-center gap-1.5 border border-border bg-background px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-foreground transition-colors hover:border-foreground hover:bg-secondary"
+    >
+      {label} <ExternalLink size={11} />
+    </a>
+  );
+}
 
 function riskColor(level: Pairing["riskLevel"]) {
   if (level === "Low") return "border-border bg-secondary text-foreground";
@@ -154,6 +168,11 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
         </div>
 
         <div className="flex items-center justify-end border-t border-border pt-4">
+          <div className="mr-auto flex flex-wrap items-center gap-2">
+            <span className="label-eyebrow mr-1">Sources</span>
+            <SourceLink font={primary} label={sourceButtonLabel(primary).replace("View ", "Primary — ")} />
+            <SourceLink font={secondary} label={sourceButtonLabel(secondary).replace("View ", "Secondary — ")} />
+          </div>
           <button
             type="button"
             onClick={() => !saved && save(pairing)}

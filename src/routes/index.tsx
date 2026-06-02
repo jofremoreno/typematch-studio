@@ -11,12 +11,10 @@ import { PrintScreenSuitability } from "@/components/typematch/print-screen";
 import { LicenseSource } from "@/components/typematch/license-source";
 import { PairingPreview } from "@/components/typematch/pairing-preview";
 import { MethodSection } from "@/components/typematch/method-section";
-import { EmptyState } from "@/components/typematch/empty-state";
 import { NotFoundState } from "@/components/typematch/not-found-state";
 import { FontLibrary } from "@/components/typematch/font-library";
 import { SavedPairings } from "@/components/typematch/saved-pairings";
 import { findFontByQuery } from "@/data/fonts";
-import { Link } from "@tanstack/react-router";
 
 const searchSchema = z.object({ q: z.string().optional() });
 
@@ -50,24 +48,13 @@ function Index() {
             Typography pairing with design logic.
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Analyze free typefaces and build pairings based on contrast,
-            legibility, hierarchy and context.
+            Search a typeface to analyze it, then browse the library below to
+            filter and compare.
           </p>
           <div className="mt-10 max-w-3xl">
             <FontSearch defaultValue={query} />
           </div>
-          <div className="mt-6 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-            <a href="#library" className="border border-border bg-card px-3 py-1.5 text-foreground hover:border-foreground">
-              Jump to library ↓
-            </a>
-            <p className="max-w-lg leading-relaxed">
-              No random matches. No paid-font database. Every recommendation is
-              based on local typographic attributes.
-            </p>
-          </div>
         </section>
-
-        {/* {!query && <EmptyState />} */}
 
         {query && !font && (
           <div className="py-12">
