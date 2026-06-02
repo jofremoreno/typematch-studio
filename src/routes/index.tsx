@@ -11,7 +11,6 @@ import { PrintScreenSuitability } from "@/components/typematch/print-screen";
 import { LicenseSource } from "@/components/typematch/license-source";
 import { PairingPreview } from "@/components/typematch/pairing-preview";
 import { MethodSection } from "@/components/typematch/method-section";
-import { EmptyState } from "@/components/typematch/empty-state";
 import { NotFoundState } from "@/components/typematch/not-found-state";
 import { FontLibrary } from "@/components/typematch/font-library";
 import { SavedPairings } from "@/components/typematch/saved-pairings";
@@ -56,8 +55,6 @@ function Index() {
             <FontSearch defaultValue={query} />
           </div>
         </section>
-
-        {/* {!query && <EmptyState />} */}
 
         {query && !font && (
           <div className="py-12">
