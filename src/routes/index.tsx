@@ -16,7 +16,6 @@ import { NotFoundState } from "@/components/typematch/not-found-state";
 import { FontLibrary } from "@/components/typematch/font-library";
 import { SavedPairings } from "@/components/typematch/saved-pairings";
 import { findFontByQuery } from "@/data/fonts";
-import { Link } from "@tanstack/react-router";
 
 const searchSchema = z.object({ q: z.string().optional() });
 
