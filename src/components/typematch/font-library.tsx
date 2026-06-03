@@ -165,7 +165,7 @@ export function FontLibrary() {
             <article
               key={f.id}
               className={
-                "group flex flex-col justify-between gap-6 border-border bg-card p-6 transition-colors hover:bg-secondary " +
+                "card-elevated group flex flex-col justify-between gap-6 border-border p-6 " +
                 "border-b " +
                 ((i + 1) % 3 !== 0 ? "lg:border-r " : "") +
                 ((i + 1) % 2 !== 0 ? "sm:border-r lg:border-r " : "")
