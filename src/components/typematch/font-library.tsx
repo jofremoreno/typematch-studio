@@ -198,7 +198,7 @@ export function FontLibrary() {
                   <Link
                     to="/"
                     search={{ q: f.name } as never}
-                    className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-background px-2.5 py-1 text-[11px] uppercase tracking-[0.14em] text-foreground transition-colors hover:border-foreground hover:bg-secondary"
+                    className="cta-accent inline-flex items-center gap-1.5 rounded-sm border bg-background px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-foreground"
                   >
                     Analyze →
                   </Link>

@@ -63,26 +63,32 @@
 
 :root {
   --radius: 0.25rem;
-  /* Light editorial palette */
-  --background: oklch(0.967 0.005 85);       /* #F7F6F2 */
-  --foreground: oklch(0.18 0 0);             /* #111111 */
-  --card: oklch(1 0 0);                       /* #FFFFFF */
-  --card-foreground: oklch(0.18 0 0);
+  /* Light editorial palette — Figma tokens */
+  --background: oklch(1 0 0);                /* #FFFFFF */
+  --foreground: oklch(0.13 0 0);             /* #0C0D0C */
+  --card: oklch(0.97 0 0);                   /* #F5F5F5 */
+  --card-foreground: oklch(0.13 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0 0);
-  --primary: oklch(0.18 0 0);
-  --primary-foreground: oklch(0.97 0.005 85);
-  --secondary: oklch(0.94 0.005 85);
-  --secondary-foreground: oklch(0.18 0 0);
-  --muted: oklch(0.94 0.005 85);
-  --muted-foreground: oklch(0.5 0 0);        /* #6B6B6B */
-  --accent: oklch(0.66 0.22 30);             /* #FF4B2B */
+  --popover-foreground: oklch(0.13 0 0);
+  --primary: oklch(0.13 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.93 0 0);              /* #EBEBEB */
+  --secondary-foreground: oklch(0.13 0 0);
+  --muted: oklch(0.93 0 0);
+  --muted-foreground: oklch(0.60 0 0);       /* #808080 */
+  --accent: oklch(0.66 0.235 30);            /* #FF3E1E */
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0 0);
-  --border: oklch(0.9 0.008 85);             /* #E4E1DA */
-  --input: oklch(0.9 0.008 85);
-  --ring: oklch(0.66 0.22 30);
+  --border: oklch(0.87 0 0);                 /* #D9D9D9 */
+  --input: oklch(0.87 0 0);
+  --ring: oklch(0.66 0.235 30);
+  /* Surface elevations */
+  --surface-low: oklch(0.97 0 0);
+  --surface-mid: oklch(0.93 0 0);
+  --surface-high: oklch(0.88 0 0);
+  --text-secondary: oklch(0.35 0 0);         /* #404040 */
+  --text-tertiary: oklch(0.60 0 0);          /* #808080 */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -128,25 +134,32 @@
 }
 
 .dark {
-  --background: oklch(0.18 0 0);             /* #111111 */
-  --foreground: oklch(0.95 0.01 85);         /* #F4F1EA */
-  --card: oklch(0.22 0 0);                    /* #1A1A1A */
-  --card-foreground: oklch(0.95 0.01 85);
+  /* Dark editorial palette — Figma tokens */
+  --background: oklch(0.13 0 0);             /* #0C0D0C */
+  --foreground: oklch(1 0 0);                /* #FFFFFF */
+  --card: oklch(0.22 0 0);                   /* #1A1A1A */
+  --card-foreground: oklch(1 0 0);
   --popover: oklch(0.22 0 0);
-  --popover-foreground: oklch(0.95 0.01 85);
-  --primary: oklch(0.95 0.01 85);
-  --primary-foreground: oklch(0.18 0 0);
-  --secondary: oklch(0.26 0 0);
-  --secondary-foreground: oklch(0.95 0.01 85);
-  --muted: oklch(0.26 0 0);
-  --muted-foreground: oklch(0.7 0 0);        /* #A9A9A9 */
-  --accent: oklch(0.68 0.22 30);             /* #FF5A3D */
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(1 0 0);
+  --primary-foreground: oklch(0.13 0 0);
+  --secondary: oklch(0.30 0 0);              /* #292929 */
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.30 0 0);
+  --muted-foreground: oklch(0.74 0 0);       /* #BFBFBF */
+  --accent: oklch(0.66 0.235 30);            /* #FF3E1E */
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.984 0 0);
-  --border: oklch(0.3 0 0);                   /* #2A2A2A */
-  --input: oklch(0.3 0 0);
-  --ring: oklch(0.68 0.22 30);
+  --border: oklch(0.30 0 0);                 /* #292929 */
+  --input: oklch(0.30 0 0);
+  --ring: oklch(0.66 0.235 30);
+  /* Surface elevations */
+  --surface-low: oklch(0.22 0 0);
+  --surface-mid: oklch(0.30 0 0);
+  --surface-high: oklch(0.38 0 0);
+  --text-secondary: oklch(0.74 0 0);         /* #BFBFBF */
+  --text-tertiary: oklch(0.60 0 0);          /* #808080 */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -276,4 +289,33 @@
   color: var(--color-muted-foreground);
   font-size: 0.8125rem;
   line-height: 1.55;
+}
+
+/* ---- Interaction polish ----
+ * Consistent focus ring + smooth hover transitions
+ * applied through the design tokens. Keeps motion subtle (0.2s). */
+@layer base {
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    transition-property: color, background-color, border-color, box-shadow, opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+/* Subtle accent CTA — used for the "Analyze" affordance on cards */
+.cta-accent {
+  border-color: var(--color-border);
+}
+.cta-accent:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background-color: color-mix(in oklab, var(--color-accent) 8%, transparent);
 }
