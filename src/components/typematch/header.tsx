@@ -53,14 +53,16 @@ export function Header() {
                 key={item.to}
                 to={item.to}
                 className={
-                  "ui-text text-sm transition-colors " +
+                  "ui-text relative text-sm transition-colors " +
                   (active
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground")
                 }
               >
                 {item.label}
-                {active && <span className="ml-1 inline-block h-1 w-1 rounded-full bg-accent" />}
+                {active && (
+                  <span className="absolute -bottom-[18px] left-0 right-0 mx-auto h-[2px] w-full bg-accent" />
+                )}
               </Link>
             );
           })}
@@ -97,7 +99,9 @@ export function Header() {
                   onClick={() => setOpen(false)}
                   className={
                     "ui-text border-b border-border py-3 text-sm last:border-b-0 " +
-                    (active ? "text-foreground" : "text-muted-foreground")
+                    (active
+                      ? "text-foreground border-l-2 border-l-accent pl-3"
+                      : "text-muted-foreground pl-3")
                   }
                 >
                   {item.label}

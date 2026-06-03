@@ -35,7 +35,7 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
   const secondaryFamily =
     secondary.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : secondary.family;
   return (
-    <article className="grid grid-cols-1 gap-0 border border-border bg-card lg:grid-cols-[1.05fr_1fr]">
+    <article className="card-elevated grid grid-cols-1 gap-0 border lg:grid-cols-[1.05fr_1fr]">
       {/* Preview */}
       <div className="flex flex-col justify-between gap-8 border-b border-border p-7 lg:border-b-0 lg:border-r">
         <div className="flex items-baseline justify-between">

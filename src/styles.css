@@ -319,3 +319,35 @@
   color: var(--color-accent);
   background-color: color-mix(in oklab, var(--color-accent) 8%, transparent);
 }
+
+/* ---- Surface elevation system ----
+ * Pair with bg-card. Cards lift one step on hover (low → mid) and the
+ * border softens to the higher token for a controlled hover affordance. */
+.surface-low    { background-color: var(--surface-low); }
+.surface-mid    { background-color: var(--surface-mid); }
+.surface-high   { background-color: var(--surface-high); }
+
+.card-elevated {
+  background-color: var(--surface-low);
+  border-color: var(--color-border);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.card-elevated:hover {
+  background-color: var(--surface-mid);
+  border-color: var(--surface-high);
+}
+
+/* Primary CTA — solid accent fill for the single most important action
+ * on a page (hero "Analyze typeface"). Use sparingly. */
+.cta-primary {
+  background-color: var(--color-accent);
+  color: var(--color-accent-foreground);
+  border: 1px solid var(--color-accent);
+}
+.cta-primary:hover {
+  background-color: color-mix(in oklab, var(--color-accent) 90%, black);
+  border-color: color-mix(in oklab, var(--color-accent) 90%, black);
+}
+.cta-primary:active {
+  background-color: color-mix(in oklab, var(--color-accent) 80%, black);
+}

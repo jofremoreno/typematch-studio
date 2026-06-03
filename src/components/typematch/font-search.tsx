@@ -48,7 +48,7 @@ export function FontSearch({ defaultValue = "" }: { defaultValue?: string }) {
         />
         <button
           type="submit"
-          className="m-1 flex items-center gap-2 bg-foreground px-5 text-sm font-medium tracking-wide text-background transition-colors hover:bg-accent hover:text-accent-foreground"
+          className="cta-primary m-1 flex items-center gap-2 px-5 text-sm font-medium tracking-wide"
         >
           Analyze typeface
           <ArrowRight size={16} />
