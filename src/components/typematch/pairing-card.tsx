@@ -35,7 +35,7 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
   const secondaryFamily =
     secondary.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : secondary.family;
   return (
-    <article className="card-elevated grid grid-cols-1 gap-0 border lg:grid-cols-[1.05fr_1fr]">
+    <article className="card-elevated safe-card grid grid-cols-1 gap-0 border lg:grid-cols-[1.05fr_1fr]">
       {/* Preview */}
       <div className="flex flex-col justify-between gap-8 border-b border-border p-7 lg:border-b-0 lg:border-r">
         <div className="flex items-baseline justify-between">
@@ -167,8 +167,8 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
           </div>
         </div>
 
-        <div className="flex items-center justify-end border-t border-border pt-4">
-          <div className="mr-auto flex flex-wrap items-center gap-2">
+        <div className="safe-row flex items-center justify-between gap-3 border-t border-border pt-4">
+          <div className="safe-row flex items-center gap-2">
             <span className="label-eyebrow mr-1">Sources</span>
             <SourceLink font={primary} label={sourceButtonLabel(primary).replace("View ", "Primary — ")} />
             <SourceLink font={secondary} label={sourceButtonLabel(secondary).replace("View ", "Secondary — ")} />
@@ -178,7 +178,7 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
             onClick={() => !saved && save(pairing)}
             disabled={saved}
             aria-pressed={saved}
-            className="inline-flex items-center gap-2 border border-border bg-background px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] text-foreground transition-colors hover:border-foreground disabled:cursor-default disabled:opacity-70"
+            className="cta-secondary inline-flex shrink-0 items-center gap-2 rounded-sm px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] disabled:cursor-default disabled:opacity-70"
           >
             {saved ? <BookmarkCheck size={12} /> : <Bookmark size={12} />}
             {saved ? "Saved" : "Save pairing"}
