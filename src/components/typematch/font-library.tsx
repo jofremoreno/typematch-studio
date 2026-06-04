@@ -157,50 +157,45 @@ export function FontLibrary() {
         </CollapsibleContent>
       </Collapsible>
 
-      <div className="mt-6 grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-3">
-        {shown.map((f, i) => {
+      <div className="mt-8 grid-cards">
+        {shown.map((f) => {
           const previewFamily =
             f.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : f.family;
           return (
             <article
               key={f.id}
-              className={
-                "card-elevated safe-card group flex min-w-0 flex-col justify-between gap-6 border-border p-6 " +
-                "border-b " +
-                ((i + 1) % 3 !== 0 ? "lg:border-r " : "") +
-                ((i + 1) % 2 !== 0 ? "sm:border-r lg:border-r " : "")
-              }
+              className="editorial-card safe-card group flex min-h-[340px] min-w-0 flex-col justify-between gap-6"
             >
-              <header className="ui-text flex items-center justify-between">
-                <span className="label-eyebrow">{f.classification}</span>
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+              <header className="ui-text safe-row flex items-center justify-between gap-3">
+                <span className="label-eyebrow shrink-0">{f.classification}</span>
+                <span className="min-w-0 truncate text-right text-[10px] uppercase tracking-widest text-muted-foreground">
                   {availabilityLabel(f)} · {f.sourceName}
                 </span>
               </header>
               <div className="type-preview">
                 <p
-                  className="text-4xl leading-[1.05] tracking-tight sm:text-5xl"
+                  className="text-[2.25rem] leading-[1.05] tracking-tight"
                   style={{ fontFamily: previewFamily }}
                 >
                   {f.name}
                 </p>
               </div>
-              <div className="ui-text space-y-3">
+              <div className="ui-text space-y-4">
                 <LicenseBadges font={f} compact />
-                <div className="safe-row flex items-center justify-between gap-3 text-xs text-muted-foreground">
-                  <span className="min-w-0 flex-1">
+                <p className="text-xs text-muted-foreground">
                     {f.availability === "pay-what-you-want"
                       ? "Informational reference"
                       : isPremiumReference(f)
                         ? "Premium reference"
                         : `Best for ${f.bestMedium.toLowerCase()}`}
-                  </span>
+                </p>
+                <div className="safe-row flex items-center gap-3">
                   <Link
                     to="/"
                     search={{ q: f.name } as never}
-                    className="cta-accent inline-flex shrink-0 items-center gap-1.5 rounded-sm border bg-background px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-foreground"
+                    className="btn-card-primary flex-1"
                   >
-                    Analyze →
+                    Analyze
                   </Link>
                 </div>
               </div>

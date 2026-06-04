@@ -2,7 +2,7 @@ import type { Pairing } from "@/lib/pairing";
 import { pairingReasons } from "@/lib/pairing";
 import { useSavedPairings } from "@/lib/saved-pairings";
 import { Bookmark, BookmarkCheck, ExternalLink } from "lucide-react";
-import { LicenseBadges, sourceButtonLabel } from "./license-badges";
+import { LicenseBadges } from "./license-badges";
 import type { FontRecord } from "@/data/fonts";
 
 function SourceLink({ font, label }: { font: FontRecord; label: string }) {
@@ -12,9 +12,10 @@ function SourceLink({ font, label }: { font: FontRecord; label: string }) {
       href={font.sourceUrl}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center gap-1.5 border border-border bg-background px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-foreground transition-colors hover:border-foreground hover:bg-secondary"
+      className="btn-card-secondary w-full justify-center"
     >
-      {label} <ExternalLink size={11} />
+      <span className="truncate">{label}</span>
+      <ExternalLink size={12} />
     </a>
   );
 }
@@ -35,9 +36,9 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
   const secondaryFamily =
     secondary.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : secondary.family;
   return (
-    <article className="card-elevated safe-card grid grid-cols-1 gap-0 border lg:grid-cols-[1.05fr_1fr]">
+    <article className="editorial-card safe-card flex min-h-[420px] flex-col gap-6">
       {/* Preview */}
-      <div className="flex flex-col justify-between gap-8 border-b border-border p-7 lg:border-b-0 lg:border-r">
+      <div className="flex flex-col gap-6 border-b border-border pb-6">
         <div className="flex items-baseline justify-between">
           <span className="label-eyebrow">0{index + 1} — {pairing.category}</span>
           <span className={`inline-flex items-center rounded-sm border px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] ${riskColor(pairing.riskLevel)}`}>
@@ -62,7 +63,7 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 border-t border-border pt-5">
+        <div className="grid grid-cols-1 gap-4 border-t border-border pt-5 sm:grid-cols-2">
           <div>
             <span className="label-eyebrow">Primary</span>
             <p
@@ -89,7 +90,7 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
       </div>
 
       {/* Rationale */}
-      <div className="space-y-5 p-7">
+      <div className="flex flex-1 flex-col gap-5">
         <div className="flex items-baseline justify-between">
           <h3 className="font-editorial text-2xl tracking-tight">{pairing.name}</h3>
           <div className="text-right">
@@ -167,20 +168,20 @@ export function PairingCard({ pairing, index }: { pairing: Pairing; index: numbe
           </div>
         </div>
 
-        <div className="safe-row flex items-center justify-between gap-3 border-t border-border pt-4">
-          <div className="safe-row flex items-center gap-2">
-            <span className="label-eyebrow mr-1">Sources</span>
-            <SourceLink font={primary} label={sourceButtonLabel(primary).replace("View ", "Primary — ")} />
-            <SourceLink font={secondary} label={sourceButtonLabel(secondary).replace("View ", "Secondary — ")} />
+        <div className="mt-auto space-y-3 border-t border-border pt-5">
+          <span className="label-eyebrow">Actions</span>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <SourceLink font={primary} label={`Primary source`} />
+            <SourceLink font={secondary} label={`Secondary source`} />
           </div>
           <button
             type="button"
             onClick={() => !saved && save(pairing)}
             disabled={saved}
             aria-pressed={saved}
-            className="cta-secondary inline-flex shrink-0 items-center gap-2 rounded-sm px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] disabled:cursor-default disabled:opacity-70"
+            className="btn-card-primary w-full disabled:cursor-default disabled:opacity-70"
           >
-            {saved ? <BookmarkCheck size={12} /> : <Bookmark size={12} />}
+            {saved ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
             {saved ? "Saved" : "Save pairing"}
           </button>
         </div>

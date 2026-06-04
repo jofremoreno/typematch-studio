@@ -23,8 +23,8 @@ export function PairingRecommendations({ font }: { font: FontRecord }) {
   };
 
   return (
-    <section className="border-b border-border py-12">
-      <div className="mb-10 max-w-3xl">
+    <section className="border-b border-border py-20">
+      <div className="mb-12 max-w-3xl">
         <span className="label-eyebrow">04 — Pairing recommendations</span>
         <h2 className="font-editorial mt-3 text-3xl tracking-tight sm:text-4xl">
           Three pairings, three intentions.
@@ -35,12 +35,12 @@ export function PairingRecommendations({ font }: { font: FontRecord }) {
           editorial, the third trades safety for character.
         </p>
       </div>
-      <div className="space-y-5">
+      <div className="grid-pairings">
         {pairings.map((p, i) => (
           <PairingCard key={p.name} pairing={p} index={i} />
         ))}
       </div>
-      <div className="mt-8 flex items-center justify-center">
+      <div className="mt-12 flex items-center justify-center">
         {exhausted ? (
           <p className="text-xs text-muted-foreground">
             No more pairings available for this typeface yet.
