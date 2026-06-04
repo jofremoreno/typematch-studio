@@ -379,3 +379,81 @@
   flex-wrap: wrap;
   min-width: 0;
 }
+
+/* ---- Editorial grid system ----
+ * Auto-fill responsive grids keyed to Figma minimum card widths so cards
+ * never compress below their comfortable reading width. They reflow from
+ * 3 → 2 → 1 columns based on available space, not a fixed breakpoint. */
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+.grid-pairings {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+  gap: 24px;
+}
+@media (max-width: 640px) {
+  .grid-pairings { grid-template-columns: 1fr; gap: 16px; }
+  .grid-cards    { gap: 16px; }
+}
+
+/* ---- Card-level action buttons ----
+ * 44px touch target, contained inside the card, never wraps.
+ * Primary = solid accent, Secondary = quiet surface. */
+.btn-card-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background-color: var(--color-accent);
+  color: var(--color-accent-foreground);
+  border: 1px solid var(--color-accent);
+}
+.btn-card-primary:hover {
+  background-color: color-mix(in oklab, var(--color-accent) 88%, white);
+  border-color: color-mix(in oklab, var(--color-accent) 88%, white);
+}
+.btn-card-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background-color: var(--surface-mid);
+  color: var(--color-foreground);
+  border: 1px solid var(--color-border);
+}
+.btn-card-secondary:hover {
+  border-color: var(--surface-high);
+  background-color: var(--surface-high);
+}
+
+/* Editorial card shell — used by font and pairing cards. Replaces the
+ * border-grid pattern with proper gutters and rounded corners. */
+.editorial-card {
+  background-color: var(--surface-low);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.editorial-card:hover {
+  border-color: color-mix(in oklab, var(--color-border) 60%, var(--color-foreground));
+}
