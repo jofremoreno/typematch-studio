@@ -351,3 +351,31 @@
 .cta-primary:active {
   background-color: color-mix(in oklab, var(--color-accent) 80%, black);
 }
+
+/* Secondary CTA — for Compare / Official page / Save. Quiet surface that
+ * stays inside cards and never breaks across lines. */
+.cta-secondary {
+  background-color: var(--surface-mid);
+  color: var(--color-foreground);
+  border: 1px solid var(--color-border);
+}
+.cta-secondary:hover {
+  border-color: var(--surface-high);
+  background-color: var(--surface-high);
+}
+
+/* ---- Overflow safety primitives ----
+ * Apply to card roots so long font names / button labels never break the
+ * layout. Keeps content inside the card boundary and wraps gracefully. */
+.safe-card {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  border-radius: var(--radius-lg);
+}
+.safe-row {
+  flex-wrap: wrap;
+  min-width: 0;
+}
