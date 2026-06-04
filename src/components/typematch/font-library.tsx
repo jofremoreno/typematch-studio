@@ -165,7 +165,7 @@ export function FontLibrary() {
             <article
               key={f.id}
               className={
-                "card-elevated group flex flex-col justify-between gap-6 border-border p-6 " +
+                "card-elevated safe-card group flex min-w-0 flex-col justify-between gap-6 border-border p-6 " +
                 "border-b " +
                 ((i + 1) % 3 !== 0 ? "lg:border-r " : "") +
                 ((i + 1) % 2 !== 0 ? "sm:border-r lg:border-r " : "")
@@ -179,7 +179,7 @@ export function FontLibrary() {
               </header>
               <div className="type-preview">
                 <p
-                  className="text-5xl leading-none tracking-tight"
+                  className="text-4xl leading-[1.05] tracking-tight sm:text-5xl"
                   style={{ fontFamily: previewFamily }}
                 >
                   {f.name}
@@ -187,8 +187,8 @@ export function FontLibrary() {
               </div>
               <div className="ui-text space-y-3">
                 <LicenseBadges font={f} compact />
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>
+                <div className="safe-row flex items-center justify-between gap-3 text-xs text-muted-foreground">
+                  <span className="min-w-0 flex-1">
                     {f.availability === "pay-what-you-want"
                       ? "Informational reference"
                       : isPremiumReference(f)
@@ -198,7 +198,7 @@ export function FontLibrary() {
                   <Link
                     to="/"
                     search={{ q: f.name } as never}
-                    className="cta-accent inline-flex items-center gap-1.5 rounded-sm border bg-background px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-foreground"
+                    className="cta-accent inline-flex shrink-0 items-center gap-1.5 rounded-sm border bg-background px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-foreground"
                   >
                     Analyze →
                   </Link>
