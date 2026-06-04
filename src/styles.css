@@ -62,21 +62,21 @@
 }
 
 :root {
-  --radius: 0.25rem;
+  --radius: 0.5rem;
   /* Light editorial palette — Figma tokens */
   --background: oklch(1 0 0);                /* #FFFFFF */
   --foreground: oklch(0.13 0 0);             /* #0C0D0C */
-  --card: oklch(0.97 0 0);                   /* #F5F5F5 */
+  --card: oklch(1 0 0);                      /* #FFFFFF (card) */
   --card-foreground: oklch(0.13 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.13 0 0);
   --primary: oklch(0.13 0 0);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.93 0 0);              /* #EBEBEB */
+  --secondary: oklch(0.97 0 0);              /* #F5F5F5 */
   --secondary-foreground: oklch(0.13 0 0);
   --muted: oklch(0.93 0 0);
   --muted-foreground: oklch(0.60 0 0);       /* #808080 */
-  --accent: oklch(0.66 0.235 30);            /* #FF3E1E */
+  --accent: oklch(0.66 0.235 30);            /* #FF3F1E */
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0 0);
@@ -84,9 +84,9 @@
   --input: oklch(0.87 0 0);
   --ring: oklch(0.66 0.235 30);
   /* Surface elevations */
-  --surface-low: oklch(0.97 0 0);
-  --surface-mid: oklch(0.93 0 0);
-  --surface-high: oklch(0.88 0 0);
+  --surface-low: oklch(1 0 0);               /* card */
+  --surface-mid: oklch(0.975 0 0);           /* #F7F7F4 */
+  --surface-high: oklch(0.93 0 0);           /* #EBEBEB raised */
   --text-secondary: oklch(0.35 0 0);         /* #404040 */
   --text-tertiary: oklch(0.60 0 0);          /* #808080 */
   --chart-1: oklch(0.646 0.222 41.116);
@@ -135,19 +135,19 @@
 
 .dark {
   /* Dark editorial palette — Figma tokens */
-  --background: oklch(0.13 0 0);             /* #0C0D0C */
-  --foreground: oklch(1 0 0);                /* #FFFFFF */
-  --card: oklch(0.22 0 0);                   /* #1A1A1A */
+  --background: oklch(0.115 0 0);            /* #070807 */
+  --foreground: oklch(0.945 0.012 80);       /* #F4EEE4 */
+  --card: oklch(0.135 0 0);                  /* #0C0D0C surface */
   --card-foreground: oklch(1 0 0);
-  --popover: oklch(0.22 0 0);
+  --popover: oklch(0.135 0 0);
   --popover-foreground: oklch(1 0 0);
   --primary: oklch(1 0 0);
   --primary-foreground: oklch(0.13 0 0);
-  --secondary: oklch(0.30 0 0);              /* #292929 */
+  --secondary: oklch(0.18 0 0);              /* #111111 raised */
   --secondary-foreground: oklch(1 0 0);
-  --muted: oklch(0.30 0 0);
-  --muted-foreground: oklch(0.74 0 0);       /* #BFBFBF */
-  --accent: oklch(0.66 0.235 30);            /* #FF3E1E */
+  --muted: oklch(0.22 0 0);
+  --muted-foreground: oklch(0.74 0.005 80);  /* #AFA9A0 */
+  --accent: oklch(0.66 0.235 30);            /* #FF3F1E */
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.984 0 0);
@@ -155,11 +155,11 @@
   --input: oklch(0.30 0 0);
   --ring: oklch(0.66 0.235 30);
   /* Surface elevations */
-  --surface-low: oklch(0.22 0 0);
-  --surface-mid: oklch(0.30 0 0);
-  --surface-high: oklch(0.38 0 0);
-  --text-secondary: oklch(0.74 0 0);         /* #BFBFBF */
-  --text-tertiary: oklch(0.60 0 0);          /* #808080 */
+  --surface-low: oklch(0.135 0 0);           /* #0C0D0C */
+  --surface-mid: oklch(0.18 0 0);            /* #111111 */
+  --surface-high: oklch(0.24 0 0);           /* hover raised */
+  --text-secondary: oklch(0.86 0.01 80);     /* #C8C1B7 */
+  --text-tertiary: oklch(0.74 0.005 80);     /* #AFA9A0 */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
