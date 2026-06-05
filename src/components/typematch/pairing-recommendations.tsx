@@ -4,7 +4,16 @@ import type { FontRecord } from "@/data/fonts";
 import { PairingCard } from "./pairing-card";
 
 export function PairingRecommendations({ font }: { font: FontRecord }) {
-  const base = useMemo(() => buildRecommendations(font), [font]);
+  const base = useMemo(() => {
+    const initial = buildRecommendations(font);
+    // Add a fourth pairing — pull one extra recommendation that isn't already
+    // chosen, so the section can show 4 cards in a 2×2 grid.
+    const usedIds = new Set<string>(initial.map((p) => p.secondary.id));
+    usedIds.add(font.id);
+    const extra = buildExtendedRecommendations(font, usedIds, 1);
+    const fourth = extra.find((p) => !initial.some((e) => e.name === p.name));
+    return fourth ? [...initial, fourth] : initial;
+  }, [font]);
   const [extra, setExtra] = useState<Pairing[]>([]);
   const [exhausted, setExhausted] = useState(false);
 
@@ -27,15 +36,15 @@ export function PairingRecommendations({ font }: { font: FontRecord }) {
       <div className="mb-12 max-w-3xl">
         <span className="label-eyebrow">04 — Pairing recommendations</span>
         <h2 className="font-editorial mt-3 text-3xl tracking-tight sm:text-4xl">
-          Three pairings, three intentions.
+          Four pairings, four intentions.
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
           Each recommendation is built from {font.name}'s attributes against the
-          local library. The first is a safe system pairing, the second leans
-          editorial, the third trades safety for character.
+          local library — a reliable system pairing, an editorial contrast, an
+          experimental high-character pairing, and one further alternative.
         </p>
       </div>
-      <div className="grid-pairings">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {pairings.map((p, i) => (
           <PairingCard key={p.name} pairing={p} index={i} />
         ))}
