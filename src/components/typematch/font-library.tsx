@@ -2,8 +2,8 @@ import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { FONTS, type FontCategory, isPremiumReference } from "@/data/fonts";
 import { LicenseBadges, availabilityLabel } from "./license-badges";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDown } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { SlidersHorizontal } from "lucide-react";
 
 type CategoryFilter = "All" | FontCategory;
 type AvailabilityFilter =
@@ -40,7 +40,8 @@ export function FontLibrary() {
   const [source, setSource] = useState<string>("All");
   const [query, setQuery] = useState("");
   const [visible, setVisible] = useState(PAGE_SIZE);
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [sourcesExpanded, setSourcesExpanded] = useState(false);
 
   const sources = useMemo(
     () => ["All", ...Array.from(new Set(FONTS.map((f) => f.sourceName))).sort()],
@@ -78,7 +79,7 @@ export function FontLibrary() {
     setSource("All");
   };
 
-  const FilterRow = ({
+  const FilterGroup = ({
     label,
     options,
     value,
@@ -89,75 +90,144 @@ export function FontLibrary() {
     value: string;
     onChange: (v: string) => void;
   }) => (
-    <div className="flex flex-wrap items-center gap-2 border-b border-border py-3">
-      <span className="label-eyebrow mr-2 w-24">{label}</span>
-      {options.map((o) => (
-        <button
-          key={o}
-          onClick={() => onChange(o)}
-          className={
-            "border px-3 py-1.5 text-xs transition-colors " +
-            (value === o
-              ? "border-foreground bg-foreground text-background"
-              : "border-border bg-card text-muted-foreground hover:text-foreground")
-          }
-        >
-          {o}
-        </button>
-      ))}
+    <div className="border-b border-border pb-5">
+      <span className="label-eyebrow mb-3 block">{label}</span>
+      <div className="flex flex-wrap gap-1.5">
+        {options.map((o) => (
+          <button
+            key={o}
+            onClick={() => onChange(o)}
+            className={
+              "rounded-md border px-2.5 py-1 text-[11px] transition-colors " +
+              (value === o
+                ? "border-foreground bg-foreground text-background"
+                : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground")
+            }
+          >
+            {o}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
+  const SourceGroup = () => {
+    const collapsedCount = 10;
+    const list = sourcesExpanded ? sources : sources.slice(0, collapsedCount);
+    const hidden = sources.length - collapsedCount;
+    return (
+      <div className="pb-2">
+        <span className="label-eyebrow mb-3 block">Source</span>
+        <div className="flex flex-wrap gap-1.5">
+          {list.map((o) => (
+            <button
+              key={o}
+              onClick={() => setSource(o)}
+              className={
+                "rounded-md border px-2.5 py-1 text-[11px] transition-colors " +
+                (source === o
+                  ? "border-foreground bg-foreground text-background"
+                  : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground")
+              }
+            >
+              {o}
+            </button>
+          ))}
+        </div>
+        {hidden > 0 && (
+          <button
+            type="button"
+            onClick={() => setSourcesExpanded((s) => !s)}
+            className="ui-text mt-3 text-[10px] uppercase tracking-widest text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          >
+            {sourcesExpanded ? "Show fewer sources" : `Show ${hidden} more sources`}
+          </button>
+        )}
+      </div>
+    );
+  };
+
+  const FiltersPanel = (
+    <div className="flex flex-col gap-5">
+      <div className="flex items-center justify-between">
+        <span className="label-eyebrow">Filters</span>
+        {activeCount > 0 && (
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="ui-text text-[10px] uppercase tracking-widest text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          >
+            Clear all
+          </button>
+        )}
+      </div>
+      <FilterGroup label="Category" options={CATEGORIES} value={category} onChange={(v) => setCategory(v as CategoryFilter)} />
+      <FilterGroup label="Availability" options={AVAILS} value={availability} onChange={(v) => setAvailability(v as AvailabilityFilter)} />
+      <FilterGroup label="Preview" options={PREVIEWS} value={preview} onChange={(v) => setPreview(v as PreviewFilter)} />
+      <SourceGroup />
     </div>
   );
 
   return (
-    <div>
-      <div className="mb-4 flex items-center gap-3 border-b border-border py-3">
-        <span className="label-eyebrow">Search</span>
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Filter by name or foundry…"
-          className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-        />
-        <span className="font-mono-ui text-xs text-muted-foreground">
-          {fonts.length} / {FONTS.length}
-        </span>
-      </div>
+    <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:block lg:w-[300px] lg:shrink-0">
+        <div className="sticky top-24 rounded-xl border border-border bg-card p-6">
+          {FiltersPanel}
+        </div>
+      </aside>
 
-      <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen}>
-        <div className="flex items-center justify-between gap-3 border-b border-border py-2.5">
-          <CollapsibleTrigger className="ui-text group flex flex-1 items-center gap-3 text-left">
-            <ChevronDown
-              className={
-                "h-3.5 w-3.5 text-muted-foreground transition-transform " +
-                (filtersOpen ? "rotate-0" : "-rotate-90")
-              }
-            />
-            <span className="label-eyebrow">Filters</span>
-            <span className="text-xs text-muted-foreground">
-              {activeCount > 0
-                ? `${activeCount} active`
-                : "Category · Availability · Preview · Source"}
-            </span>
-          </CollapsibleTrigger>
+      {/* Results column */}
+      <div className="min-w-0 flex-1">
+        <div className="mb-4 flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3">
+          <span className="label-eyebrow">Search</span>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Filter by name or foundry…"
+            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+          />
+          <span className="font-mono-ui text-xs text-muted-foreground">
+            {fonts.length} / {FONTS.length}
+          </span>
+        </div>
+
+        {/* Mobile filters trigger */}
+        <div className="mb-6 flex items-center justify-between lg:hidden">
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger asChild>
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-xs uppercase tracking-widest text-foreground hover:border-foreground"
+              >
+                <SlidersHorizontal size={14} />
+                Filters
+                {activeCount > 0 && (
+                  <span className="ml-1 rounded-md border border-border bg-secondary px-1.5 text-[10px]">
+                    {activeCount}
+                  </span>
+                )}
+              </button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[320px] max-w-[90vw] overflow-y-auto bg-card">
+              <SheetHeader>
+                <SheetTitle className="label-eyebrow text-left">Filters</SheetTitle>
+              </SheetHeader>
+              <div className="mt-6">{FiltersPanel}</div>
+            </SheetContent>
+          </Sheet>
           {activeCount > 0 && (
             <button
               type="button"
               onClick={clearFilters}
               className="ui-text text-[10px] uppercase tracking-widest text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
             >
-              Clear filters
+              Clear all
             </button>
           )}
         </div>
-        <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
-          <FilterRow label="Category" options={CATEGORIES} value={category} onChange={(v) => setCategory(v as CategoryFilter)} />
-          <FilterRow label="Availability" options={AVAILS} value={availability} onChange={(v) => setAvailability(v as AvailabilityFilter)} />
-          <FilterRow label="Preview" options={PREVIEWS} value={preview} onChange={(v) => setPreview(v as PreviewFilter)} />
-          <FilterRow label="Source" options={sources} value={source} onChange={setSource} />
-        </CollapsibleContent>
-      </Collapsible>
 
-      <div className="mt-8 grid-cards">
+      <div className="grid-cards">
         {shown.map((f) => {
           const previewFamily =
             f.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : f.family;
@@ -209,12 +279,13 @@ export function FontLibrary() {
           <button
             type="button"
             onClick={() => setVisible((v) => v + PAGE_SIZE)}
-            className="border border-border bg-card px-5 py-2 text-xs uppercase tracking-widest text-foreground hover:border-foreground"
+            className="rounded-lg border border-border bg-card px-5 py-2 text-xs uppercase tracking-widest text-foreground hover:border-foreground"
           >
             Load more — {Math.min(PAGE_SIZE, fonts.length - visible)} of {fonts.length - visible}
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 }

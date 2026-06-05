@@ -76,23 +76,25 @@ function Index() {
           </article>
         )}
 
-        <section id="library" className="scroll-mt-24 pt-12 sm:pt-20">
-          <div className="hairline mb-16" />
-          <span className="label-eyebrow">Library</span>
-          <h2 className="font-editorial mt-3 max-w-3xl text-[clamp(1.875rem,4vw,3rem)] leading-[1.05] tracking-tight">
-            Explore the type library
-          </h2>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
-            Browse local typefaces, filter by use, license and source, then
-            analyze or compare.
-          </p>
-          <div className="mt-10">
-            <FontLibrary />
-          </div>
-          <div className="mt-16">
-            <SavedPairings />
-          </div>
-        </section>
+        {!font && (
+          <section id="library" className="scroll-mt-24 pt-12 sm:pt-20">
+            <div className="hairline mb-16" />
+            <span className="label-eyebrow">Library</span>
+            <h2 className="font-editorial mt-3 max-w-3xl text-[clamp(1.875rem,4vw,3rem)] leading-[1.05] tracking-tight">
+              Explore the type library
+            </h2>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
+              Browse local typefaces, filter by use, license and source, then
+              analyze or compare.
+            </p>
+            <div className="mt-10">
+              <FontLibrary />
+            </div>
+            <div className="mt-16">
+              <SavedPairings />
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
     </div>

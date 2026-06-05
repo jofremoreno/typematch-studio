@@ -3,8 +3,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { FONTS } from "@/data/fonts";
 import { ArrowRight, Search } from "lucide-react";
 
-const SUGGESTIONS = ["Inter", "Space Grotesk", "Playfair Display", "Fraunces", "IBM Plex Mono"];
-
 export function FontSearch({ defaultValue = "" }: { defaultValue?: string }) {
   const navigate = useNavigate();
   const [value, setValue] = useState(defaultValue);
@@ -54,20 +52,6 @@ export function FontSearch({ defaultValue = "" }: { defaultValue?: string }) {
           <ArrowRight size={16} />
         </button>
       </form>
-
-      <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-        <span className="label-eyebrow">Try</span>
-        {SUGGESTIONS.map((s) => (
-          <button
-            key={s}
-            type="button"
-            onClick={() => submit(s)}
-            className="rounded-sm border border-border bg-card px-2 py-1 text-foreground transition-colors hover:border-foreground"
-          >
-            {s}
-          </button>
-        ))}
-      </div>
 
       {open && matches.length > 0 && (
         <div className="absolute left-0 right-0 top-[68px] z-30 border border-border bg-card shadow-lg">
