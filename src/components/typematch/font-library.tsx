@@ -90,15 +90,15 @@ export function FontLibrary() {
     value: string;
     onChange: (v: string) => void;
   }) => (
-    <div className="border-b border-border pb-5">
-      <span className="label-eyebrow mb-3 block">{label}</span>
-      <div className="flex flex-wrap gap-1.5">
+    <div className="border-b border-border pb-3">
+      <span className="label-eyebrow mb-2 block">{label}</span>
+      <div className="flex flex-wrap gap-1">
         {options.map((o) => (
           <button
             key={o}
             onClick={() => onChange(o)}
             className={
-              "rounded-md border px-2.5 py-1 text-[11px] transition-colors " +
+              "rounded-md border px-2 py-0.5 text-[10.5px] transition-colors " +
               (value === o
                 ? "border-foreground bg-foreground text-background"
                 : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground")
@@ -112,19 +112,19 @@ export function FontLibrary() {
   );
 
   const SourceGroup = () => {
-    const collapsedCount = 10;
+    const collapsedCount = 8;
     const list = sourcesExpanded ? sources : sources.slice(0, collapsedCount);
     const hidden = sources.length - collapsedCount;
     return (
-      <div className="pb-2">
-        <span className="label-eyebrow mb-3 block">Source</span>
-        <div className="flex flex-wrap gap-1.5">
+      <div className="pb-1">
+        <span className="label-eyebrow mb-2 block">Source</span>
+        <div className="flex flex-wrap gap-1">
           {list.map((o) => (
             <button
               key={o}
               onClick={() => setSource(o)}
               className={
-                "rounded-md border px-2.5 py-1 text-[11px] transition-colors " +
+                "rounded-md border px-2 py-0.5 text-[10.5px] transition-colors " +
                 (source === o
                   ? "border-foreground bg-foreground text-background"
                   : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground")
@@ -138,7 +138,7 @@ export function FontLibrary() {
           <button
             type="button"
             onClick={() => setSourcesExpanded((s) => !s)}
-            className="ui-text mt-3 text-[10px] uppercase tracking-widest text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            className="ui-text mt-2 text-[10px] uppercase tracking-widest text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
             {sourcesExpanded ? "Show fewer sources" : `Show ${hidden} more sources`}
           </button>
@@ -148,7 +148,7 @@ export function FontLibrary() {
   };
 
   const FiltersPanel = (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <span className="label-eyebrow">Filters</span>
         {activeCount > 0 && (
@@ -171,8 +171,8 @@ export function FontLibrary() {
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
       {/* Desktop sidebar */}
-      <aside className="hidden lg:block lg:w-[300px] lg:shrink-0">
-        <div className="sticky top-24 rounded-xl border border-border bg-card p-6">
+      <aside className="hidden lg:block lg:w-[280px] lg:shrink-0">
+        <div className="sticky top-24 rounded-xl border border-border bg-card p-4">
           {FiltersPanel}
         </div>
       </aside>

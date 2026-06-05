@@ -42,7 +42,7 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main className="mx-auto w-full max-w-7xl px-6 pb-32 sm:px-9">
-        <section className="pb-12 pt-20 sm:pb-16 sm:pt-28">
+        <section className="pb-8 pt-16 sm:pb-10 sm:pt-20">
           <span className="label-eyebrow">A typography tool, not a generator</span>
           <h1 className="font-editorial mt-4 max-w-4xl text-[clamp(2.5rem,6.5vw,5rem)] leading-[0.98] tracking-tight">
             Typography pairing with design logic.
@@ -77,8 +77,8 @@ function Index() {
         )}
 
         {!font && (
-          <section id="library" className="scroll-mt-24 pt-12 sm:pt-20">
-            <div className="hairline mb-16" />
+          <section id="library" className="scroll-mt-24 pt-6 sm:pt-8">
+            <div className="hairline mb-10" />
             <span className="label-eyebrow">Library</span>
             <h2 className="font-editorial mt-3 max-w-3xl text-[clamp(1.875rem,4vw,3rem)] leading-[1.05] tracking-tight">
               Explore the type library
