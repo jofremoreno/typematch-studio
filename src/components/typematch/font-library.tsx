@@ -130,23 +130,21 @@ export function FontLibrary() {
   const SourceGroup = () => (
     <div className="pb-1">
       <span className="label-eyebrow mb-3 block">Source</span>
-      <div className="max-h-[280px] overflow-y-auto pr-1 [scrollbar-width:thin]">
-        <div className="flex flex-wrap gap-1.5">
-          {sources.map((o) => (
-            <button
-              key={o}
-              onClick={() => setSource(o)}
-              className={
-                "rounded-lg border px-3 py-1.5 text-[12px] leading-none transition-colors " +
-                (source === o
-                  ? "border-foreground bg-foreground text-background"
-                  : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground")
-              }
-            >
-              {o}
-            </button>
-          ))}
-        </div>
+      <div className="flex flex-wrap gap-1.5">
+        {sources.map((o) => (
+          <button
+            key={o}
+            onClick={() => setSource(o)}
+            className={
+              "rounded-lg border px-2.5 py-1 text-[11.5px] leading-none transition-colors " +
+              (source === o
+                ? "border-foreground bg-foreground text-background"
+                : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground")
+            }
+          >
+            {o}
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -189,7 +187,7 @@ export function FontLibrary() {
     <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
       {/* Desktop sidebar — sticky, always visible, search lives here */}
       <aside className="hidden lg:block lg:w-[320px] lg:shrink-0">
-        <div className="sticky top-24 rounded-xl border border-border bg-card p-6">
+        <div className="sticky top-24 rounded-xl border border-border bg-card p-5">
           {FiltersPanel}
         </div>
       </aside>
@@ -225,7 +223,7 @@ export function FontLibrary() {
           </span>
         </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
         {shown.map((f) => {
           const previewFamily =
             f.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : f.family;
@@ -233,20 +231,17 @@ export function FontLibrary() {
           return (
             <article
               key={f.id}
-              className="editorial-card safe-card group flex min-h-[360px] min-w-0 flex-col gap-5"
+              className="editorial-card safe-card group flex aspect-square min-w-0 flex-col gap-3"
             >
               {/* 01 Meta — category · source */}
-              <header className="ui-text safe-row flex items-center gap-2">
-                <span className="label-eyebrow shrink-0">{f.classification}</span>
-                <span className="label-eyebrow text-muted-foreground">·</span>
-                <span className="label-eyebrow min-w-0 truncate text-muted-foreground">
-                  {sourceShort}
-                </span>
+              <header className="ui-text flex flex-col gap-0.5">
+                <span className="label-eyebrow">{f.classification}</span>
+                <span className="label-eyebrow text-muted-foreground">{sourceShort}</span>
               </header>
 
               {/* 02 Preview — dominant font name */}
               <p
-                className="min-w-0 truncate text-[clamp(2.5rem,3.6vw,3.5rem)] font-extrabold leading-[1.02] tracking-[-0.03em]"
+                className="min-w-0 break-words text-[clamp(1.5rem,2.1vw,2.125rem)] font-extrabold leading-[1.05] tracking-[-0.03em]"
                 style={{ fontFamily: previewFamily }}
                 title={f.name}
               >
@@ -255,17 +250,17 @@ export function FontLibrary() {
 
               {/* 03 Sample — Aa Bb Cc 123 */}
               <p
-                className="text-2xl leading-none text-muted-foreground"
+                className="text-lg leading-none text-muted-foreground"
                 style={{ fontFamily: previewFamily }}
               >
                 Aa Bb Cc 123
               </p>
 
-              <div className="mt-auto ui-text space-y-4">
+              <div className="mt-auto ui-text space-y-3">
                 {/* 04 Badges — max 3 via compact */}
                 <LicenseBadges font={f} compact />
                 {isPremiumReference(f) && (
-                  <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                  <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
                     Premium reference
                   </p>
                 )}
