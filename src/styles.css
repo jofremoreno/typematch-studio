@@ -175,33 +175,33 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 
   /* ----- Badge token system (dark) ----- */
-  --badge-safe-bg:        oklch(0.28 0.04 150);
-  --badge-safe-fg:        oklch(0.86 0.10 150);
-  --badge-safe-border:    oklch(0.40 0.06 150);
-  --badge-warning-bg:     oklch(0.30 0.06 80);
-  --badge-warning-fg:     oklch(0.88 0.12 85);
-  --badge-warning-border: oklch(0.42 0.08 80);
-  --badge-danger-bg:      oklch(0.30 0.07 25);
-  --badge-danger-fg:      oklch(0.86 0.12 25);
-  --badge-danger-border:  oklch(0.44 0.10 25);
-  --badge-trial-bg:       oklch(0.30 0.07 50);
-  --badge-trial-fg:       oklch(0.88 0.12 55);
-  --badge-trial-border:   oklch(0.44 0.10 50);
-  --badge-sub-bg:         oklch(0.28 0.04 240);
-  --badge-sub-fg:         oklch(0.86 0.10 240);
-  --badge-sub-border:     oklch(0.42 0.06 240);
-  --badge-screen-bg:      oklch(0.28 0.04 220);
-  --badge-screen-fg:      oklch(0.86 0.10 225);
-  --badge-screen-border:  oklch(0.42 0.06 220);
-  --badge-print-bg:       oklch(0.28 0.05 290);
-  --badge-print-fg:       oklch(0.86 0.10 290);
-  --badge-print-border:   oklch(0.42 0.07 290);
-  --badge-display-bg:     oklch(0.30 0.06 340);
-  --badge-display-fg:     oklch(0.88 0.12 340);
-  --badge-display-border: oklch(0.44 0.08 340);
-  --badge-exp-bg:         oklch(0.30 0.06 305);
-  --badge-exp-fg:         oklch(0.88 0.12 305);
-  --badge-exp-border:     oklch(0.44 0.09 305);
+  --badge-safe-bg:        #0F1E17;
+  --badge-safe-fg:        #BFE8CF;
+  --badge-safe-border:    #2F8F5B;
+  --badge-warning-bg:     #241B0B;
+  --badge-warning-fg:     #F5D28A;
+  --badge-warning-border: #B67A12;
+  --badge-danger-bg:      #25100E;
+  --badge-danger-fg:      #FFC6B8;
+  --badge-danger-border:  #D9492F;
+  --badge-trial-bg:       #241B0B;
+  --badge-trial-fg:       #F5D28A;
+  --badge-trial-border:   #B67A12;
+  --badge-sub-bg:         #0D1724;
+  --badge-sub-fg:         #BFD7FF;
+  --badge-sub-border:     #2E72D2;
+  --badge-screen-bg:      #0D1724;
+  --badge-screen-fg:      #BFD7FF;
+  --badge-screen-border:  #2E72D2;
+  --badge-print-bg:       #171225;
+  --badge-print-fg:       #D7CBFF;
+  --badge-print-border:   #7559D9;
+  --badge-display-bg:     #171225;
+  --badge-display-fg:     #D7CBFF;
+  --badge-display-border: #7559D9;
+  --badge-exp-bg:         #1C1411;
+  --badge-exp-fg:         #FFD7CC;
+  --badge-exp-border:     #FF3F1E;
 }
 
 @layer base {
@@ -407,21 +407,21 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  height: 44px;
+  height: 42px;
   padding: 0 16px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   white-space: nowrap;
-  background-color: var(--color-accent);
-  color: var(--color-accent-foreground);
-  border: 1px solid var(--color-accent);
+  background-color: #D9361C;
+  color: #FFFFFF;
+  border: 1px solid #D9361C;
 }
 .btn-card-primary:hover {
-  background-color: color-mix(in oklab, var(--color-accent) 88%, white);
-  border-color: color-mix(in oklab, var(--color-accent) 88%, white);
+  background-color: #FF5B38;
+  border-color: #FF5B38;
 }
 .btn-card-secondary {
   display: inline-flex;

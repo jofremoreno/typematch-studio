@@ -102,7 +102,7 @@ export function Badge({
   return (
     <span
       className={
-        "inline-flex items-center rounded-sm border uppercase tracking-[0.14em] font-medium font-ui " +
+        "inline-flex items-center rounded-lg border uppercase tracking-[0.12em] font-medium font-ui whitespace-nowrap " +
         SIZE_STYLES[size] + " " + VARIANT_STYLES[resolved] + " " + className
       }
     >
