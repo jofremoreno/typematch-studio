@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { FONTS, type FontCategory, isPremiumReference } from "@/data/fonts";
-import { LicenseBadges, availabilityLabel } from "./license-badges";
+import { LicenseBadges } from "./license-badges";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { SlidersHorizontal } from "lucide-react";
+import { ArrowRight, Search, SlidersHorizontal } from "lucide-react";
 
 type CategoryFilter = "All" | FontCategory;
 type AvailabilityFilter =
@@ -41,7 +41,7 @@ export function FontLibrary() {
   const [query, setQuery] = useState("");
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [sourcesExpanded, setSourcesExpanded] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   const sources = useMemo(
     () => ["All", ...Array.from(new Set(FONTS.map((f) => f.sourceName))).sort()],
@@ -79,6 +79,22 @@ export function FontLibrary() {
     setSource("All");
   };
 
+  // Infinite scroll — observe sentinel near bottom and load next page.
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setVisible((v) => (v < fonts.length ? v + PAGE_SIZE : v));
+        }
+      },
+      { rootMargin: "600px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [fonts.length]);
+
   const FilterGroup = ({
     label,
     options,
@@ -90,15 +106,15 @@ export function FontLibrary() {
     value: string;
     onChange: (v: string) => void;
   }) => (
-    <div className="border-b border-border pb-3">
-      <span className="label-eyebrow mb-2 block">{label}</span>
-      <div className="flex flex-wrap gap-1">
+    <div className="border-b border-border pb-4">
+      <span className="label-eyebrow mb-3 block">{label}</span>
+      <div className="flex flex-wrap gap-1.5">
         {options.map((o) => (
           <button
             key={o}
             onClick={() => onChange(o)}
             className={
-              "rounded-md border px-2 py-0.5 text-[10.5px] transition-colors " +
+              "rounded-lg border px-3 py-1.5 text-[12px] leading-none transition-colors " +
               (value === o
                 ? "border-foreground bg-foreground text-background"
                 : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground")
@@ -111,20 +127,17 @@ export function FontLibrary() {
     </div>
   );
 
-  const SourceGroup = () => {
-    const collapsedCount = 8;
-    const list = sourcesExpanded ? sources : sources.slice(0, collapsedCount);
-    const hidden = sources.length - collapsedCount;
-    return (
-      <div className="pb-1">
-        <span className="label-eyebrow mb-2 block">Source</span>
-        <div className="flex flex-wrap gap-1">
-          {list.map((o) => (
+  const SourceGroup = () => (
+    <div className="pb-1">
+      <span className="label-eyebrow mb-3 block">Source</span>
+      <div className="max-h-[280px] overflow-y-auto pr-1 [scrollbar-width:thin]">
+        <div className="flex flex-wrap gap-1.5">
+          {sources.map((o) => (
             <button
               key={o}
               onClick={() => setSource(o)}
               className={
-                "rounded-md border px-2 py-0.5 text-[10.5px] transition-colors " +
+                "rounded-lg border px-3 py-1.5 text-[12px] leading-none transition-colors " +
                 (source === o
                   ? "border-foreground bg-foreground text-background"
                   : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground")
@@ -134,64 +147,55 @@ export function FontLibrary() {
             </button>
           ))}
         </div>
-        {hidden > 0 && (
-          <button
-            type="button"
-            onClick={() => setSourcesExpanded((s) => !s)}
-            className="ui-text mt-2 text-[10px] uppercase tracking-widest text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-          >
-            {sourcesExpanded ? "Show fewer sources" : `Show ${hidden} more sources`}
-          </button>
-        )}
       </div>
-    );
-  };
+    </div>
+  );
 
   const FiltersPanel = (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-4">
+      {/* Search inside the side menu — the only catalogue search */}
+      <div className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2.5 focus-within:border-foreground">
+        <Search size={14} className="text-muted-foreground" />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search name or foundry"
+          className="min-w-0 flex-1 bg-transparent text-[13px] outline-none placeholder:text-muted-foreground"
+        />
+      </div>
+      <div className="flex items-center justify-between border-b border-border pb-3">
         <span className="label-eyebrow">Filters</span>
-        {activeCount > 0 && (
-          <button
-            type="button"
-            onClick={clearFilters}
-            className="ui-text text-[10px] uppercase tracking-widest text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-          >
-            Clear all
-          </button>
-        )}
+        <span className="font-mono-ui text-[11px] text-muted-foreground">
+          {fonts.length}/{FONTS.length}
+        </span>
       </div>
       <FilterGroup label="Category" options={CATEGORIES} value={category} onChange={(v) => setCategory(v as CategoryFilter)} />
       <FilterGroup label="Availability" options={AVAILS} value={availability} onChange={(v) => setAvailability(v as AvailabilityFilter)} />
       <FilterGroup label="Preview" options={PREVIEWS} value={preview} onChange={(v) => setPreview(v as PreviewFilter)} />
       <SourceGroup />
+      {activeCount > 0 && (
+        <button
+          type="button"
+          onClick={clearFilters}
+          className="ui-text mt-1 self-start text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+        >
+          Clear all filters
+        </button>
+      )}
     </div>
   );
 
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
-      {/* Desktop sidebar */}
-      <aside className="hidden lg:block lg:w-[280px] lg:shrink-0">
-        <div className="sticky top-24 rounded-xl border border-border bg-card p-4">
+      {/* Desktop sidebar — sticky, always visible, search lives here */}
+      <aside className="hidden lg:block lg:w-[320px] lg:shrink-0">
+        <div className="sticky top-24 rounded-xl border border-border bg-card p-6">
           {FiltersPanel}
         </div>
       </aside>
 
       {/* Results column */}
       <div className="min-w-0 flex-1">
-        <div className="mb-4 flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3">
-          <span className="label-eyebrow">Search</span>
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Filter by name or foundry…"
-            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-          />
-          <span className="font-mono-ui text-xs text-muted-foreground">
-            {fonts.length} / {FONTS.length}
-          </span>
-        </div>
-
         {/* Mobile filters trigger */}
         <div className="mb-6 flex items-center justify-between lg:hidden">
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -209,81 +213,89 @@ export function FontLibrary() {
                 )}
               </button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-[320px] max-w-[90vw] overflow-y-auto bg-card">
+            <SheetContent side="left" className="w-[340px] max-w-[92vw] overflow-y-auto bg-card">
               <SheetHeader>
                 <SheetTitle className="label-eyebrow text-left">Filters</SheetTitle>
               </SheetHeader>
               <div className="mt-6">{FiltersPanel}</div>
             </SheetContent>
           </Sheet>
-          {activeCount > 0 && (
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="ui-text text-[10px] uppercase tracking-widest text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-            >
-              Clear all
-            </button>
-          )}
+          <span className="font-mono-ui text-xs text-muted-foreground">
+            {fonts.length}/{FONTS.length}
+          </span>
         </div>
 
-      <div className="grid-cards">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         {shown.map((f) => {
           const previewFamily =
             f.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : f.family;
+          const sourceShort = f.sourceName;
           return (
             <article
               key={f.id}
-              className="editorial-card safe-card group flex min-h-[340px] min-w-0 flex-col justify-between gap-6"
+              className="editorial-card safe-card group flex min-h-[360px] min-w-0 flex-col gap-5"
             >
-              <header className="ui-text safe-row flex items-center justify-between gap-3">
+              {/* 01 Meta — category · source */}
+              <header className="ui-text safe-row flex items-center gap-2">
                 <span className="label-eyebrow shrink-0">{f.classification}</span>
-                <span className="min-w-0 truncate text-right text-[10px] uppercase tracking-widest text-muted-foreground">
-                  {availabilityLabel(f)} · {f.sourceName}
+                <span className="label-eyebrow text-muted-foreground">·</span>
+                <span className="label-eyebrow min-w-0 truncate text-muted-foreground">
+                  {sourceShort}
                 </span>
               </header>
-              <div className="type-preview">
-                <p
-                  className="text-[2.25rem] leading-[1.05] tracking-tight"
-                  style={{ fontFamily: previewFamily }}
-                >
-                  {f.name}
-                </p>
-              </div>
-              <div className="ui-text space-y-4">
+
+              {/* 02 Preview — dominant font name */}
+              <p
+                className="min-w-0 truncate text-[clamp(2.5rem,3.6vw,3.5rem)] font-extrabold leading-[1.02] tracking-[-0.03em]"
+                style={{ fontFamily: previewFamily }}
+                title={f.name}
+              >
+                {f.name}
+              </p>
+
+              {/* 03 Sample — Aa Bb Cc 123 */}
+              <p
+                className="text-2xl leading-none text-muted-foreground"
+                style={{ fontFamily: previewFamily }}
+              >
+                Aa Bb Cc 123
+              </p>
+
+              <div className="mt-auto ui-text space-y-4">
+                {/* 04 Badges — max 3 via compact */}
                 <LicenseBadges font={f} compact />
-                <p className="text-xs text-muted-foreground">
-                    {f.availability === "pay-what-you-want"
-                      ? "Informational reference"
-                      : isPremiumReference(f)
-                        ? "Premium reference"
-                        : `Best for ${f.bestMedium.toLowerCase()}`}
-                </p>
-                <div className="safe-row flex items-center gap-3">
-                  <Link
-                    to="/"
-                    search={{ q: f.name } as never}
-                    className="btn-card-primary flex-1"
-                  >
-                    Analyze
-                  </Link>
-                </div>
+                {isPremiumReference(f) && (
+                  <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                    Premium reference
+                  </p>
+                )}
+                {/* 05 CTA — Analyze → */}
+                <Link
+                  to="/"
+                  search={{ q: f.name } as never}
+                  className="btn-card-primary w-full"
+                >
+                  Analyze
+                  <ArrowRight size={14} />
+                </Link>
               </div>
             </article>
           );
         })}
       </div>
 
-      {visible < fonts.length && (
-        <div className="ui-text mt-8 flex items-center justify-center">
-          <button
-            type="button"
-            onClick={() => setVisible((v) => v + PAGE_SIZE)}
-            className="rounded-lg border border-border bg-card px-5 py-2 text-xs uppercase tracking-widest text-foreground hover:border-foreground"
-          >
-            Load more — {Math.min(PAGE_SIZE, fonts.length - visible)} of {fonts.length - visible}
-          </button>
-        </div>
+      {/* Lazy load sentinel + subtle status */}
+      <div ref={sentinelRef} className="h-12" />
+      {visible < fonts.length ? (
+        <p className="ui-text mt-2 text-center text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+          Loading more typefaces…
+        </p>
+      ) : (
+        fonts.length > PAGE_SIZE && (
+          <p className="ui-text mt-2 text-center text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+            End of catalogue — {fonts.length} typefaces
+          </p>
+        )
       )}
       </div>
     </div>
