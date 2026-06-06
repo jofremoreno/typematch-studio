@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { Header } from "@/components/typematch/header";
-import { FontSearch } from "@/components/typematch/font-search";
 import { FontOverview } from "@/components/typematch/font-overview";
 import { TechnicalDiagnosis } from "@/components/typematch/technical-diagnosis";
 import { UsageFit } from "@/components/typematch/usage-fit";
@@ -15,6 +14,7 @@ import { NotFoundState } from "@/components/typematch/not-found-state";
 import { FontLibrary } from "@/components/typematch/font-library";
 import { SavedPairings } from "@/components/typematch/saved-pairings";
 import { findFontByQuery } from "@/data/fonts";
+import { ArrowRight } from "lucide-react";
 
 const searchSchema = z.object({ q: z.string().optional() });
 
@@ -42,17 +42,27 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main className="mx-auto w-full max-w-7xl px-6 pb-32 sm:px-9">
-        <section className="pb-8 pt-16 sm:pb-10 sm:pt-20">
+        <section className="pb-10 pt-16 sm:pb-14 sm:pt-24">
           <span className="label-eyebrow">A typography tool, not a generator</span>
-          <h1 className="font-editorial mt-4 max-w-4xl text-[clamp(2.5rem,6.5vw,5rem)] leading-[0.98] tracking-tight">
-            Typography pairing with design logic.
+          <h1 className="mt-5 max-w-5xl text-[clamp(2.75rem,7vw,4.5rem)] font-extrabold leading-[0.98] tracking-[-0.035em]">
+            Typography pairing<br />with design logic.
           </h1>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Search a typeface to analyze it, then browse the library below to
-            filter and compare.
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            Analyze typefaces, compare visual behaviour and build better
+            combinations — browse the catalogue, filter by use and license,
+            then dive into any specimen.
           </p>
-          <div className="mt-10 max-w-3xl">
-            <FontSearch defaultValue={query} />
+          <div className="mt-10 flex flex-wrap items-center gap-4">
+            <a
+              href="#library"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-xs uppercase tracking-[0.16em] text-foreground hover:border-foreground"
+            >
+              Explore the library
+              <ArrowRight size={14} />
+            </a>
+            <span className="ui-text text-xs uppercase tracking-[0.18em] text-muted-foreground">
+              Or search a typeface inside the catalogue
+            </span>
           </div>
         </section>
 
