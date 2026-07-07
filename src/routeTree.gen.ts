@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as MethodRouteImport } from './routes/method'
 import { Route as LicensingRouteImport } from './routes/licensing'
 import { Route as LibraryRouteImport } from './routes/library'
+import { Route as FoundriesRouteImport } from './routes/foundries'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FoundriesSlugRouteImport } from './routes/foundries.$slug'
 
 const MethodRoute = MethodRouteImport.update({
   id: '/method',
@@ -30,6 +32,11 @@ const LibraryRoute = LibraryRouteImport.update({
   path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FoundriesRoute = FoundriesRouteImport.update({
+  id: '/foundries',
+  path: '/foundries',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompareRoute = CompareRouteImport.update({
   id: '/compare',
   path: '/compare',
@@ -40,40 +47,74 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FoundriesSlugRoute = FoundriesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => FoundriesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/compare': typeof CompareRoute
+  '/foundries': typeof FoundriesRouteWithChildren
   '/library': typeof LibraryRoute
   '/licensing': typeof LicensingRoute
   '/method': typeof MethodRoute
+  '/foundries/$slug': typeof FoundriesSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/compare': typeof CompareRoute
+  '/foundries': typeof FoundriesRouteWithChildren
   '/library': typeof LibraryRoute
   '/licensing': typeof LicensingRoute
   '/method': typeof MethodRoute
+  '/foundries/$slug': typeof FoundriesSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/compare': typeof CompareRoute
+  '/foundries': typeof FoundriesRouteWithChildren
   '/library': typeof LibraryRoute
   '/licensing': typeof LicensingRoute
   '/method': typeof MethodRoute
+  '/foundries/$slug': typeof FoundriesSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/compare' | '/library' | '/licensing' | '/method'
+  fullPaths:
+    | '/'
+    | '/compare'
+    | '/foundries'
+    | '/library'
+    | '/licensing'
+    | '/method'
+    | '/foundries/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/compare' | '/library' | '/licensing' | '/method'
-  id: '__root__' | '/' | '/compare' | '/library' | '/licensing' | '/method'
+  to:
+    | '/'
+    | '/compare'
+    | '/foundries'
+    | '/library'
+    | '/licensing'
+    | '/method'
+    | '/foundries/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/compare'
+    | '/foundries'
+    | '/library'
+    | '/licensing'
+    | '/method'
+    | '/foundries/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CompareRoute: typeof CompareRoute
+  FoundriesRoute: typeof FoundriesRouteWithChildren
   LibraryRoute: typeof LibraryRoute
   LicensingRoute: typeof LicensingRoute
   MethodRoute: typeof MethodRoute
@@ -102,6 +143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/foundries': {
+      id: '/foundries'
+      path: '/foundries'
+      fullPath: '/foundries'
+      preLoaderRoute: typeof FoundriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compare': {
       id: '/compare'
       path: '/compare'
@@ -116,12 +164,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/foundries/$slug': {
+      id: '/foundries/$slug'
+      path: '/$slug'
+      fullPath: '/foundries/$slug'
+      preLoaderRoute: typeof FoundriesSlugRouteImport
+      parentRoute: typeof FoundriesRoute
+    }
   }
 }
+
+interface FoundriesRouteChildren {
+  FoundriesSlugRoute: typeof FoundriesSlugRoute
+}
+
+const FoundriesRouteChildren: FoundriesRouteChildren = {
+  FoundriesSlugRoute: FoundriesSlugRoute,
+}
+
+const FoundriesRouteWithChildren = FoundriesRoute._addFileChildren(
+  FoundriesRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CompareRoute: CompareRoute,
+  FoundriesRoute: FoundriesRouteWithChildren,
   LibraryRoute: LibraryRoute,
   LicensingRoute: LicensingRoute,
   MethodRoute: MethodRoute,
@@ -129,3 +197,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
