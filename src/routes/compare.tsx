@@ -5,6 +5,8 @@ import { Header } from "@/components/typematch/header";
 import { FONTS, FONTS_BY_ID, isPremiumReference } from "@/data/fonts";
 import { compareFonts } from "@/lib/pairing";
 import { LicenseBadges } from "@/components/typematch/license-badges";
+import { useCompareQueue } from "@/lib/compare-queue";
+import { X } from "lucide-react";
 
 const searchSchema = z.object({
   a: z.string().optional(),
@@ -24,8 +26,9 @@ export const Route = createFileRoute("/compare")({
 
 function ComparePage() {
   const { a: aId, b: bId } = Route.useSearch();
-  const [a, setA] = useState<string>(aId ?? "inter");
-  const [b, setB] = useState<string>(bId ?? "playfair-display");
+  const { items: queue, remove: removeFromQueue, clear: clearQueue } = useCompareQueue();
+  const [a, setA] = useState<string>(aId ?? queue[0]?.id ?? "inter");
+  const [b, setB] = useState<string>(bId ?? queue[1]?.id ?? "playfair-display");
 
   const fontA = FONTS_BY_ID[a] ?? FONTS[0];
   const fontB = FONTS_BY_ID[b] ?? FONTS[1];
@@ -44,6 +47,59 @@ function ComparePage() {
           Side-by-side comparison based on local attributes. Free alternatives
           are surfaced whenever a premium reference is involved.
         </p>
+
+        {queue.length > 0 && (
+          <section className="mt-8 border border-border bg-card p-4">
+            <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <div>
+                <span className="label-eyebrow">Compare queue</span>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Selections added from the Library. Use as Font A or Font B, or remove.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={clearQueue}
+                className="ui-text text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+              >
+                Clear queue
+              </button>
+            </div>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {queue.map((it) => (
+                <li
+                  key={it.id}
+                  className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-[12px]"
+                >
+                  <span className="text-foreground">{it.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => setA(it.id)}
+                    className="ui-text text-[10px] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
+                  >
+                    Set A
+                  </button>
+                  <span className="text-muted-foreground">·</span>
+                  <button
+                    type="button"
+                    onClick={() => setB(it.id)}
+                    className="ui-text text-[10px] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
+                  >
+                    Set B
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeFromQueue(it.id)}
+                    aria-label={`Remove ${it.name}`}
+                    className="ml-1 text-muted-foreground hover:text-foreground"
+                  >
+                    <X size={12} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Picker label="Font A" value={a} onChange={setA} />

@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { FONTS, type FontCategory, isPremiumReference } from "@/data/fonts";
-import { LicenseBadges } from "./license-badges";
+import { FONTS, type FontCategory } from "@/data/fonts";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { ArrowRight, Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal } from "lucide-react";
+import { FontCard } from "./font-card";
+import { CompareChip } from "./compare-chip";
 
 type CategoryFilter = "All" | FontCategory;
 type AvailabilityFilter =
@@ -194,8 +194,9 @@ export function FontLibrary() {
 
       {/* Results column */}
       <div className="min-w-0 flex-1">
-        {/* Mobile filters trigger */}
-        <div className="mb-6 flex items-center justify-between lg:hidden">
+        {/* Toolbar — mobile filters + persistent Compare chip */}
+        <div className="mb-6 flex items-center justify-between gap-3">
+          <div className="lg:hidden">
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
               <button
@@ -218,65 +219,20 @@ export function FontLibrary() {
               <div className="mt-6">{FiltersPanel}</div>
             </SheetContent>
           </Sheet>
-          <span className="font-mono-ui text-xs text-muted-foreground">
+          </div>
+          <span className="font-mono-ui hidden text-xs text-muted-foreground lg:inline">
+            Showing <span className="text-foreground">{fonts.length}</span> of {FONTS.length} typefaces
+          </span>
+          <span className="font-mono-ui text-xs text-muted-foreground lg:hidden">
             {fonts.length}/{FONTS.length}
           </span>
+          <CompareChip />
         </div>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {shown.map((f) => {
-          const previewFamily =
-            f.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : f.family;
-          const sourceShort = f.sourceName;
-          return (
-            <article
-              key={f.id}
-              className="editorial-card safe-card group flex aspect-square min-w-0 flex-col gap-3"
-            >
-              {/* 01 Meta — category · source */}
-              <header className="ui-text flex flex-col gap-0.5">
-                <span className="label-eyebrow">{f.classification}</span>
-                <span className="label-eyebrow text-muted-foreground">{sourceShort}</span>
-              </header>
-
-              {/* 02 Preview — dominant font name */}
-              <p
-                className="min-w-0 break-words text-[clamp(1.5rem,2.1vw,2.125rem)] font-extrabold leading-[1.05] tracking-[-0.03em]"
-                style={{ fontFamily: previewFamily }}
-                title={f.name}
-              >
-                {f.name}
-              </p>
-
-              {/* 03 Sample — Aa Bb Cc 123 */}
-              <p
-                className="text-lg leading-none text-muted-foreground"
-                style={{ fontFamily: previewFamily }}
-              >
-                Aa Bb Cc 123
-              </p>
-
-              <div className="mt-auto ui-text space-y-3">
-                {/* 04 Badges — max 3 via compact */}
-                <LicenseBadges font={f} compact />
-                {isPremiumReference(f) && (
-                  <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-                    Premium reference
-                  </p>
-                )}
-                {/* 05 CTA — Analyze → */}
-                <Link
-                  to="/"
-                  search={{ q: f.name } as never}
-                  className="btn-card-primary w-full"
-                >
-                  Analyze
-                  <ArrowRight size={14} />
-                </Link>
-              </div>
-            </article>
-          );
-        })}
+        {shown.map((f) => (
+          <FontCard key={f.id} font={f} />
+        ))}
       </div>
 
       {/* Lazy load sentinel + subtle status */}

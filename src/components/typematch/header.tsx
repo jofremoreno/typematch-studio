@@ -4,10 +4,12 @@ import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 
 const NAV = [
-  { to: "/", label: "Explore" },
-  { to: "/compare", label: "Compare" },
-  { to: "/licensing", label: "Licensing" },
-  { to: "/method", label: "Method" },
+  { to: "/", label: "Library", hash: undefined as string | undefined },
+  { to: "/foundries", label: "Foundries", hash: undefined },
+  { to: "/compare", label: "Compare", hash: undefined },
+  { to: "/", label: "Saved", hash: "saved" },
+  { to: "/method", label: "Method", hash: undefined },
+  { to: "/licensing", label: "Licensing", hash: undefined },
 ] as const;
 
 export function Header() {
@@ -47,11 +49,12 @@ export function Header() {
         {/* Desktop nav */}
         <nav className="hidden items-center gap-7 md:flex">
           {NAV.map((item) => {
-            const active = pathname === item.to;
+            const active = pathname === item.to && !item.hash;
             return (
               <Link
-                key={item.to}
+                key={item.label}
                 to={item.to}
+                hash={item.hash}
                 className={
                   "ui-text relative text-sm transition-colors " +
                   (active
@@ -91,11 +94,12 @@ export function Header() {
         >
           <nav className="mx-auto flex w-full max-w-7xl flex-col px-5 py-3 sm:px-8">
             {NAV.map((item) => {
-              const active = pathname === item.to;
+            const active = pathname === item.to && !item.hash;
               return (
                 <Link
-                  key={item.to}
-                  to={item.to}
+                key={item.label}
+                to={item.to}
+                hash={item.hash}
                   onClick={() => setOpen(false)}
                   className={
                     "ui-text border-b border-border py-3 text-sm last:border-b-0 " +
