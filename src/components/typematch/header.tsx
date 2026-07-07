@@ -4,10 +4,12 @@ import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 
 const NAV = [
-  { to: "/", label: "Explore" },
+  { to: "/", label: "Library" },
+  { to: "/foundries", label: "Foundries" },
   { to: "/compare", label: "Compare" },
-  { to: "/licensing", label: "Licensing" },
+  { to: "/#saved", label: "Saved" },
   { to: "/method", label: "Method" },
+  { to: "/licensing", label: "Licensing" },
 ] as const;
 
 export function Header() {
