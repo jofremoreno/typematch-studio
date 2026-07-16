@@ -41,7 +41,7 @@ function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
-      <main className="mx-auto w-full max-w-7xl px-6 pb-32 sm:px-9">
+      <main className="mx-auto w-full max-w-[1440px] px-6 pb-32 sm:px-9">
         <section className="pb-10 pt-16 sm:pb-14 sm:pt-24">
           <span className="label-eyebrow">A typography tool, not a generator</span>
           <h1 className="mt-5 max-w-5xl text-[clamp(2.75rem,7vw,4.5rem)] font-extrabold leading-[0.98] tracking-[-0.035em]">
