@@ -1,8 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FONTS, type FontCategory } from "@/data/fonts";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Search, SlidersHorizontal } from "lucide-react";
-import { FontCard } from "./font-card";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Search,
+  SlidersHorizontal,
+  ArrowUpDown,
+  LayoutGrid,
+  Rows3,
+  X,
+  ChevronDown,
+} from "lucide-react";
+import { FontCard, FontRow } from "./font-card";
 import { CompareChip } from "./compare-chip";
 
 type CategoryFilter = "All" | FontCategory;
@@ -15,10 +23,20 @@ type AvailabilityFilter =
   | "Subscription"
   | "Pay what you want";
 type PreviewFilter = "All" | "Can preview in app" | "Fallback preview only";
+type SortKey = "name" | "recent" | "screen" | "print" | "versatility";
+type ViewMode = "cards" | "list";
 
 const CATEGORIES: CategoryFilter[] = ["All", "Sans-serif", "Serif", "Mono", "Display"];
 const AVAILS: AvailabilityFilter[] = ["All", "Free", "Open Source", "Trial", "Paid", "Subscription", "Pay what you want"];
 const PREVIEWS: PreviewFilter[] = ["All", "Can preview in app", "Fallback preview only"];
+
+const SORTS: { key: SortKey; label: string }[] = [
+  { key: "name", label: "Name (A→Z)" },
+  { key: "recent", label: "Catalogue order" },
+  { key: "screen", label: "Best for screen" },
+  { key: "print", label: "Best for print" },
+  { key: "versatility", label: "Most versatile" },
+];
 
 function matchesAvailability(f: { availability?: string }, a: AvailabilityFilter): boolean {
   if (a === "All") return true;
@@ -40,7 +58,8 @@ export function FontLibrary() {
   const [source, setSource] = useState<string>("All");
   const [query, setQuery] = useState("");
   const [visible, setVisible] = useState(PAGE_SIZE);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [sort, setSort] = useState<SortKey>("name");
+  const [view, setView] = useState<ViewMode>("cards");
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   const sources = useMemo(
@@ -50,7 +69,7 @@ export function FontLibrary() {
 
   const fonts = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return FONTS.filter((f) => {
+    const filtered = FONTS.filter((f) => {
       if (category !== "All" && f.classification !== category) return false;
       if (!matchesAvailability(f, availability)) return false;
       if (preview === "Can preview in app" && f.canPreviewInApp === false) return false;
@@ -59,11 +78,20 @@ export function FontLibrary() {
       if (q && !f.name.toLowerCase().includes(q) && !(f.foundry ?? "").toLowerCase().includes(q)) return false;
       return true;
     });
-  }, [category, availability, preview, source, query]);
+    const sorted = [...filtered];
+    switch (sort) {
+      case "name": sorted.sort((a, b) => a.name.localeCompare(b.name)); break;
+      case "screen": sorted.sort((a, b) => b.screenScore - a.screenScore); break;
+      case "print": sorted.sort((a, b) => b.printScore - a.printScore); break;
+      case "versatility": sorted.sort((a, b) => b.versatilityScore - a.versatilityScore); break;
+      default: break;
+    }
+    return sorted;
+  }, [category, availability, preview, source, query, sort]);
 
   // Reset visible window on any filter change.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useMemo(() => setVisible(PAGE_SIZE), [category, availability, preview, source, query]);
+  useMemo(() => setVisible(PAGE_SIZE), [category, availability, preview, source, query, sort]);
   const shown = fonts.slice(0, visible);
 
   const activeCount =
@@ -77,6 +105,7 @@ export function FontLibrary() {
     setAvailability("All");
     setPreview("All");
     setSource("All");
+    setQuery("");
   };
 
   // Infinite scroll — observe sentinel near bottom and load next page.
@@ -106,7 +135,7 @@ export function FontLibrary() {
     value: string;
     onChange: (v: string) => void;
   }) => (
-    <div className="border-b border-border pb-4">
+    <div className="border-b border-border pb-3 last:border-b-0 last:pb-0">
       <span className="label-eyebrow mb-3 block">{label}</span>
       <div className="flex flex-wrap gap-1.5">
         {options.map((o) => (
@@ -114,7 +143,7 @@ export function FontLibrary() {
             key={o}
             onClick={() => onChange(o)}
             className={
-              "rounded-lg border px-3 py-1.5 text-[12px] leading-none transition-colors " +
+              "rounded-lg border px-2.5 py-1.5 text-[11.5px] leading-none transition-colors " +
               (value === o
                 ? "border-foreground bg-foreground text-background"
                 : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground")
@@ -127,50 +156,12 @@ export function FontLibrary() {
     </div>
   );
 
-  const SourceGroup = () => (
-    <div className="pb-1">
-      <span className="label-eyebrow mb-3 block">Source</span>
-      <div className="flex flex-wrap gap-1.5">
-        {sources.map((o) => (
-          <button
-            key={o}
-            onClick={() => setSource(o)}
-            className={
-              "rounded-lg border px-2.5 py-1 text-[11.5px] leading-none transition-colors " +
-              (source === o
-                ? "border-foreground bg-foreground text-background"
-                : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground")
-            }
-          >
-            {o}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-
-  const FiltersPanel = (
-    <div className="flex flex-col gap-4">
-      {/* Search inside the side menu — the only catalogue search */}
-      <div className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2.5 focus-within:border-foreground">
-        <Search size={14} className="text-muted-foreground" />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search name or foundry"
-          className="min-w-0 flex-1 bg-transparent text-[13px] outline-none placeholder:text-muted-foreground"
-        />
-      </div>
-      <div className="flex items-center justify-between border-b border-border pb-3">
-        <span className="label-eyebrow">Filters</span>
-        <span className="font-mono-ui text-[11px] text-muted-foreground">
-          {fonts.length}/{FONTS.length}
-        </span>
-      </div>
+  const filtersPanel = (
+    <div className="flex max-h-[70vh] flex-col gap-4 overflow-y-auto pr-1">
       <FilterGroup label="Category" options={CATEGORIES} value={category} onChange={(v) => setCategory(v as CategoryFilter)} />
       <FilterGroup label="Availability" options={AVAILS} value={availability} onChange={(v) => setAvailability(v as AvailabilityFilter)} />
       <FilterGroup label="Preview" options={PREVIEWS} value={preview} onChange={(v) => setPreview(v as PreviewFilter)} />
-      <SourceGroup />
+      <FilterGroup label="Source" options={sources} value={source} onChange={setSource} />
       {activeCount > 0 && (
         <button
           type="button"
@@ -183,72 +174,167 @@ export function FontLibrary() {
     </div>
   );
 
-  return (
-    <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
-      {/* Desktop sidebar — sticky, always visible, search lives here */}
-      <aside className="hidden lg:block lg:w-[320px] lg:shrink-0">
-        <div className="sticky top-24 rounded-xl border border-border bg-card p-5">
-          {FiltersPanel}
-        </div>
-      </aside>
+  const activeSortLabel = SORTS.find((s) => s.key === sort)?.label ?? "Sort";
 
-      {/* Results column */}
-      <div className="min-w-0 flex-1">
-        {/* Toolbar — mobile filters + persistent Compare chip */}
-        <div className="mb-6 flex items-center justify-between gap-3">
-          <div className="lg:hidden">
-          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger asChild>
+  return (
+    <div className="min-w-0">
+      {/* Sticky toolbar */}
+      <div className="tm-toolbar -mx-6 mb-8 px-6 py-3 sm:-mx-9 sm:px-9">
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Left cluster */}
+          <div className="flex min-w-0 items-baseline gap-3">
+            <span className="font-editorial text-[15px] tracking-tight text-foreground">
+              TypeMatch Library
+            </span>
+            <span className="font-mono-ui text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+              {fonts.length} / {FONTS.length} fonts
+            </span>
+          </div>
+
+          <div className="ml-auto flex flex-wrap items-center gap-2">
+            {/* Search */}
+            <label className="tm-chip !gap-1.5 !pr-2 focus-within:border-foreground">
+              <Search size={13} className="text-muted-foreground" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search font or foundry"
+                className="w-40 min-w-0 bg-transparent text-[12.5px] outline-none placeholder:text-muted-foreground sm:w-52"
+              />
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => setQuery("")}
+                  aria-label="Clear search"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </label>
+
+            {/* View toggle */}
+            <div className="inline-flex overflow-hidden rounded-[10px] border border-border">
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-xs uppercase tracking-widest text-foreground hover:border-foreground"
+                onClick={() => setView("cards")}
+                aria-pressed={view === "cards"}
+                title="Cards view"
+                className={
+                  "flex h-9 w-9 items-center justify-center transition-colors " +
+                  (view === "cards"
+                    ? "bg-foreground text-background"
+                    : "bg-transparent text-muted-foreground hover:text-foreground")
+                }
               >
-                <SlidersHorizontal size={14} />
-                Filters
-                {activeCount > 0 && (
-                  <span className="ml-1 rounded-md border border-border bg-secondary px-1.5 text-[10px]">
-                    {activeCount}
-                  </span>
-                )}
+                <LayoutGrid size={14} />
               </button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-[340px] max-w-[92vw] overflow-y-auto bg-card">
-              <SheetHeader>
-                <SheetTitle className="label-eyebrow text-left">Filters</SheetTitle>
-              </SheetHeader>
-              <div className="mt-6">{FiltersPanel}</div>
-            </SheetContent>
-          </Sheet>
-          </div>
-          <span className="font-mono-ui hidden text-xs text-muted-foreground lg:inline">
-            Showing <span className="text-foreground">{fonts.length}</span> of {FONTS.length} typefaces
-          </span>
-          <span className="font-mono-ui text-xs text-muted-foreground lg:hidden">
-            {fonts.length}/{FONTS.length}
-          </span>
-          <CompareChip />
-        </div>
+              <button
+                type="button"
+                onClick={() => setView("list")}
+                aria-pressed={view === "list"}
+                title="List view"
+                className={
+                  "flex h-9 w-9 items-center justify-center border-l border-border transition-colors " +
+                  (view === "list"
+                    ? "bg-foreground text-background"
+                    : "bg-transparent text-muted-foreground hover:text-foreground")
+                }
+              >
+                <Rows3 size={14} />
+              </button>
+            </div>
 
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {shown.map((f) => (
-          <FontCard key={f.id} font={f} />
-        ))}
+            {/* Filters popover */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <button type="button" className="tm-chip" data-active={activeCount > 0}>
+                  <SlidersHorizontal size={13} />
+                  Filters
+                  {activeCount > 0 && (
+                    <span className="rounded-md bg-background/20 px-1.5 text-[10px] font-mono-ui tabular-nums">
+                      {activeCount}
+                    </span>
+                  )}
+                </button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-[340px] rounded-2xl border-border bg-card p-5">
+                {filtersPanel}
+              </PopoverContent>
+            </Popover>
+
+            {/* Sort popover */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <button type="button" className="tm-chip">
+                  <ArrowUpDown size={13} />
+                  <span className="hidden sm:inline">{activeSortLabel}</span>
+                  <span className="sm:hidden">Sort</span>
+                  <ChevronDown size={12} className="text-muted-foreground" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-56 rounded-2xl border-border bg-card p-2">
+                <div className="flex flex-col">
+                  {SORTS.map((s) => (
+                    <button
+                      key={s.key}
+                      onClick={() => setSort(s.key)}
+                      className={
+                        "flex items-center justify-between rounded-lg px-3 py-2 text-left text-[12.5px] transition-colors " +
+                        (sort === s.key
+                          ? "bg-foreground text-background"
+                          : "text-foreground hover:bg-secondary")
+                      }
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+
+            <CompareChip />
+          </div>
+        </div>
       </div>
 
-      {/* Lazy load sentinel + subtle status */}
-      <div ref={sentinelRef} className="h-12" />
-      {visible < fonts.length ? (
-        <p className="ui-text mt-2 text-center text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-          Loading more typefaces…
-        </p>
+      {/* Results */}
+      {view === "cards" ? (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {shown.map((f) => (
+            <FontCard key={f.id} font={f} />
+          ))}
+        </div>
       ) : (
-        fonts.length > PAGE_SIZE && (
-          <p className="ui-text mt-2 text-center text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-            End of catalogue — {fonts.length} typefaces
-          </p>
+        <div className="flex flex-col gap-3">
+          {shown.map((f) => (
+            <FontRow key={f.id} font={f} />
+          ))}
+        </div>
+      )}
+
+      {/* Infinite scroll sentinel + skeletons */}
+      <div ref={sentinelRef} className="h-8" />
+      {visible < fonts.length && (
+        view === "cards" ? (
+          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="tm-skeleton h-[340px]" />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-3 flex flex-col gap-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="tm-skeleton h-24" />
+            ))}
+          </div>
         )
       )}
-      </div>
+      {visible >= fonts.length && fonts.length === 0 && (
+        <p className="ui-text mt-10 text-center text-[12px] uppercase tracking-[0.2em] text-muted-foreground">
+          No typefaces match these filters
+        </p>
+      )}
     </div>
   );
 }
