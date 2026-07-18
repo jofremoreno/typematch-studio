@@ -82,10 +82,7 @@ export function useSavedPairings() {
     writeAll(readAll().filter((x) => x.id !== id));
   }, []);
 
-  const isSaved = useCallback(
-    (p: Pairing) => items.some((x) => x.id === pairingId(p)),
-    [items],
-  );
+  const isSaved = useCallback((p: Pairing) => items.some((x) => x.id === pairingId(p)), [items]);
 
   return { items, save, remove, isSaved };
 }

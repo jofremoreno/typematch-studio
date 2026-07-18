@@ -125,7 +125,10 @@ function editorialScore(primary: FontRecord, secondary: FontRecord) {
 function experimentalScore(primary: FontRecord, secondary: FontRecord) {
   let s = contrastScore(primary, secondary) * 1.2;
   s += secondary.displayScore / 5;
-  if (secondary.personality.some((p) => /expressive|characterful|quirky|retro|playful|warm/i.test(p))) s += 10;
+  if (
+    secondary.personality.some((p) => /expressive|characterful|quirky|retro|playful|warm/i.test(p))
+  )
+    s += 10;
   if (secondary.classification === "Display" || secondary.classification === "Mono") s += 8;
   if (secondary.personality.includes("neutral")) s -= 12;
   // reward genuinely distinct sub-classification
@@ -170,11 +173,15 @@ function explain(category: PairingCategory, p: FontRecord, s: FontRecord) {
   switch (category) {
     case "Reliable System Pairing":
       return `This pairing works because ${s.name} provides ${
-        s.classification === "Sans-serif" ? "structural neutrality and high legibility" : "a readable counterpoint"
+        s.classification === "Sans-serif"
+          ? "structural neutrality and high legibility"
+          : "a readable counterpoint"
       } against ${p.name}'s ${p.personality.slice(0, 2).join(", ")} voice. The ${aCat}/${bCat} relationship creates clear role separation without breaking system coherence, which is what brand systems, dashboards and corporate documents need.`;
     case "Editorial Contrast Pairing":
       return `${p.name} carries the editorial voice with ${p.strokeContrast.toLowerCase()} stroke contrast and ${p.personality[0]} character, while ${s.name} introduces ${
-        s.classification === "Sans-serif" ? "a quieter structural rhythm" : "a contrasting reading texture"
+        s.classification === "Sans-serif"
+          ? "a quieter structural rhythm"
+          : "a contrasting reading texture"
       }. The contrast is visible but controlled, making it useful for cultural brands, portfolios and long-form editorial layouts.`;
     case "Experimental / High Character Pairing":
       return `This is a more expressive combination. ${s.name} brings strong personality (${s.personality.slice(0, 2).join(", ")}), which amplifies ${p.name}'s voice but increases risk: scale, spacing and role separation must be controlled, and it is not suitable for dense UI or long-form body text. Use it for campaigns, covers and identity work where the typography is part of the message.`;
@@ -210,8 +217,7 @@ function buildPairing(
   let confidence = Math.max(35, Math.min(98, Math.round(rawScore)));
   if (similarity >= 6) confidence = Math.min(confidence, 55);
   if (competes) confidence = Math.min(confidence, 50);
-  if (category === "Reliable System Pairing" && supportUnfit)
-    confidence = Math.min(confidence, 55);
+  if (category === "Reliable System Pairing" && supportUnfit) confidence = Math.min(confidence, 55);
 
   const contrastType = sameCat
     ? "Structural contrast within the same category"
@@ -234,10 +240,7 @@ function buildPairing(
       `${secondary.name} is not a strong choice for body or UI text (readability ${secondary.readabilityScore}, body ${secondary.bodyTextScore}). Use a different secondary for system reliability.`,
     );
   }
-  if (
-    secondaryRole.startsWith("Body") &&
-    secondary.weakRoles.some((r) => /body/i.test(r))
-  ) {
+  if (secondaryRole.startsWith("Body") && secondary.weakRoles.some((r) => /body/i.test(r))) {
     warnings.push(
       `${secondary.name} lists body text in its weak roles — avoid using it for long-form reading even if scores allow it.`,
     );
@@ -251,13 +254,12 @@ function buildPairing(
       : "");
 
   const freeAlt = isPremiumReference(secondary)
-    ? (secondary.freeAlternatives ?? [])
+    ? ((secondary.freeAlternatives ?? [])
         .map((id) => FONTS_BY_ID[id])
-        .find((f) => f && !isPremiumReference(f)) ?? null
+        .find((f) => f && !isPremiumReference(f)) ?? null)
     : null;
 
-  const licenseRequired =
-    isPremiumReference(primary) || isPremiumReference(secondary);
+  const licenseRequired = isPremiumReference(primary) || isPremiumReference(secondary);
 
   return {
     name: `${primary.name} + ${secondary.name}`,
@@ -318,17 +320,18 @@ export function buildExtendedRecommendations(
     (f) => f.id !== primary.id && (f.displayScore >= 75 || f.classification === "Mono"),
   );
 
-  const rankIn = (
-    pool: FontRecord[],
-    score: (a: FontRecord, b: FontRecord) => number,
-  ) =>
-    pool
-      .map((f) => ({ f, score: score(primary, f) }))
-      .sort((a, b) => b.score - a.score);
+  const rankIn = (pool: FontRecord[], score: (a: FontRecord, b: FontRecord) => number) =>
+    pool.map((f) => ({ f, score: score(primary, f) })).sort((a, b) => b.score - a.score);
 
-  const reliable = rankIn(reliablePool.length ? reliablePool : FONTS.filter((f) => f.id !== primary.id), reliableScore);
+  const reliable = rankIn(
+    reliablePool.length ? reliablePool : FONTS.filter((f) => f.id !== primary.id),
+    reliableScore,
+  );
   const editorial = rankIn(editorialPool, editorialScore);
-  const experimental = rankIn(experimentalPool.length ? experimentalPool : editorialPool, experimentalScore);
+  const experimental = rankIn(
+    experimentalPool.length ? experimentalPool : editorialPool,
+    experimentalScore,
+  );
 
   const picked = new Set<string>(excludeIds);
   const pickN = (list: typeof reliable, n: number) => {
@@ -350,7 +353,10 @@ export function buildExtendedRecommendations(
   for (let i = 0; i < perCategory; i++) {
     if (rs[i]) out.push(buildPairing(primary, rs[i].f, "Reliable System Pairing", rs[i].score));
     if (es[i]) out.push(buildPairing(primary, es[i].f, "Editorial Contrast Pairing", es[i].score));
-    if (xs[i]) out.push(buildPairing(primary, xs[i].f, "Experimental / High Character Pairing", xs[i].score));
+    if (xs[i])
+      out.push(
+        buildPairing(primary, xs[i].f, "Experimental / High Character Pairing", xs[i].score),
+      );
   }
   return out;
 }
@@ -488,13 +494,19 @@ export function compareFonts(a: FontRecord, b: FontRecord): ComparisonResult {
     );
   }
   if (a.xHeight !== b.xHeight) {
-    reasons.push(`Different x-heights (${a.xHeight} vs ${b.xHeight}) help visual hierarchy at small sizes.`);
+    reasons.push(
+      `Different x-heights (${a.xHeight} vs ${b.xHeight}) help visual hierarchy at small sizes.`,
+    );
   }
   if (a.strokeContrast !== b.strokeContrast) {
-    reasons.push(`Stroke-contrast difference (${a.strokeContrast} vs ${b.strokeContrast}) adds formal contrast.`);
+    reasons.push(
+      `Stroke-contrast difference (${a.strokeContrast} vs ${b.strokeContrast}) adds formal contrast.`,
+    );
   }
   if (competes) {
-    reasons.push(`Both fonts behave as display voices — they compete for attention and need strict role separation.`);
+    reasons.push(
+      `Both fonts behave as display voices — they compete for attention and need strict role separation.`,
+    );
   }
   if (similarity >= 5) {
     reasons.push(`Structural similarity is high — hierarchy will not emerge from form alone.`);

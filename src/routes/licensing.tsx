@@ -1,15 +1,22 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/typematch/header";
-import { SOURCES, ADOBE_FOUNDRIES, ADOBE_FOUNDRIES_DIRECTORY_URL } from "@/data/fonts";
-import { ExternalLink } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/licensing")({
   head: () => ({
     meta: [
       { title: "Licensing & sources — TypeMatch Studio" },
-      { name: "description", content: "How TypeMatch Studio handles free, trial, paid and subscription typefaces. A directory of font sources and foundries." },
+      {
+        name: "description",
+        content:
+          "How TypeMatch Studio handles free, trial, paid and subscription typefaces. A directory of font sources and foundries.",
+      },
       { property: "og:title", content: "Licensing clarity — TypeMatch Studio" },
-      { property: "og:description", content: "Free, trial, paid and subscription typefaces — how they appear and how to use them responsibly." },
+      {
+        property: "og:description",
+        content:
+          "Free, trial, paid and subscription typefaces — how they appear and how to use them responsibly.",
+      },
     ],
   }),
   component: LicensingPage,
@@ -34,104 +41,50 @@ function LicensingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
-      <main className="mx-auto w-full max-w-7xl px-5 pb-24 pt-16 sm:px-8 sm:pt-20">
-        <span className="label-eyebrow">Licensing clarity</span>
-        <h1 className="font-editorial mt-3 max-w-3xl text-[clamp(2.25rem,5vw,4rem)] leading-[1.02] tracking-tight">
-          An informational tool — never a font distributor.
-        </h1>
-        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          TypeMatch Studio is an informational tool for comparing typefaces and
-          building pairing strategies. It does not distribute, host or serve
-          commercial font files. Font licensing varies by foundry, format and
-          use case. Always verify the official license before using a typeface
-          commercially.
-        </p>
-
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {BLOCKS.map((b) => (
-            <div key={b.title} className="border border-border bg-card p-5">
-              <span className="label-eyebrow">{b.title}</span>
-              <p className="mt-3 text-sm leading-relaxed text-foreground">{b.body}</p>
-            </div>
-          ))}
-        </div>
-
-        <section className="mt-16">
-          <span className="label-eyebrow">Source directory</span>
-          <h2 className="font-editorial mt-3 text-3xl tracking-tight sm:text-4xl">
-            Where the fonts in this catalogue come from.
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Every link is informational only. TypeMatch Studio does not scrape,
-            download or auto-import fonts.
+      <main className="mx-auto w-full max-w-[1920px] px-5 pb-32 sm:px-8 lg:px-[5.75vw]">
+        <header className="tm-page-header">
+          <span className="label-eyebrow">Licensing clarity</span>
+          <h1>An informational tool — never a font distributor.</h1>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            TypeMatch Studio is an informational tool for comparing typefaces and building pairing
+            strategies. It does not distribute, host or serve commercial font files. Font licensing
+            varies by foundry, format and use case. Always verify the official license before using
+            a typeface commercially.
           </p>
-          <div className="mt-8 grid grid-cols-1 gap-0 sm:grid-cols-2">
-            {SOURCES.map((s, i) => (
-              <article
-                key={s.name}
-                className={
-                  "border-b border-border bg-card p-5 " +
-                  ((i + 1) % 2 !== 0 ? "sm:border-r" : "")
-                }
-              >
-                <header className="flex items-baseline justify-between gap-3">
-                  <h3 className="font-editorial text-xl tracking-tight">{s.name}</h3>
-                  <span className="label-eyebrow">{s.category}</span>
-                </header>
-                <dl className="mt-3 grid grid-cols-[110px_1fr] gap-y-1 text-xs">
-                  <dt className="label-eyebrow">Type</dt><dd className="text-foreground">{s.type}</dd>
-                  <dt className="label-eyebrow">License</dt><dd className="text-foreground">{s.licenseConfidence} confidence</dd>
-                  <dt className="label-eyebrow">Role</dt><dd className="text-foreground">{s.role}</dd>
-                </dl>
-                <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{s.notes}</p>
-                <a
-                  href={s.officialUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-4 inline-flex items-center gap-1 text-xs text-foreground underline-offset-4 hover:underline"
-                >
-                  {s.officialUrl.replace(/^https?:\/\//, "")} <ExternalLink size={12} />
-                </a>
+        </header>
+
+        <section className="tm-page-panel tm-licensing-guide">
+          <div className="tm-section-heading">
+            <div>
+              <span className="label-eyebrow">License states</span>
+              <h2 className="mt-3">Three labels, one clear responsibility.</h2>
+            </div>
+            <p>
+              These states explain how a typeface appears inside TypeMatch. The official provider
+              remains the final authority for every project and use case.
+            </p>
+          </div>
+          <div className="tm-licensing-grid">
+            {BLOCKS.map((block, index) => (
+              <article key={block.title}>
+                <span className="font-mono-ui">0{index + 1}</span>
+                <h3>{block.title}</h3>
+                <p>{block.body}</p>
               </article>
             ))}
           </div>
-        </section>
 
-        <section className="mt-16">
-          <span className="label-eyebrow">Adobe Fonts — foundry directory</span>
-          <h2 className="font-editorial mt-3 text-3xl tracking-tight sm:text-4xl">
-            Foundries distributed through Adobe Fonts.
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Adobe Fonts is a subscription library. The foundries below are
-            referenced for informational purposes only. TypeMatch Studio does
-            not distribute, self-host or serve Adobe font files. Usage depends
-            on Adobe Fonts licensing and active access — always verify on the
-            official source.
-          </p>
-          <a
-            href={ADOBE_FOUNDRIES_DIRECTORY_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-4 inline-flex items-center gap-1 text-xs text-foreground underline-offset-4 hover:underline"
-          >
-            fonts.adobe.com/foundries <ExternalLink size={12} />
-          </a>
-          <ul className="mt-8 grid grid-cols-2 gap-x-6 gap-y-2 text-xs sm:grid-cols-3 lg:grid-cols-4">
-            {ADOBE_FOUNDRIES.map((foundry) => (
-              <li
-                key={foundry.slug}
-                className="flex items-baseline justify-between gap-2 border-b border-border py-2"
-              >
-                <span className="text-foreground">{foundry.name}</span>
-                <span className="label-eyebrow text-[9px]">Foundry ref</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-6 max-w-2xl text-[11px] leading-relaxed text-muted-foreground">
-            Partial listing. Each foundry is referenced under Adobe Fonts as a
-            subscription source. Verify license and active access before use.
-          </p>
+          <div className="tm-licensing-source-cta">
+            <div>
+              <span className="label-eyebrow">Need the original provider?</span>
+              <h3>Browse verified catalogue sources.</h3>
+              <p>Foundries, libraries and directories now live together in Catalogue → Sources.</p>
+            </div>
+            <Link to="/catalogue" search={{ view: "sources" }} className="btn-card-primary">
+              Open sources
+              <ArrowRight size={16} />
+            </Link>
+          </div>
         </section>
       </main>
     </div>
