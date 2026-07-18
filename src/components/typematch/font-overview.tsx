@@ -1,28 +1,17 @@
 import type { FontRecord } from "@/data/fonts";
 import { FONTS_BY_ID, isPremiumReference } from "@/data/fonts";
 import { Badge } from "./badge";
-import {
-  LicenseBadges,
-  licensingNotice,
-  sourceButtonLabel,
-} from "./license-badges";
-import { ExternalLink, GitCompareArrows } from "lucide-react";
+import { LicenseBadges } from "./license-badges";
+import { licensingNotice, sourceButtonLabel } from "./license-utils";
+import { ExternalLink } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { FONTS } from "@/data/fonts";
-import { useState } from "react";
-
-const WEIGHTS = [300, 400, 500, 600, 700];
+import { useFontPreview } from "@/hooks/use-font-preview";
 
 export function FontOverview({ font }: { font: FontRecord }) {
-  const previewFamily =
-    font.canPreviewInApp === false ? "ui-sans-serif, system-ui, sans-serif" : font.family;
+  const preview = useFontPreview(font);
   const notice = licensingNotice(font);
-  const [compareOpen, setCompareOpen] = useState(false);
-  const [compareWith, setCompareWith] = useState<string>(
-    FONTS.find((f) => f.id !== font.id)?.id ?? "",
-  );
   return (
-    <section className="border-b border-border pb-12">
+    <section className="tm-font-hero rounded-xl border border-border bg-card p-6 sm:p-10">
       <div className="flex flex-wrap items-baseline justify-between gap-4">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
@@ -32,7 +21,7 @@ export function FontOverview({ font }: { font: FontRecord }) {
           <LicenseBadges font={font} />
           <h1
             className="text-[clamp(3.5rem,10vw,8rem)] leading-[0.95] tracking-tight"
-            style={{ fontFamily: previewFamily }}
+            style={{ fontFamily: preview.family }}
           >
             {font.name}
           </h1>
@@ -46,54 +35,16 @@ export function FontOverview({ font }: { font: FontRecord }) {
             href={font.sourceUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 border border-border bg-card px-3 py-2 text-xs text-foreground transition-colors hover:border-foreground"
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-xs text-foreground transition-colors hover:border-foreground"
           >
             {sourceButtonLabel(font)} — {font.sourceName}
             <ExternalLink size={12} />
           </a>
-          <button
-            type="button"
-            onClick={() => setCompareOpen((v) => !v)}
-            className="inline-flex items-center gap-2 border border-border bg-background px-3 py-2 text-xs text-foreground transition-colors hover:border-foreground"
-            aria-expanded={compareOpen}
-          >
-            <GitCompareArrows size={12} />
-            Compare with another font
-          </button>
         </div>
       </div>
 
-      {compareOpen && (
-        <div className="mt-6 flex flex-wrap items-end gap-3 border border-border bg-card p-4">
-          <label className="flex flex-1 min-w-[220px] flex-col gap-1">
-            <span className="label-eyebrow">Compare {font.name} with</span>
-            <select
-              value={compareWith}
-              onChange={(e) => setCompareWith(e.target.value)}
-              className="border border-border bg-background px-2 py-2 text-sm text-foreground outline-none"
-            >
-              {FONTS.filter((f) => f.id !== font.id).map((f) => (
-                <option key={f.id} value={f.id}>
-                  {f.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <Link
-            to="/compare"
-            search={{ a: font.id, b: compareWith }}
-            className="border border-foreground bg-foreground px-4 py-2 text-xs uppercase tracking-[0.14em] text-background hover:opacity-90"
-          >
-            Open comparison →
-          </Link>
-          <p className="basis-full text-[11px] text-muted-foreground">
-            Uses the existing comparator — same local database, no APIs.
-          </p>
-        </div>
-      )}
-
       {notice && (
-        <div className="mt-6 border-l-2 border-accent bg-card p-4 text-xs leading-relaxed text-muted-foreground">
+        <div className="mt-6 rounded-r-lg border-l-2 border-accent bg-card p-4 text-xs leading-relaxed text-muted-foreground">
           <strong className="text-foreground">License notice — </strong>
           {notice}
           {font.canPreviewInApp === false &&
@@ -101,43 +52,28 @@ export function FontOverview({ font }: { font: FontRecord }) {
         </div>
       )}
 
-      <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-6">
-          <p
-            className="text-3xl leading-snug sm:text-4xl"
-            style={{ fontFamily: previewFamily }}
-          >
-            The quick brown fox jumps over the lazy dog.
-          </p>
-          <p
-            className="text-xl text-muted-foreground"
-            style={{ fontFamily: previewFamily }}
-          >
-            ABCDEFGHIJKLMNOPQRSTUVWXYZ
-            <br />
-            abcdefghijklmnopqrstuvwxyz
-            <br />
-            0123456789 — &amp; @ # ! ? . , : ;
-          </p>
+      <dl className="tm-font-hero-facts">
+        <div>
+          <dt>Category</dt>
+          <dd title={font.subclassification || font.classification}>
+            {font.subclassification || font.classification}
+          </dd>
         </div>
-        <div className="space-y-3 border-l border-border pl-6">
-          <span className="label-eyebrow">Weights</span>
-          {WEIGHTS.map((w) => (
-            <div
-              key={w}
-              className="flex items-baseline justify-between gap-4 border-b border-border pb-2"
-            >
-              <span className="font-mono-ui text-xs text-muted-foreground">{w}</span>
-              <span
-                className="text-xl"
-                style={{ fontFamily: previewFamily, fontWeight: w }}
-              >
-                Typography
-              </span>
-            </div>
-          ))}
+        <div>
+          <dt>Source</dt>
+          <dd title={font.foundry ?? font.sourceName}>{font.foundry ?? font.sourceName}</dd>
         </div>
-      </div>
+        <div>
+          <dt>Preview</dt>
+          <dd title={font.canPreviewInApp === false ? "Reference only" : "Live webfont"}>
+            {font.canPreviewInApp === false ? "Reference only" : "Live webfont"}
+          </dd>
+        </div>
+        <div>
+          <dt>Pairing difficulty</dt>
+          <dd title={font.pairingDifficulty}>{font.pairingDifficulty}</dd>
+        </div>
+      </dl>
 
       <div className="mt-6 flex flex-wrap gap-2">
         {font.personality.map((p) => (
@@ -155,27 +91,26 @@ export function FontOverview({ font }: { font: FontRecord }) {
 }
 
 function FreeAlternativesInline({ font }: { font: FontRecord }) {
-  const alts = (font.freeAlternatives ?? [])
-    .map((id) => FONTS_BY_ID[id])
-    .filter(Boolean);
+  const alts = (font.freeAlternatives ?? []).map((id) => FONTS_BY_ID[id]).filter(Boolean);
   if (!alts.length) return null;
   return (
-    <div className="mt-8 border border-border bg-card p-5">
+    <div className="mt-8 rounded-xl border border-border bg-card p-5">
       <span className="label-eyebrow">Free alternatives</span>
       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-        Free alternatives with a similar functional role or visual direction.
-        They do not reproduce the exact tone or proportions of {font.name}.
+        Free alternatives with a similar functional role or visual direction. They do not reproduce
+        the exact tone or proportions of {font.name}.
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
         {alts.map((a) => (
-          <a
+          <Link
             key={a.id}
-            href={`/?q=${encodeURIComponent(a.name)}`}
-            className="border border-border bg-background px-3 py-1.5 text-xs text-foreground hover:border-foreground"
+            to="/analyze"
+            search={{ font: a.id }}
+            className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs text-foreground hover:border-foreground"
             style={{ fontFamily: a.family }}
           >
             {a.name}
-          </a>
+          </Link>
         ))}
       </div>
     </div>

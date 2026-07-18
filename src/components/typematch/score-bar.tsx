@@ -11,9 +11,9 @@ export function ScoreBar({ label, value, caption }: ScoreBarProps) {
         <span className="label-eyebrow">{label}</span>
         <span className="font-mono-ui text-sm tabular-nums text-foreground">{value}</span>
       </div>
-      <div className="h-[3px] w-full bg-border">
+      <div className="h-[3px] w-full overflow-hidden rounded-full bg-border">
         <div
-          className="h-full bg-foreground transition-[width] duration-700"
+          className="h-full rounded-full bg-foreground transition-[width] duration-700"
           style={{ width: `${Math.max(0, Math.min(100, value))}%` }}
         />
       </div>

@@ -1,14 +1,15 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
-  createRootRouteWithContext,
+  createRootRoute,
   useRouter,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import { CompareTray } from "@/components/typematch/compare-tray";
+import { Footer } from "@/components/typematch/footer";
 
 function NotFoundComponent() {
   return (
@@ -67,7 +68,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -87,13 +88,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "TypeMatch Studio — Typography pairing with design logic" },
-      { name: "description", content: "TypePair Studio analyzes free fonts, offering justified pairings and technical insights for designers." },
-      { property: "og:description", content: "TypePair Studio analyzes free fonts, offering justified pairings and technical insights for designers." },
-      { name: "twitter:description", content: "TypePair Studio analyzes free fonts, offering justified pairings and technical insights for designers." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0df689c3-3a0c-4cc6-97a3-b65750e85dd8/id-preview-a7285f19--60e21c1d-d5d5-48f5-8797-bc4af11376b3.lovable.app-1779950908946.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0df689c3-3a0c-4cc6-97a3-b65750e85dd8/id-preview-a7285f19--60e21c1d-d5d5-48f5-8797-bc4af11376b3.lovable.app-1779950908946.png" },
+      {
+        name: "twitter:description",
+        content:
+          "A professional analysis and pairing tool for free typefaces. Built on local typographic attributes, not random generators.",
+      },
     ],
     links: [
       {
@@ -160,12 +160,12 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  const { queryClient } = Route.useRouteContext();
-
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
-    </QueryClientProvider>
+      <Footer />
+      <CompareTray />
+    </>
   );
 }

@@ -15,22 +15,25 @@ import { CompareChip } from "./compare-chip";
 
 type CategoryFilter = "All" | FontCategory;
 type AvailabilityFilter =
-  | "All"
-  | "Free"
-  | "Open Source"
-  | "Trial"
-  | "Paid"
-  | "Subscription"
-  | "Pay what you want";
-type PreviewFilter = "All" | "Can preview in app" | "Fallback preview only";
-type SortKey = "name" | "recent" | "screen" | "print" | "versatility";
+  "All" | "Free" | "Open Source" | "Trial" | "Paid" | "Subscription" | "Pay what you want";
+type PreviewFilter = "All" | "Can preview in app" | "Reference only";
+type SortKey = "preview" | "name" | "recent" | "screen" | "print" | "versatility";
 type ViewMode = "cards" | "list";
 
 const CATEGORIES: CategoryFilter[] = ["All", "Sans-serif", "Serif", "Mono", "Display"];
-const AVAILS: AvailabilityFilter[] = ["All", "Free", "Open Source", "Trial", "Paid", "Subscription", "Pay what you want"];
-const PREVIEWS: PreviewFilter[] = ["All", "Can preview in app", "Fallback preview only"];
+const AVAILS: AvailabilityFilter[] = [
+  "All",
+  "Free",
+  "Open Source",
+  "Trial",
+  "Paid",
+  "Subscription",
+  "Pay what you want",
+];
+const PREVIEWS: PreviewFilter[] = ["All", "Can preview in app", "Reference only"];
 
 const SORTS: { key: SortKey; label: string }[] = [
+  { key: "preview", label: "Preview available first" },
   { key: "name", label: "Name (A→Z)" },
   { key: "recent", label: "Catalogue order" },
   { key: "screen", label: "Best for screen" },
@@ -58,9 +61,55 @@ export function FontLibrary() {
   const [source, setSource] = useState<string>("All");
   const [query, setQuery] = useState("");
   const [visible, setVisible] = useState(PAGE_SIZE);
-  const [sort, setSort] = useState<SortKey>("name");
+  const [sort, setSort] = useState<SortKey>("preview");
   const [view, setView] = useState<ViewMode>("cards");
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const searchRef = useRef<HTMLInputElement | null>(null);
+
+  // Restore the two non-content preferences without making filters feel
+  // mysteriously persistent when a user returns to the catalogue.
+  useEffect(() => {
+    try {
+      const storedView = window.localStorage.getItem("tm-library-view");
+      const storedSort = window.localStorage.getItem("tm-library-sort");
+      if (storedView === "cards" || storedView === "list") setView(storedView);
+      if (SORTS.some((item) => item.key === storedSort)) setSort(storedSort as SortKey);
+    } catch {
+      // Storage can be unavailable in restrictive browser modes; defaults remain valid.
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("tm-library-view", view);
+      window.localStorage.setItem("tm-library-sort", sort);
+    } catch {
+      // The catalogue remains fully usable without persisted preferences.
+    }
+  }, [sort, view]);
+
+  // Cmd/Ctrl+K and / put the catalogue search one keystroke away. Escape
+  // clears an active query first, then returns focus to the page.
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      const isEditing =
+        target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable;
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        searchRef.current?.focus();
+        searchRef.current?.select();
+      } else if (event.key === "/" && !isEditing) {
+        event.preventDefault();
+        searchRef.current?.focus();
+      } else if (event.key === "Escape" && document.activeElement === searchRef.current) {
+        if (query) setQuery("");
+        else searchRef.current?.blur();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [query]);
 
   const sources = useMemo(
     () => ["All", ...Array.from(new Set(FONTS.map((f) => f.sourceName))).sort()],
@@ -73,25 +122,53 @@ export function FontLibrary() {
       if (category !== "All" && f.classification !== category) return false;
       if (!matchesAvailability(f, availability)) return false;
       if (preview === "Can preview in app" && f.canPreviewInApp === false) return false;
-      if (preview === "Fallback preview only" && f.canPreviewInApp !== false) return false;
+      if (preview === "Reference only" && f.canPreviewInApp !== false) return false;
       if (source !== "All" && f.sourceName !== source) return false;
-      if (q && !f.name.toLowerCase().includes(q) && !(f.foundry ?? "").toLowerCase().includes(q)) return false;
+      if (q) {
+        const searchable = [
+          f.name,
+          f.foundry,
+          f.sourceName,
+          f.classification,
+          f.subclassification,
+          ...(f.tags ?? []),
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+        if (!searchable.includes(q)) return false;
+      }
       return true;
     });
     const sorted = [...filtered];
     switch (sort) {
-      case "name": sorted.sort((a, b) => a.name.localeCompare(b.name)); break;
-      case "screen": sorted.sort((a, b) => b.screenScore - a.screenScore); break;
-      case "print": sorted.sort((a, b) => b.printScore - a.printScore); break;
-      case "versatility": sorted.sort((a, b) => b.versatilityScore - a.versatilityScore); break;
-      default: break;
+      case "preview":
+        sorted.sort((a, b) => {
+          const previewOrder =
+            Number(a.canPreviewInApp === false) - Number(b.canPreviewInApp === false);
+          return previewOrder || a.name.localeCompare(b.name);
+        });
+        break;
+      case "name":
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "screen":
+        sorted.sort((a, b) => b.screenScore - a.screenScore);
+        break;
+      case "print":
+        sorted.sort((a, b) => b.printScore - a.printScore);
+        break;
+      case "versatility":
+        sorted.sort((a, b) => b.versatilityScore - a.versatilityScore);
+        break;
+      default:
+        break;
     }
     return sorted;
   }, [category, availability, preview, source, query, sort]);
 
   // Reset visible window on any filter change.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useMemo(() => setVisible(PAGE_SIZE), [category, availability, preview, source, query, sort]);
+  useEffect(() => setVisible(PAGE_SIZE), [category, availability, preview, source, query, sort]);
   const shown = fonts.slice(0, visible);
 
   const activeCount =
@@ -107,6 +184,13 @@ export function FontLibrary() {
     setSource("All");
     setQuery("");
   };
+
+  const activeFilters = [
+    category !== "All" ? { label: category, clear: () => setCategory("All") } : null,
+    availability !== "All" ? { label: availability, clear: () => setAvailability("All") } : null,
+    preview !== "All" ? { label: preview, clear: () => setPreview("All") } : null,
+    source !== "All" ? { label: source, clear: () => setSource("All") } : null,
+  ].filter((item): item is { label: string; clear: () => void } => Boolean(item));
 
   // Infinite scroll — observe sentinel near bottom and load next page.
   useEffect(() => {
@@ -141,9 +225,11 @@ export function FontLibrary() {
         {options.map((o) => (
           <button
             key={o}
+            type="button"
             onClick={() => onChange(o)}
+            aria-pressed={value === o}
             className={
-              "rounded-lg border px-2.5 py-1.5 text-[11.5px] leading-none transition-colors " +
+              "rounded-lg border px-2.5 py-1.5 text-xs leading-none transition-colors " +
               (value === o
                 ? "border-foreground bg-foreground text-background"
                 : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground")
@@ -158,15 +244,30 @@ export function FontLibrary() {
 
   const filtersPanel = (
     <div className="flex max-h-[70vh] flex-col gap-4 overflow-y-auto pr-1">
-      <FilterGroup label="Category" options={CATEGORIES} value={category} onChange={(v) => setCategory(v as CategoryFilter)} />
-      <FilterGroup label="Availability" options={AVAILS} value={availability} onChange={(v) => setAvailability(v as AvailabilityFilter)} />
-      <FilterGroup label="Preview" options={PREVIEWS} value={preview} onChange={(v) => setPreview(v as PreviewFilter)} />
+      <FilterGroup
+        label="Category"
+        options={CATEGORIES}
+        value={category}
+        onChange={(v) => setCategory(v as CategoryFilter)}
+      />
+      <FilterGroup
+        label="Availability"
+        options={AVAILS}
+        value={availability}
+        onChange={(v) => setAvailability(v as AvailabilityFilter)}
+      />
+      <FilterGroup
+        label="Preview"
+        options={PREVIEWS}
+        value={preview}
+        onChange={(v) => setPreview(v as PreviewFilter)}
+      />
       <FilterGroup label="Source" options={sources} value={source} onChange={setSource} />
       {activeCount > 0 && (
         <button
           type="button"
           onClick={clearFilters}
-          className="ui-text mt-1 self-start text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          className="ui-text mt-1 self-start text-[11px] uppercase tracking-[0.18em] text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
         >
           Clear all filters
         </button>
@@ -179,12 +280,12 @@ export function FontLibrary() {
   return (
     <div className="min-w-0">
       {/* Sticky toolbar */}
-      <div className="tm-toolbar -mx-6 mb-8 px-6 py-3 sm:-mx-9 sm:px-9">
+      <div className="tm-toolbar -mx-5 mb-8 px-5 py-3 sm:-mx-8 sm:px-8 lg:-mx-[5.75vw] lg:px-[5.75vw]">
         <div className="flex flex-wrap items-center gap-3">
           {/* Left cluster */}
           <div className="flex min-w-0 items-baseline gap-3">
             <span className="font-editorial text-[15px] tracking-tight text-foreground">
-              TypeMatch Library
+              Catalogue Typefaces
             </span>
             <span className="font-mono-ui text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
               {fonts.length} / {FONTS.length} fonts
@@ -194,40 +295,47 @@ export function FontLibrary() {
           <div className="ml-auto flex flex-wrap items-center gap-2">
             {/* Search */}
             <label className="tm-chip !gap-1.5 !pr-2 focus-within:border-foreground">
-              <Search size={13} className="text-muted-foreground" />
+              <Search size={12} className="text-muted-foreground" />
               <input
+                ref={searchRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                aria-label="Search fonts and foundries"
                 placeholder="Search font or foundry"
-                className="w-40 min-w-0 bg-transparent text-[12.5px] outline-none placeholder:text-muted-foreground sm:w-52"
+                className="w-40 min-w-0 bg-transparent text-[13px] outline-none placeholder:text-muted-foreground sm:w-52"
               />
               {query && (
                 <button
                   type="button"
                   onClick={() => setQuery("")}
                   aria-label="Clear search"
-                  className="text-muted-foreground hover:text-foreground"
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground"
                 >
                   <X size={12} />
                 </button>
               )}
+              {!query && (
+                <kbd className="hidden rounded border border-border px-1 py-0.5 font-mono-ui text-[11px] text-muted-foreground xl:inline">
+                  ⌘K
+                </kbd>
+              )}
             </label>
 
             {/* View toggle */}
-            <div className="inline-flex overflow-hidden rounded-[10px] border border-border">
+            <div className="inline-flex overflow-hidden rounded-lg border border-border">
               <button
                 type="button"
                 onClick={() => setView("cards")}
                 aria-pressed={view === "cards"}
                 title="Cards view"
                 className={
-                  "flex h-9 w-9 items-center justify-center transition-colors " +
+                  "flex h-11 w-11 items-center justify-center transition-colors " +
                   (view === "cards"
                     ? "bg-foreground text-background"
                     : "bg-transparent text-muted-foreground hover:text-foreground")
                 }
               >
-                <LayoutGrid size={14} />
+                <LayoutGrid size={16} />
               </button>
               <button
                 type="button"
@@ -235,13 +343,13 @@ export function FontLibrary() {
                 aria-pressed={view === "list"}
                 title="List view"
                 className={
-                  "flex h-9 w-9 items-center justify-center border-l border-border transition-colors " +
+                  "flex h-11 w-11 items-center justify-center border-l border-border transition-colors " +
                   (view === "list"
                     ? "bg-foreground text-background"
                     : "bg-transparent text-muted-foreground hover:text-foreground")
                 }
               >
-                <Rows3 size={14} />
+                <Rows3 size={16} />
               </button>
             </div>
 
@@ -249,16 +357,19 @@ export function FontLibrary() {
             <Popover>
               <PopoverTrigger asChild>
                 <button type="button" className="tm-chip" data-active={activeCount > 0}>
-                  <SlidersHorizontal size={13} />
+                  <SlidersHorizontal size={12} />
                   Filters
                   {activeCount > 0 && (
-                    <span className="rounded-md bg-background/20 px-1.5 text-[10px] font-mono-ui tabular-nums">
+                    <span className="rounded-md bg-background/20 px-1.5 text-[11px] font-mono-ui tabular-nums">
                       {activeCount}
                     </span>
                   )}
                 </button>
               </PopoverTrigger>
-              <PopoverContent align="end" className="w-[340px] rounded-2xl border-border bg-card p-5">
+              <PopoverContent
+                align="end"
+                className="w-[340px] rounded-xl border-border bg-card p-5"
+              >
                 {filtersPanel}
               </PopoverContent>
             </Popover>
@@ -267,20 +378,21 @@ export function FontLibrary() {
             <Popover>
               <PopoverTrigger asChild>
                 <button type="button" className="tm-chip">
-                  <ArrowUpDown size={13} />
+                  <ArrowUpDown size={12} />
                   <span className="hidden sm:inline">{activeSortLabel}</span>
                   <span className="sm:hidden">Sort</span>
                   <ChevronDown size={12} className="text-muted-foreground" />
                 </button>
               </PopoverTrigger>
-              <PopoverContent align="end" className="w-56 rounded-2xl border-border bg-card p-2">
+              <PopoverContent align="end" className="w-56 rounded-xl border-border bg-card p-2">
                 <div className="flex flex-col">
                   {SORTS.map((s) => (
                     <button
                       key={s.key}
+                      type="button"
                       onClick={() => setSort(s.key)}
                       className={
-                        "flex items-center justify-between rounded-lg px-3 py-2 text-left text-[12.5px] transition-colors " +
+                        "flex items-center justify-between rounded-lg px-3 py-2 text-left text-[13px] transition-colors " +
                         (sort === s.key
                           ? "bg-foreground text-background"
                           : "text-foreground hover:bg-secondary")
@@ -298,11 +410,39 @@ export function FontLibrary() {
         </div>
       </div>
 
+      <p className="sr-only" role="status" aria-live="polite">
+        {fonts.length} typefaces match the current search and filters.
+      </p>
+
+      {activeFilters.length > 0 && (
+        <div className="-mt-4 mb-6 flex flex-wrap items-center gap-2" aria-label="Active filters">
+          {activeFilters.map((item) => (
+            <button
+              key={item.label}
+              type="button"
+              onClick={item.clear}
+              className="ui-text inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 text-[11px] text-muted-foreground hover:border-foreground hover:text-foreground"
+              aria-label={`Remove ${item.label} filter`}
+            >
+              {item.label}
+              <X size={12} aria-hidden />
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="ui-text px-1 text-[11px] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"
+          >
+            Clear all
+          </button>
+        </div>
+      )}
+
       {/* Results */}
       {view === "cards" ? (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {shown.map((f) => (
-            <FontCard key={f.id} font={f} />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {shown.map((f, index) => (
+            <FontCard key={f.id} font={f} index={index} />
           ))}
         </div>
       ) : (
@@ -315,11 +455,11 @@ export function FontLibrary() {
 
       {/* Infinite scroll sentinel + skeletons */}
       <div ref={sentinelRef} className="h-8" />
-      {visible < fonts.length && (
-        view === "cards" ? (
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {visible < fonts.length &&
+        (view === "cards" ? (
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="tm-skeleton h-[340px]" />
+              <div key={i} className="tm-skeleton aspect-[0.76] min-h-[340px]" />
             ))}
           </div>
         ) : (
@@ -328,12 +468,17 @@ export function FontLibrary() {
               <div key={i} className="tm-skeleton h-24" />
             ))}
           </div>
-        )
-      )}
-      {visible >= fonts.length && fonts.length === 0 && (
-        <p className="ui-text mt-10 text-center text-[12px] uppercase tracking-[0.2em] text-muted-foreground">
-          No typefaces match these filters
-        </p>
+        ))}
+      {fonts.length === 0 && (
+        <div className="ui-text mt-10 flex flex-col items-center rounded-xl border border-dashed border-border px-6 py-14 text-center">
+          <p className="text-sm font-medium text-foreground">No typefaces match this search</p>
+          <p className="mt-2 max-w-sm text-xs leading-relaxed text-muted-foreground">
+            Try another name or remove one of the active catalogue filters.
+          </p>
+          <button type="button" onClick={clearFilters} className="tm-chip mt-5">
+            Clear search and filters
+          </button>
+        </div>
       )}
     </div>
   );

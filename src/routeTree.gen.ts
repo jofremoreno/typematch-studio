@@ -14,6 +14,8 @@ import { Route as LicensingRouteImport } from './routes/licensing'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as FoundriesRouteImport } from './routes/foundries'
 import { Route as CompareRouteImport } from './routes/compare'
+import { Route as CatalogueRouteImport } from './routes/catalogue'
+import { Route as AnalyzeRouteImport } from './routes/analyze'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as FoundriesSlugRouteImport } from './routes/foundries.$slug'
 
@@ -42,6 +44,16 @@ const CompareRoute = CompareRouteImport.update({
   path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CatalogueRoute = CatalogueRouteImport.update({
+  id: '/catalogue',
+  path: '/catalogue',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyzeRoute = AnalyzeRouteImport.update({
+  id: '/analyze',
+  path: '/analyze',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,6 +67,8 @@ const FoundriesSlugRoute = FoundriesSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analyze': typeof AnalyzeRoute
+  '/catalogue': typeof CatalogueRoute
   '/compare': typeof CompareRoute
   '/foundries': typeof FoundriesRouteWithChildren
   '/library': typeof LibraryRoute
@@ -64,6 +78,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analyze': typeof AnalyzeRoute
+  '/catalogue': typeof CatalogueRoute
   '/compare': typeof CompareRoute
   '/foundries': typeof FoundriesRouteWithChildren
   '/library': typeof LibraryRoute
@@ -74,6 +90,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/analyze': typeof AnalyzeRoute
+  '/catalogue': typeof CatalogueRoute
   '/compare': typeof CompareRoute
   '/foundries': typeof FoundriesRouteWithChildren
   '/library': typeof LibraryRoute
@@ -85,6 +103,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/analyze'
+    | '/catalogue'
     | '/compare'
     | '/foundries'
     | '/library'
@@ -94,6 +114,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/analyze'
+    | '/catalogue'
     | '/compare'
     | '/foundries'
     | '/library'
@@ -103,6 +125,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/analyze'
+    | '/catalogue'
     | '/compare'
     | '/foundries'
     | '/library'
@@ -113,6 +137,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnalyzeRoute: typeof AnalyzeRoute
+  CatalogueRoute: typeof CatalogueRoute
   CompareRoute: typeof CompareRoute
   FoundriesRoute: typeof FoundriesRouteWithChildren
   LibraryRoute: typeof LibraryRoute
@@ -157,6 +183,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/catalogue': {
+      id: '/catalogue'
+      path: '/catalogue'
+      fullPath: '/catalogue'
+      preLoaderRoute: typeof CatalogueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analyze': {
+      id: '/analyze'
+      path: '/analyze'
+      fullPath: '/analyze'
+      preLoaderRoute: typeof AnalyzeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -188,6 +228,8 @@ const FoundriesRouteWithChildren = FoundriesRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnalyzeRoute: AnalyzeRoute,
+  CatalogueRoute: CatalogueRoute,
   CompareRoute: CompareRoute,
   FoundriesRoute: FoundriesRouteWithChildren,
   LibraryRoute: LibraryRoute,
@@ -197,3 +239,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
