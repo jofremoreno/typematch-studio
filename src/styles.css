@@ -1725,44 +1725,73 @@ summary:focus-visible {
 
 .tm-font-detail-nav {
   position: sticky;
-  top: 64px;
-  z-index: 29;
+  top: 84px;
+  z-index: 30;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: var(--space-4);
-  min-height: 50px;
-  margin: 0 calc(-5.75vw);
-  padding: 0 5.75vw;
-  border-bottom: 1px solid var(--color-border);
-  background: color-mix(in oklab, var(--color-background) 88%, transparent);
-  backdrop-filter: blur(12px) saturate(150%);
+  min-height: 56px;
+  margin: var(--space-3) 0 var(--space-4);
+  padding: var(--space-2);
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--color-border) 90%, transparent);
+  border-radius: var(--radius-card);
+  background: color-mix(in oklab, var(--color-background) 76%, transparent);
+  box-shadow: 0 14px 34px -30px color-mix(in oklab, var(--color-foreground) 50%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(145%);
+  backdrop-filter: blur(18px) saturate(145%);
 }
 
 .tm-font-detail-nav-links {
   display: flex;
   width: 100%;
   min-width: 0;
-  align-self: stretch;
-  gap: var(--space-6);
+  gap: var(--space-1);
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+}
+
+.tm-font-detail-nav-links::-webkit-scrollbar {
+  display: none;
 }
 
 .tm-font-detail-nav-link {
   display: inline-flex;
+  min-height: 38px;
   flex-shrink: 0;
   align-items: center;
+  justify-content: center;
+  padding: 0 0.85rem;
+  border-radius: var(--radius-control);
   color: var(--color-muted-foreground);
   font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
   font-size: var(--text-micro);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  transition: color 160ms ease;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
 }
 
 .tm-font-detail-nav-link:hover,
 .tm-font-detail-nav-link:focus-visible {
+  background: var(--surface-mid);
   color: var(--color-foreground);
+}
+
+.tm-font-detail-nav-link:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: -2px;
+}
+
+.tm-font-detail-nav-link[aria-current="location"] {
+  background: var(--color-foreground);
+  color: var(--color-background);
+}
+
+.tm-font-detail-nav + .tm-detail-specimen {
+  padding-top: 0;
 }
 
 .tm-detail-specimen-toolbar {
@@ -2011,11 +2040,16 @@ body:has(.tm-compare-tray) .tm-scroll-top {
     gap: var(--space-2);
   }
   .tm-font-detail-nav {
-    margin: 0 -1.25rem;
-    padding: 0 1.25rem;
+    top: 84px;
+    margin-bottom: var(--space-4);
+    padding: 0.4rem;
   }
   .tm-font-detail-nav-links {
-    gap: var(--space-4);
+    gap: 0.2rem;
+  }
+  .tm-font-detail-nav-link {
+    min-height: 36px;
+    padding-inline: 0.7rem;
   }
   .tm-compare-tray-item {
     min-width: 132px;
