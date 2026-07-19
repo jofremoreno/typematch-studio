@@ -1,5 +1,5 @@
 import type { FontRecord } from "@/data/fonts";
-import { FONTS_BY_ID, isPremiumReference } from "@/data/fonts";
+import { PUBLIC_FONTS_BY_ID, isPremiumReference } from "@/data/fonts";
 import { Badge } from "./badge";
 import { LicenseBadges } from "./license-badges";
 import { licensingNotice, sourceButtonLabel } from "./license-utils";
@@ -44,7 +44,7 @@ export function FontOverview({ font }: { font: FontRecord }) {
       </div>
 
       {notice && (
-        <div className="mt-6 rounded-r-lg border-l-2 border-accent bg-card p-4 text-xs leading-relaxed text-muted-foreground">
+        <div className="mt-6 rounded-r-lg border-l-2 border-selection bg-card p-4 text-xs leading-relaxed text-muted-foreground">
           <strong className="text-foreground">License notice — </strong>
           {notice}
           {font.canPreviewInApp === false &&
@@ -91,7 +91,7 @@ export function FontOverview({ font }: { font: FontRecord }) {
 }
 
 function FreeAlternativesInline({ font }: { font: FontRecord }) {
-  const alts = (font.freeAlternatives ?? []).map((id) => FONTS_BY_ID[id]).filter(Boolean);
+  const alts = (font.freeAlternatives ?? []).map((id) => PUBLIC_FONTS_BY_ID[id]).filter(Boolean);
   if (!alts.length) return null;
   return (
     <div className="mt-8 rounded-xl border border-border bg-card p-5">

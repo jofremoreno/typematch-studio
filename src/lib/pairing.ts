@@ -1,4 +1,9 @@
-import { FONTS, FONTS_BY_ID, isPremiumReference, type FontRecord } from "@/data/fonts";
+import {
+  PUBLIC_FONTS as FONTS,
+  PUBLIC_FONTS_BY_ID as FONTS_BY_ID,
+  isPremiumReference,
+  type FontRecord,
+} from "@/data/fonts";
 
 export type PairingCategory =
   | "Reliable System Pairing"

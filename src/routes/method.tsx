@@ -5,7 +5,7 @@ import { MethodSection } from "@/components/typematch/method-section";
 export const Route = createFileRoute("/method")({
   head: () => ({
     meta: [
-      { title: "Method — TypeMatch Studio" },
+      { title: "TypeMatch Studio" },
       {
         name: "description",
         content:

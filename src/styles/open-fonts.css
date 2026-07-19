@@ -1,5 +1,53 @@
 /* Locally hosted OFL previews. Keep family names aligned with FontRecord.family. */
 @font-face {
+  font-family: "Luperca";
+  src: url("/fonts/open-source/luperca.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Canarina";
+  src: url("/fonts/open-source/canarina.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Picaflor";
+  src: url("/fonts/open-source/picaflor.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Piscolabis";
+  src: url("/fonts/open-source/piscolabis.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Paysage";
+  src: url("/fonts/open-source/paysage.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Isenheim";
+  src: url("/fonts/open-source/isenheim.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Apfel Grotezk";
   src: url("/fonts/open-source/apfel-grotezk.woff2") format("woff2");
   font-weight: 400;

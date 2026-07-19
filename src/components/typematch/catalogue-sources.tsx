@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowRight, ExternalLink, Search, X } from "lucide-react";
-import { FONTS, SOURCES } from "@/data/fonts";
+import { PUBLIC_FONTS, PUBLIC_SOURCES } from "@/data/fonts";
 import { foundrySlug } from "@/lib/foundries";
 
 type SourceCategory = "all" | "free" | "premium" | "directory" | "subscription";
@@ -24,17 +24,21 @@ const categoryLabels: Record<string, string> = {
 export function CatalogueSources() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<SourceCategory>("all");
+  const availableCategories = categories.filter(
+    (item) =>
+      item.value === "all" || PUBLIC_SOURCES.some((source) => source.category === item.value),
+  );
 
   const sources = useMemo(() => {
-    const familiesBySource = new Map<string, typeof FONTS>();
-    for (const font of FONTS) {
+    const familiesBySource = new Map<string, typeof PUBLIC_FONTS>();
+    for (const font of PUBLIC_FONTS) {
       const families = familiesBySource.get(font.sourceName) ?? [];
       families.push(font);
       familiesBySource.set(font.sourceName, families);
     }
 
     const normalizedQuery = query.trim().toLowerCase();
-    return SOURCES.map((source) => {
+    return PUBLIC_SOURCES.map((source) => {
       const families = familiesBySource.get(source.name) ?? [];
       return {
         ...source,
@@ -62,7 +66,7 @@ export function CatalogueSources() {
               Catalogue Sources
             </span>
             <span className="font-mono-ui text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-              {sources.length} / {SOURCES.length} sources
+              {sources.length} / {PUBLIC_SOURCES.length} sources
             </span>
           </div>
 
@@ -89,7 +93,7 @@ export function CatalogueSources() {
             </label>
 
             <div className="flex max-w-full gap-1 overflow-x-auto" aria-label="Source category">
-              {categories.map((item) => (
+              {availableCategories.map((item) => (
                 <button
                   key={item.value}
                   type="button"

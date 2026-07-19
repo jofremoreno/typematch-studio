@@ -1,17 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { z } from "zod";
 import { Header } from "@/components/typematch/header";
-import { FontCard } from "@/components/typematch/font-card";
+import { AnimatedNumber } from "@/components/typematch/animated-number";
+import { CatalogueSources } from "@/components/typematch/catalogue-sources";
+import { FontLibrary } from "@/components/typematch/font-library";
 import { SavedPairings } from "@/components/typematch/saved-pairings";
 import { PairingOfTheDay } from "@/components/typematch/pairing-of-the-day";
-import { FONTS } from "@/data/fonts";
+import { PUBLIC_FONTS, PUBLIC_SOURCES } from "@/data/fonts";
 import { ArrowRight } from "lucide-react";
 
-const featuredFonts = FONTS.filter((font) => font.canPreviewInApp !== false).slice(0, 4);
+const searchSchema = z.object({
+  view: z.enum(["typefaces", "sources"]).optional(),
+});
 
 export const Route = createFileRoute("/")({
+  validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Explore — TypeMatch Studio" },
+      { title: "TypeMatch Studio" },
       {
         name: "description",
         content:
@@ -23,6 +29,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { view = "typefaces" } = Route.useSearch();
+  const free = PUBLIC_FONTS.filter(
+    (font) => font.availability === "free" || font.availability === "open-source",
+  ).length;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
@@ -40,46 +51,79 @@ function Index() {
               catalogue, filter by use and license, then dive into any specimen.
             </p>
             <div className="tm-home-actions">
-              <Link to="/catalogue" className="tm-home-cta tm-arrow-link group">
+              <Link to="/" hash="catalogue" className="tm-home-cta tm-arrow-link group">
                 Explore the catalogue
                 <ArrowRight size={16} />
-              </Link>
-              <Link to="/foundries" className="tm-home-secondary">
-                Explore type sources
-                <ArrowRight size={14} />
               </Link>
             </div>
           </div>
           <PairingOfTheDay />
         </section>
 
-        <section className="tm-page-panel tm-home-catalogue-preview">
-          <div className="tm-section-heading">
-            <div>
-              <span className="label-eyebrow">Catalogue preview</span>
-              <h2 className="mt-3">Start with four typefaces.</h2>
+        <section id="catalogue" className="scroll-mt-16 pt-10 sm:pt-16">
+          <header className="tm-page-header">
+            <span className="label-eyebrow">TypeMatch catalogue</span>
+            <div className="mt-3 grid gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(500px,0.66fr)] xl:items-end">
+              <div>
+                <h2>Typefaces and their sources, together.</h2>
+                <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
+                  Explore the full collection, filter by use and availability, and open any family
+                  to test its specimen and pairing behaviour.
+                </p>
+              </div>
+              <dl className="tm-stat-grid">
+                <Stat label="Families" value={PUBLIC_FONTS.length} />
+                <Stat label="Sources" value={PUBLIC_SOURCES.length} />
+                <Stat label="Open / Free" value={free} />
+              </dl>
             </div>
-            <p>
-              Preview a selection here, then enter the catalogue to move between families and the
-              foundries, libraries or directories behind them.
-            </p>
-          </div>
-          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {featuredFonts.map((featuredFont, index) => (
-              <FontCard key={featuredFont.id} font={featuredFont} index={index} />
-            ))}
-          </div>
-          <div className="mt-6 flex justify-end">
-            <Link to="/catalogue" className="btn-card-primary">
-              Open full catalogue
-              <ArrowRight size={16} />
+          </header>
+
+          <nav className="tm-catalogue-switcher" aria-label="Catalogue view">
+            <Link
+              to="/"
+              hash="catalogue"
+              search={{ view: "typefaces" }}
+              className="tm-catalogue-switcher-link"
+              data-active={view === "typefaces"}
+              aria-current={view === "typefaces" ? "page" : undefined}
+            >
+              <span>01</span>
+              Typefaces
+              <strong>{PUBLIC_FONTS.length}</strong>
             </Link>
-          </div>
-          <div id="saved" className="mt-6 scroll-mt-24">
-            <SavedPairings />
-          </div>
+            <Link
+              to="/"
+              hash="catalogue"
+              search={{ view: "sources" }}
+              className="tm-catalogue-switcher-link"
+              data-active={view === "sources"}
+              aria-current={view === "sources" ? "page" : undefined}
+            >
+              <span>02</span>
+              Sources
+              <strong>{PUBLIC_SOURCES.length}</strong>
+            </Link>
+          </nav>
+
+          <div className="mt-10">{view === "sources" ? <CatalogueSources /> : <FontLibrary />}</div>
+        </section>
+
+        <section id="saved" className="scroll-mt-24 pt-16">
+          <SavedPairings />
         </section>
       </main>
+    </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: number }) {
+  return (
+    <div>
+      <dt className="label-eyebrow">{label}</dt>
+      <dd className="font-mono-ui mt-1 text-2xl tabular-nums">
+        <AnimatedNumber value={value} />
+      </dd>
     </div>
   );
 }

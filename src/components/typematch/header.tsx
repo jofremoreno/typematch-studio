@@ -1,15 +1,69 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Bookmark, Menu, X } from "lucide-react";
+import { Bookmark, BookmarkCheck, Menu, X } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { useSavedPairings } from "@/lib/saved-pairings";
 
 const NAV = [
-  { to: "/catalogue", label: "Catalogue", hash: undefined as string | undefined },
-  { to: "/analyze", label: "Analyze", hash: undefined },
-  { to: "/method", label: "Method", hash: undefined },
-  { to: "/licensing", label: "Licensing", hash: undefined },
+  { to: "/method", label: "Method", hash: undefined as string | undefined },
+  { to: "/licensing", label: "Licensing", hash: undefined as string | undefined },
 ] as const;
+
+const STUDIO_FONTS = [
+  "Inter",
+  "Redaction",
+  "Orbitron",
+  "Knewave",
+  "Le Murmure",
+  "Steps Mono",
+  "Basteleur",
+  "Compagnon",
+  "PicNic",
+  "Avara",
+] as const;
+
+function AnimatedStudioMark() {
+  const [fontIndex, setFontIndex] = useState(0);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reducedMotion.matches) return;
+
+    let interval = 0;
+    let cancelled = false;
+
+    const startCycle = () => {
+      if (cancelled) return;
+      interval = window.setInterval(() => {
+        setFontIndex((current) => (current + 1) % STUDIO_FONTS.length);
+      }, 500);
+    };
+
+    void Promise.all(
+      STUDIO_FONTS.map((family) => document.fonts.load(`400 11px "${family}"`)),
+    ).finally(startCycle);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  const family = STUDIO_FONTS[fontIndex];
+
+  return (
+    <span className="label-eyebrow tm-logo-studio translate-y-[-1px]" aria-label="Studio">
+      <span
+        key={`${family}-${fontIndex}`}
+        className="tm-logo-studio-glyph"
+        style={{ fontFamily: `"${family}", "Inter", sans-serif` }}
+        aria-hidden="true"
+      >
+        Studio
+      </span>
+    </span>
+  );
+}
 
 export function Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -48,107 +102,108 @@ export function Header() {
   }, [open]);
 
   return (
-    <header className="tm-header sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
-      <div className="mx-auto grid h-16 w-full max-w-[1920px] grid-cols-[1fr_auto] items-center px-5 sm:px-8 md:grid-cols-[1fr_auto_1fr] lg:px-[5.75vw]">
-        <Link
-          to="/"
-          className="flex min-w-0 items-baseline gap-2 justify-self-start whitespace-nowrap"
-        >
-          <span className="font-editorial text-xl tracking-tight">TypeMatch</span>
-          <span className="label-eyebrow translate-y-[-1px]">Studio</span>
-        </Link>
+    <header className="tm-header sticky top-0 z-40">
+      <div className="mx-auto w-full max-w-[1920px] px-5 pt-3 sm:px-8 lg:px-[5.75vw]">
+        <div className="tm-header-row flex items-stretch gap-2">
+          <div className="tm-header-shell grid min-h-16 min-w-0 flex-1 grid-cols-[1fr_auto] items-center px-4 sm:px-5 md:grid-cols-[1fr_auto_1fr]">
+            <Link
+              to="/"
+              className="flex min-w-0 items-baseline gap-2 justify-self-start whitespace-nowrap"
+            >
+              <span className="font-editorial text-xl tracking-tight">TypeMatch</span>
+              <AnimatedStudioMark />
+            </Link>
 
-        {/* Desktop nav */}
-        <nav
-          aria-label="Primary navigation"
-          className="tm-primary-nav hidden h-full items-center justify-self-center md:flex"
-        >
-          {NAV.map((item) => {
-            const active = isActive(item);
-            return (
+            {/* Desktop nav */}
+            <nav
+              aria-label="Primary navigation"
+              className="tm-primary-nav hidden h-full items-center justify-self-center md:flex"
+            >
+              {NAV.map((item) => {
+                const active = isActive(item);
+                return (
+                  <Link
+                    key={item.label}
+                    to={item.to}
+                    hash={item.hash}
+                    aria-current={active ? "page" : undefined}
+                    className={
+                      "tm-nav-link ui-text relative flex h-full items-center px-0.5 text-[13px] tracking-[0.01em] transition-colors " +
+                      (active ? "text-foreground" : "text-muted-foreground hover:text-foreground")
+                    }
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Navbar actions: Saved is the final desktop item. */}
+            <div className="tm-header-actions flex items-center justify-self-end">
               <Link
-                key={item.label}
-                to={item.to}
-                hash={item.hash}
-                aria-current={active ? "page" : undefined}
-                className={
-                  "tm-nav-link ui-text relative flex h-full items-center px-0.5 text-[13px] tracking-[0.01em] transition-colors " +
-                  (active ? "text-foreground" : "text-muted-foreground hover:text-foreground")
-                }
+                to="/"
+                hash="saved"
+                aria-label={`Saved pairings${savedPairings.length ? ` (${savedPairings.length})` : ""}`}
+                aria-current={savedActive ? "page" : undefined}
+                title="Saved pairings"
+                className="tm-nav-saved tm-header-icon"
+                data-active={savedActive || undefined}
               >
-                {item.label}
-                {active && (
-                  <span className="tm-nav-active absolute bottom-0 left-0 right-0 mx-auto h-[2px] rounded-full bg-accent" />
+                {savedPairings.length > 0 ? (
+                  <BookmarkCheck size={19} strokeWidth={1.7} aria-hidden="true" />
+                ) : (
+                  <Bookmark size={19} strokeWidth={1.7} aria-hidden="true" />
+                )}
+                {savedPairings.length > 0 && (
+                  <span className="tm-nav-saved-count">{Math.min(savedPairings.length, 99)}</span>
                 )}
               </Link>
-            );
-          })}
-        </nav>
+              <button
+                type="button"
+                aria-label={open ? "Close menu" : "Open menu"}
+                aria-expanded={open}
+                aria-controls="mobile-navigation"
+                onClick={() => setOpen((v) => !v)}
+                className="tm-mobile-trigger tm-header-icon ui-text"
+              >
+                {open ? <X size={19} strokeWidth={1.7} /> : <Menu size={19} strokeWidth={1.7} />}
+              </button>
+            </div>
+          </div>
 
-        {/* Right controls */}
-        <div className="tm-header-actions flex items-center justify-self-end">
-          <Link
-            to="/"
-            hash="saved"
-            aria-label={`Saved pairings${savedPairings.length ? ` (${savedPairings.length})` : ""}`}
-            aria-current={savedActive ? "page" : undefined}
-            title="Saved pairings"
-            className="tm-nav-saved tm-header-icon"
-            data-active={savedActive || undefined}
-          >
-            <Bookmark size={16} aria-hidden="true" />
-            {savedPairings.length > 0 && (
-              <span className="tm-nav-saved-count">{Math.min(savedPairings.length, 99)}</span>
-            )}
-          </Link>
-          <ThemeToggle />
-          <button
-            type="button"
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            aria-controls="mobile-navigation"
-            onClick={() => setOpen((v) => !v)}
-            className="tm-mobile-trigger tm-header-icon ui-text"
-          >
-            {open ? <X size={16} /> : <Menu size={16} />}
-          </button>
+          <div className="tm-theme-shell flex min-h-16 w-16 shrink-0 items-center justify-center">
+            <ThemeToggle />
+          </div>
         </div>
+
+        {/* Mobile dropdown panel */}
+        {open && (
+          <div id="mobile-navigation" ref={panelRef} className="tm-mobile-menu md:hidden">
+            <nav aria-label="Mobile navigation" className="flex w-full flex-col px-3 py-2">
+              {NAV.map((item) => {
+                const active = isActive(item);
+                return (
+                  <Link
+                    key={item.label}
+                    to={item.to}
+                    hash={item.hash}
+                    onClick={() => setOpen(false)}
+                    aria-current={active ? "page" : undefined}
+                    className={
+                      "ui-text rounded-lg px-3 py-3 text-sm " +
+                      (active
+                        ? "bg-accent text-accent-foreground"
+                        : "text-muted-foreground hover:bg-secondary hover:text-foreground")
+                    }
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+        )}
       </div>
-
-      {/* Mobile dropdown panel */}
-      {open && (
-        <div
-          id="mobile-navigation"
-          ref={panelRef}
-          className="tm-mobile-menu border-t border-border bg-background md:hidden"
-        >
-          <nav
-            aria-label="Mobile navigation"
-            className="mx-auto flex w-full max-w-[1920px] flex-col px-5 py-3 sm:px-8 lg:px-[5.75vw]"
-          >
-            {NAV.map((item) => {
-              const active = isActive(item);
-              return (
-                <Link
-                  key={item.label}
-                  to={item.to}
-                  hash={item.hash}
-                  onClick={() => setOpen(false)}
-                  aria-current={active ? "page" : undefined}
-                  className={
-                    "ui-text border-b border-border py-3 text-sm last:border-b-0 " +
-                    (active
-                      ? "text-foreground border-l-2 border-l-accent pl-3"
-                      : "text-muted-foreground pl-3")
-                  }
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-      )}
     </header>
   );
 }

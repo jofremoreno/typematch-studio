@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { RotateCcw } from "lucide-react";
-import { FONTS, FONTS_BY_ID, type FontRecord } from "@/data/fonts";
+import { PUBLIC_FONTS, PUBLIC_FONTS_BY_ID, type FontRecord } from "@/data/fonts";
 import { buildRecommendations, compareFonts } from "@/lib/pairing";
 import { useFontPreview } from "@/hooks/use-font-preview";
 import { LicenseBadges } from "./license-badges";
@@ -17,11 +17,11 @@ export function InlineFontComparison({
 }) {
   const recommended = useMemo(() => buildRecommendations(font)[0]?.secondary, [font]);
   const initialSecondary =
-    (initialSecondaryId && FONTS_BY_ID[initialSecondaryId]?.id !== font.id
-      ? FONTS_BY_ID[initialSecondaryId]
+    (initialSecondaryId && PUBLIC_FONTS_BY_ID[initialSecondaryId]?.id !== font.id
+      ? PUBLIC_FONTS_BY_ID[initialSecondaryId]
       : null) ??
     recommended ??
-    FONTS.find((candidate) => candidate.id !== font.id) ??
+    PUBLIC_FONTS.find((candidate) => candidate.id !== font.id) ??
     font;
   const [secondaryId, setSecondaryId] = useState(initialSecondary.id);
   const [primaryText, setPrimaryText] = useState(PRIMARY_TEXT);
@@ -33,7 +33,7 @@ export function InlineFontComparison({
   const [primarySpacing, setPrimarySpacing] = useState(0);
   const [secondarySpacing, setSecondarySpacing] = useState(0);
 
-  const secondary = FONTS_BY_ID[secondaryId] ?? initialSecondary;
+  const secondary = PUBLIC_FONTS_BY_ID[secondaryId] ?? initialSecondary;
   const result = useMemo(() => compareFonts(font, secondary), [font, secondary]);
 
   return (
@@ -52,7 +52,7 @@ export function InlineFontComparison({
             value={secondary.id}
             onChange={(event) => setSecondaryId(event.target.value)}
           >
-            {FONTS.filter((candidate) => candidate.id !== font.id).map((candidate) => (
+            {PUBLIC_FONTS.filter((candidate) => candidate.id !== font.id).map((candidate) => (
               <option key={candidate.id} value={candidate.id}>
                 {candidate.name}
               </option>
