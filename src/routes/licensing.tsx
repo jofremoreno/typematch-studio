@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 export const Route = createFileRoute("/licensing")({
   head: () => ({
     meta: [
-      { title: "Licensing & sources — TypeMatch Studio" },
+      { title: "TypeMatch Studio" },
       {
         name: "description",
         content:

@@ -2,8 +2,6 @@
 
 TypeMatch Studio is a local-first typography analysis, comparison, and pairing tool built with React, TypeScript, TanStack Start, Tailwind CSS, and Vite.
 
-The project runs with standard open-source tooling and does not require Lovable.
-
 ## Requirements
 
 - Node.js 22.12 or newer
@@ -37,7 +35,7 @@ npm run format:check
 npm run build
 ```
 
-The imported codebase currently has pre-existing formatting debt, so `npm run format:check` is not yet clean. Linting, type checking, and the production build pass.
+Formatting, linting, type checking, and the production build should all pass before changes are merged.
 
 ## Main folders
 

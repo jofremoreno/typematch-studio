@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate, redirect, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import { Header } from "@/components/typematch/header";
 import { FontOverview } from "@/components/typematch/font-overview";
@@ -10,7 +10,7 @@ import { TechnicalDiagnosis } from "@/components/typematch/technical-diagnosis";
 import { UsageFit } from "@/components/typematch/usage-fit";
 import { ContrastBehaviour } from "@/components/typematch/contrast-behaviour";
 import { LicenseSource } from "@/components/typematch/license-source";
-import { FONTS, FONTS_BY_ID } from "@/data/fonts";
+import { PUBLIC_FONTS, PUBLIC_FONTS_BY_ID } from "@/data/fonts";
 import { InlineFontComparison } from "@/components/typematch/inline-font-comparison";
 
 const searchSchema = z.object({
@@ -20,9 +20,14 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/analyze")({
   validateSearch: searchSchema,
+  beforeLoad: ({ search }) => {
+    if (!search.font) {
+      throw redirect({ to: "/catalogue" });
+    }
+  },
   head: () => ({
     meta: [
-      { title: "Analyze typefaces — TypeMatch Studio" },
+      { title: "TypeMatch Studio" },
       {
         name: "description",
         content: "Inspect one typeface or compare two inside the TypeMatch analysis workspace.",
@@ -33,14 +38,18 @@ export const Route = createFileRoute("/analyze")({
 });
 
 function AnalyzePage() {
-  const { font: fontId = "inter", with: companionId } = Route.useSearch();
-  const font = FONTS_BY_ID[fontId] ?? FONTS[0];
+  const { font: fontId, with: companionId } = Route.useSearch();
+  const font = PUBLIC_FONTS_BY_ID[fontId ?? ""];
+  if (!font) {
+    return <Navigate to="/" hash="catalogue" search={{ view: "typefaces" }} replace />;
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main className="mx-auto w-full max-w-[1920px] px-5 pb-32 sm:px-8 lg:px-[5.75vw]">
-        <article className="pt-12">
+        <PrimaryFontSwitcher fontId={font.id} companionId={companionId} />
+        <article key={font.id}>
           <FontOverview font={font} />
           <FontDetailNav font={font} />
           <FontSpecimenEditor font={font} />
@@ -63,6 +72,41 @@ function AnalyzePage() {
           </div>
         </article>
       </main>
+    </div>
+  );
+}
+
+function PrimaryFontSwitcher({ fontId, companionId }: { fontId: string; companionId?: string }) {
+  const navigate = useNavigate();
+
+  return (
+    <div className="tm-analysis-primary-switcher">
+      <div>
+        <span className="label-eyebrow">Analysis workspace</span>
+        <p>Change the primary typeface without returning to the catalogue.</p>
+      </div>
+      <label>
+        <span className="label-eyebrow">Primary typeface</span>
+        <select
+          value={fontId}
+          onChange={(event) => {
+            const nextFontId = event.target.value;
+            void navigate({
+              to: "/analyze",
+              search: {
+                font: nextFontId,
+                with: companionId === nextFontId ? undefined : companionId,
+              },
+            });
+          }}
+        >
+          {PUBLIC_FONTS.map((candidate) => (
+            <option key={candidate.id} value={candidate.id}>
+              {candidate.name}
+            </option>
+          ))}
+        </select>
+      </label>
     </div>
   );
 }

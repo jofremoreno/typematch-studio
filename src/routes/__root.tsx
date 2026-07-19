@@ -10,6 +10,7 @@ import {
 import appCss from "../styles.css?url";
 import { CompareTray } from "@/components/typematch/compare-tray";
 import { Footer } from "@/components/typematch/footer";
+import { ScrollToTop } from "@/components/typematch/scroll-to-top";
 
 function NotFoundComponent() {
   return (
@@ -73,7 +74,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "TypeMatch Studio — Typography pairing with design logic" },
+      { title: "TypeMatch Studio" },
       {
         name: "description",
         content:
@@ -96,6 +97,7 @@ export const Route = createRootRoute({
       },
     ],
     links: [
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       {
         rel: "stylesheet",
         href: appCss,
@@ -166,6 +168,7 @@ function RootComponent() {
       <Outlet />
       <Footer />
       <CompareTray />
+      <ScrollToTop />
     </>
   );
 }

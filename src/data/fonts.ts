@@ -3088,15 +3088,28 @@ const PREMIUM_REFERENCES: FontRecord[] = [
   }),
 ];
 
-// Premium / trial / subscription references are appended after the free
-// catalogue. Library filters drive what users see.
-FONTS.push(...PREMIUM_REFERENCES);
-
 // Extended catalogue (auto-generated additions). Imported here so that
 // FONTS_BY_ID below picks them up automatically. Import is placed below
 // the array declarations to keep module-evaluation order safe.
-import { EXTRA_FREE, EXTRA_PREMIUM } from "./fonts-extended";
-FONTS.push(...EXTRA_FREE, ...EXTRA_PREMIUM);
+import { EXTRA_FREE } from "./fonts-extended";
+import { FIGMA_CURATED_GOOGLE_FONTS } from "./fonts-figma-curation";
+import { TUNERA_FONTS } from "./fonts-tunera";
+
+function appendUniqueFonts(...collections: FontRecord[][]) {
+  const ids = new Set(FONTS.map((font) => font.id.toLowerCase()));
+  const names = new Set(FONTS.map((font) => font.name.trim().toLowerCase()));
+
+  for (const font of collections.flat()) {
+    const id = font.id.toLowerCase();
+    const name = font.name.trim().toLowerCase();
+    if (ids.has(id) || names.has(name)) continue;
+    FONTS.push(font);
+    ids.add(id);
+    names.add(name);
+  }
+}
+
+appendUniqueFonts(EXTRA_FREE, TUNERA_FONTS, FIGMA_CURATED_GOOGLE_FONTS);
 
 /* -------------------------------------------------------------------------
  * Atipo Foundry — informational references only.
@@ -3188,10 +3201,19 @@ const ATIPO_REFERENCES: FontRecord[] = [
   atipoRef("atipo-cassannet", "Cassannet", "Display", "Art-deco geometric display"),
 ];
 
-FONTS.push(...ATIPO_REFERENCES);
-
 export const FONTS_BY_ID: Record<string, FontRecord> = Object.fromEntries(
   FONTS.map((f) => [f.id, f]),
+);
+
+/**
+ * Families exposed by the interactive product. Reference-only records remain
+ * in the internal dataset so a legitimately licensed webfont can be enabled
+ * later, but they must not enter catalogue, specimen or pairing workflows.
+ */
+export const PUBLIC_FONTS: FontRecord[] = FONTS.filter((font) => font.canPreviewInApp !== false);
+
+export const PUBLIC_FONTS_BY_ID: Record<string, FontRecord> = Object.fromEntries(
+  PUBLIC_FONTS.map((font) => [font.id, font]),
 );
 
 /* -------------------------------------------------------------------------
@@ -3266,6 +3288,16 @@ export const SOURCES: SourceEntry[] = [
     category: "free",
     notes: "Experimental and characterful open-source typefaces — verify per-typeface license.",
     officialUrl: "https://velvetyne.fr/",
+  },
+  {
+    name: "Tunera Type Foundry",
+    type: "Open-source experimental foundry",
+    licenseConfidence: "High",
+    role: "Free commercial font source (SIL OFL)",
+    category: "free",
+    notes:
+      "Transnational non-commercial foundry publishing original typefaces under the SIL Open Font License.",
+    officialUrl: "https://www.tunera.xyz/",
   },
   // Directories
   {
@@ -3488,6 +3520,11 @@ export const SOURCES: SourceEntry[] = [
     officialUrl: "https://www.atipofoundry.com/",
   },
 ];
+
+/** Sources that currently have at least one interactive family in the public catalogue. */
+export const PUBLIC_SOURCES: SourceEntry[] = SOURCES.filter((source) =>
+  PUBLIC_FONTS.some((font) => font.sourceName === source.name),
+);
 
 /* -------------------------------------------------------------------------
  * Adobe Fonts foundry directory — informational references only.

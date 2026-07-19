@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { Header } from "@/components/typematch/header";
-import { FONTS, SOURCES } from "@/data/fonts";
+import { PUBLIC_FONTS, PUBLIC_SOURCES } from "@/data/fonts";
 import { FontCard } from "@/components/typematch/font-card";
 import { CompareChip } from "@/components/typematch/compare-chip";
 import { foundrySlug } from "@/lib/foundries";
@@ -9,9 +9,9 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import { AnimatedNumber } from "@/components/typematch/animated-number";
 
 export const Route = createFileRoute("/foundries/$slug")({
-  head: ({ params }) => ({
+  head: () => ({
     meta: [
-      { title: `${params.slug} — Foundry — TypeMatch Studio` },
+      { title: "TypeMatch Studio" },
       {
         name: "description",
         content: "Foundry details and every family available in TypeMatch Studio.",
@@ -24,13 +24,17 @@ export const Route = createFileRoute("/foundries/$slug")({
 
 function FoundryDetail() {
   const { slug } = Route.useParams();
-  const source = useMemo(() => SOURCES.find((s) => foundrySlug(s.name) === slug), [slug]);
+  const source = useMemo(() => PUBLIC_SOURCES.find((s) => foundrySlug(s.name) === slug), [slug]);
   if (!source) throw notFound();
 
-  const families = useMemo(() => FONTS.filter((f) => f.sourceName === source.name), [source.name]);
+  const families = useMemo(
+    () => PUBLIC_FONTS.filter((f) => f.sourceName === source.name),
+    [source.name],
+  );
 
   const stats = useMemo(() => {
-    const count = (pred: (f: (typeof FONTS)[number]) => boolean) => families.filter(pred).length;
+    const count = (pred: (f: (typeof PUBLIC_FONTS)[number]) => boolean) =>
+      families.filter(pred).length;
     return {
       families: families.length,
       openSource: count((f) => f.availability === "open-source"),
@@ -45,7 +49,8 @@ function FoundryDetail() {
       <main className="mx-auto w-full max-w-[1920px] px-5 pb-32 sm:px-8 lg:px-[5.75vw]">
         <header className="tm-page-header">
           <Link
-            to="/catalogue"
+            to="/"
+            hash="catalogue"
             search={{ view: "sources" }}
             className="ui-text inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground"
           >

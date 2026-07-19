@@ -3,6 +3,7 @@ import type { Pairing } from "./pairing";
 
 const STORAGE_KEY = "typematch:saved-pairings:v1";
 const EVENT = "typematch:saved-pairings-changed";
+const SAVED_MAX = 100;
 
 export interface SavedPairing {
   id: string; // primary.id + "__" + secondary.id
@@ -17,6 +18,25 @@ export interface SavedPairing {
   savedAt: number;
 }
 
+function isSavedPairing(value: unknown): value is SavedPairing {
+  if (!value || typeof value !== "object") return false;
+  const item = value as Partial<SavedPairing>;
+  return (
+    typeof item.id === "string" &&
+    typeof item.primaryId === "string" &&
+    typeof item.primaryName === "string" &&
+    typeof item.secondaryId === "string" &&
+    typeof item.secondaryName === "string" &&
+    typeof item.category === "string" &&
+    typeof item.riskLevel === "string" &&
+    typeof item.confidence === "number" &&
+    Number.isFinite(item.confidence) &&
+    typeof item.shortExplanation === "string" &&
+    typeof item.savedAt === "number" &&
+    Number.isFinite(item.savedAt)
+  );
+}
+
 function pairingId(p: Pairing) {
   return `${p.primary.id}__${p.secondary.id}`;
 }
@@ -26,8 +46,8 @@ function readAll(): SavedPairing[] {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as SavedPairing[]) : [];
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter(isSavedPairing).slice(0, SAVED_MAX) : [];
   } catch {
     return [];
   }
@@ -35,8 +55,12 @@ function readAll(): SavedPairing[] {
 
 function writeAll(items: SavedPairing[]) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  window.dispatchEvent(new Event(EVENT));
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(0, SAVED_MAX)));
+    window.dispatchEvent(new Event(EVENT));
+  } catch {
+    // Saved pairings are optional; the analysis tools remain available without storage.
+  }
 }
 
 function shorten(text: string, max = 220) {
@@ -75,7 +99,7 @@ export function useSavedPairings() {
       shortExplanation: shorten(p.explanation),
       savedAt: Date.now(),
     };
-    writeAll([entry, ...current]);
+    writeAll([entry, ...current].slice(0, SAVED_MAX));
   }, []);
 
   const remove = useCallback((id: string) => {

@@ -11,13 +11,26 @@ export interface CompareItem {
   addedAt: number;
 }
 
+function isCompareItem(value: unknown): value is CompareItem {
+  if (!value || typeof value !== "object") return false;
+  const item = value as Partial<CompareItem>;
+  return (
+    typeof item.id === "string" &&
+    item.id.length > 0 &&
+    typeof item.name === "string" &&
+    item.name.length > 0 &&
+    typeof item.addedAt === "number" &&
+    Number.isFinite(item.addedAt)
+  );
+}
+
 function readAll(): CompareItem[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as CompareItem[]) : [];
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter(isCompareItem).slice(0, COMPARE_MAX) : [];
   } catch {
     return [];
   }
@@ -25,8 +38,12 @@ function readAll(): CompareItem[] {
 
 function writeAll(items: CompareItem[]) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  window.dispatchEvent(new Event(EVENT));
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(0, COMPARE_MAX)));
+    window.dispatchEvent(new Event(EVENT));
+  } catch {
+    // Comparison remains usable for the current page when storage is unavailable.
+  }
 }
 
 export function useCompareQueue() {

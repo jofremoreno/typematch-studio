@@ -25,7 +25,7 @@ export function ThemeToggle() {
       aria-label="Toggle color theme"
       className="tm-theme-toggle tm-header-icon"
     >
-      {dark ? <Sun size={16} /> : <Moon size={16} />}
+      {dark ? <Sun size={19} strokeWidth={1.7} /> : <Moon size={19} strokeWidth={1.7} />}
     </button>
   );
 }

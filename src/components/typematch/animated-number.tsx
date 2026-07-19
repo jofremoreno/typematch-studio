@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 
 export function AnimatedNumber({ value, duration = 900 }: { value: number; duration?: number }) {
-  const [display, setDisplay] = useState(0);
+  const [display, setDisplay] = useState(value);
   const ref = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const element = ref.current;
-    if (!element) return;
+    setDisplay(value);
+    if (!element || typeof IntersectionObserver === "undefined") return;
     let animationFrame = 0;
     let observer: IntersectionObserver | null = null;
 
@@ -15,6 +16,7 @@ export function AnimatedNumber({ value, duration = 900 }: { value: number; durat
         setDisplay(value);
         return;
       }
+      setDisplay(0);
       const startedAt = performance.now();
       const tick = (now: number) => {
         const progress = Math.min((now - startedAt) / duration, 1);
@@ -31,7 +33,7 @@ export function AnimatedNumber({ value, duration = 900 }: { value: number; durat
         observer?.disconnect();
         animate();
       },
-      { threshold: 0.35 },
+      { threshold: 0.1 },
     );
     observer.observe(element);
 

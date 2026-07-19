@@ -1,9 +1,12 @@
 import { useSavedPairings } from "@/lib/saved-pairings";
-import { FONTS_BY_ID } from "@/data/fonts";
+import { PUBLIC_FONTS_BY_ID } from "@/data/fonts";
 import { X, Bookmark } from "lucide-react";
 
 export function SavedPairings() {
   const { items, remove } = useSavedPairings();
+  const visibleItems = items.filter(
+    (item) => PUBLIC_FONTS_BY_ID[item.primaryId] && PUBLIC_FONTS_BY_ID[item.secondaryId],
+  );
 
   return (
     <section className="tm-saved-panel">
@@ -15,7 +18,7 @@ export function SavedPairings() {
         <p>Stored only in this browser via localStorage. No account, no sync, no backend.</p>
       </div>
 
-      {items.length === 0 ? (
+      {visibleItems.length === 0 ? (
         <div className="mt-6 flex items-center gap-3 rounded-lg border border-dashed border-border bg-background p-5 text-xs text-muted-foreground">
           <Bookmark size={16} />
           No saved pairings yet. Use <span className="text-foreground">Save pairing</span> on any
@@ -23,9 +26,9 @@ export function SavedPairings() {
         </div>
       ) : (
         <ul className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2">
-          {items.map((it) => {
-            const primary = FONTS_BY_ID[it.primaryId];
-            const secondary = FONTS_BY_ID[it.secondaryId];
+          {visibleItems.map((it) => {
+            const primary = PUBLIC_FONTS_BY_ID[it.primaryId];
+            const secondary = PUBLIC_FONTS_BY_ID[it.secondaryId];
             const pFamily =
               primary && primary.canPreviewInApp !== false
                 ? primary.family

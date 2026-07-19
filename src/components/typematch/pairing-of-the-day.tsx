@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import { FONTS_BY_ID } from "@/data/fonts";
+import { PUBLIC_FONTS_BY_ID } from "@/data/fonts";
 import { useFontPreview } from "@/hooks/use-font-preview";
 
 const DAILY_PAIRINGS = [
@@ -70,8 +70,8 @@ function dailyIndex() {
 export function PairingOfTheDay() {
   const index = dailyIndex();
   const pairing = DAILY_PAIRINGS[index];
-  const primary = FONTS_BY_ID[pairing.primaryId];
-  const secondary = FONTS_BY_ID[pairing.secondaryId];
+  const primary = PUBLIC_FONTS_BY_ID[pairing.primaryId];
+  const secondary = PUBLIC_FONTS_BY_ID[pairing.secondaryId];
   const primaryPreview = useFontPreview(primary);
   const secondaryPreview = useFontPreview(secondary);
 
@@ -94,12 +94,12 @@ export function PairingOfTheDay() {
         />
         <div className="tm-daily-pairing-image-shade" aria-hidden="true" />
         <div className="tm-daily-pairing-topline">
-          <span className="tm-daily-pairing-label">Pairing of the day</span>
           <span className="tm-daily-pairing-count" aria-label={`Pairing ${index + 1} of 5`}>
             {String(index + 1).padStart(2, "0")} / {String(DAILY_PAIRINGS.length).padStart(2, "0")}
           </span>
         </div>
       </div>
+      <span className="tm-daily-pairing-label">Pairing of the day</span>
 
       <div className="tm-daily-pairing-content">
         <div className="tm-daily-pairing-copy">

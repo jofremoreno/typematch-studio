@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { FONTS, type FontCategory } from "@/data/fonts";
+import { PUBLIC_FONTS, type FontCategory } from "@/data/fonts";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Search,
@@ -16,8 +16,7 @@ import { CompareChip } from "./compare-chip";
 type CategoryFilter = "All" | FontCategory;
 type AvailabilityFilter =
   "All" | "Free" | "Open Source" | "Trial" | "Paid" | "Subscription" | "Pay what you want";
-type PreviewFilter = "All" | "Can preview in app" | "Reference only";
-type SortKey = "preview" | "name" | "recent" | "screen" | "print" | "versatility";
+type SortKey = "name" | "recent" | "screen" | "print" | "versatility";
 type ViewMode = "cards" | "list";
 
 const CATEGORIES: CategoryFilter[] = ["All", "Sans-serif", "Serif", "Mono", "Display"];
@@ -30,10 +29,7 @@ const AVAILS: AvailabilityFilter[] = [
   "Subscription",
   "Pay what you want",
 ];
-const PREVIEWS: PreviewFilter[] = ["All", "Can preview in app", "Reference only"];
-
 const SORTS: { key: SortKey; label: string }[] = [
-  { key: "preview", label: "Preview available first" },
   { key: "name", label: "Name (A→Z)" },
   { key: "recent", label: "Catalogue order" },
   { key: "screen", label: "Best for screen" },
@@ -52,16 +48,22 @@ function matchesAvailability(f: { availability?: string }, a: AvailabilityFilter
   return true;
 }
 
+const AVAILABLE_CATEGORIES = CATEGORIES.filter(
+  (option) => option === "All" || PUBLIC_FONTS.some((font) => font.classification === option),
+);
+const AVAILABLE_AVAILABILITIES = AVAILS.filter(
+  (option) => option === "All" || PUBLIC_FONTS.some((font) => matchesAvailability(font, option)),
+);
+
 const PAGE_SIZE = 40;
 
 export function FontLibrary() {
   const [category, setCategory] = useState<CategoryFilter>("All");
   const [availability, setAvailability] = useState<AvailabilityFilter>("All");
-  const [preview, setPreview] = useState<PreviewFilter>("All");
   const [source, setSource] = useState<string>("All");
   const [query, setQuery] = useState("");
   const [visible, setVisible] = useState(PAGE_SIZE);
-  const [sort, setSort] = useState<SortKey>("preview");
+  const [sort, setSort] = useState<SortKey>("name");
   const [view, setView] = useState<ViewMode>("cards");
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const searchRef = useRef<HTMLInputElement | null>(null);
@@ -112,17 +114,15 @@ export function FontLibrary() {
   }, [query]);
 
   const sources = useMemo(
-    () => ["All", ...Array.from(new Set(FONTS.map((f) => f.sourceName))).sort()],
+    () => ["All", ...Array.from(new Set(PUBLIC_FONTS.map((f) => f.sourceName))).sort()],
     [],
   );
 
   const fonts = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const filtered = FONTS.filter((f) => {
+    const filtered = PUBLIC_FONTS.filter((f) => {
       if (category !== "All" && f.classification !== category) return false;
       if (!matchesAvailability(f, availability)) return false;
-      if (preview === "Can preview in app" && f.canPreviewInApp === false) return false;
-      if (preview === "Reference only" && f.canPreviewInApp !== false) return false;
       if (source !== "All" && f.sourceName !== source) return false;
       if (q) {
         const searchable = [
@@ -142,13 +142,6 @@ export function FontLibrary() {
     });
     const sorted = [...filtered];
     switch (sort) {
-      case "preview":
-        sorted.sort((a, b) => {
-          const previewOrder =
-            Number(a.canPreviewInApp === false) - Number(b.canPreviewInApp === false);
-          return previewOrder || a.name.localeCompare(b.name);
-        });
-        break;
       case "name":
         sorted.sort((a, b) => a.name.localeCompare(b.name));
         break;
@@ -165,22 +158,18 @@ export function FontLibrary() {
         break;
     }
     return sorted;
-  }, [category, availability, preview, source, query, sort]);
+  }, [category, availability, source, query, sort]);
 
   // Reset visible window on any filter change.
-  useEffect(() => setVisible(PAGE_SIZE), [category, availability, preview, source, query, sort]);
+  useEffect(() => setVisible(PAGE_SIZE), [category, availability, source, query, sort]);
   const shown = fonts.slice(0, visible);
 
   const activeCount =
-    (category !== "All" ? 1 : 0) +
-    (availability !== "All" ? 1 : 0) +
-    (preview !== "All" ? 1 : 0) +
-    (source !== "All" ? 1 : 0);
+    (category !== "All" ? 1 : 0) + (availability !== "All" ? 1 : 0) + (source !== "All" ? 1 : 0);
 
   const clearFilters = () => {
     setCategory("All");
     setAvailability("All");
-    setPreview("All");
     setSource("All");
     setQuery("");
   };
@@ -188,7 +177,6 @@ export function FontLibrary() {
   const activeFilters = [
     category !== "All" ? { label: category, clear: () => setCategory("All") } : null,
     availability !== "All" ? { label: availability, clear: () => setAvailability("All") } : null,
-    preview !== "All" ? { label: preview, clear: () => setPreview("All") } : null,
     source !== "All" ? { label: source, clear: () => setSource("All") } : null,
   ].filter((item): item is { label: string; clear: () => void } => Boolean(item));
 
@@ -246,21 +234,15 @@ export function FontLibrary() {
     <div className="flex max-h-[70vh] flex-col gap-4 overflow-y-auto pr-1">
       <FilterGroup
         label="Category"
-        options={CATEGORIES}
+        options={AVAILABLE_CATEGORIES}
         value={category}
         onChange={(v) => setCategory(v as CategoryFilter)}
       />
       <FilterGroup
         label="Availability"
-        options={AVAILS}
+        options={AVAILABLE_AVAILABILITIES}
         value={availability}
         onChange={(v) => setAvailability(v as AvailabilityFilter)}
-      />
-      <FilterGroup
-        label="Preview"
-        options={PREVIEWS}
-        value={preview}
-        onChange={(v) => setPreview(v as PreviewFilter)}
       />
       <FilterGroup label="Source" options={sources} value={source} onChange={setSource} />
       {activeCount > 0 && (
@@ -280,15 +262,12 @@ export function FontLibrary() {
   return (
     <div className="min-w-0">
       {/* Sticky toolbar */}
-      <div className="tm-toolbar -mx-5 mb-8 px-5 py-3 sm:-mx-8 sm:px-8 lg:-mx-[5.75vw] lg:px-[5.75vw]">
+      <div className="tm-toolbar mb-8 py-3">
         <div className="flex flex-wrap items-center gap-3">
           {/* Left cluster */}
           <div className="flex min-w-0 items-baseline gap-3">
             <span className="font-editorial text-[15px] tracking-tight text-foreground">
               Catalogue Typefaces
-            </span>
-            <span className="font-mono-ui text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-              {fonts.length} / {FONTS.length} fonts
             </span>
           </div>
 
@@ -331,7 +310,7 @@ export function FontLibrary() {
                 className={
                   "flex h-11 w-11 items-center justify-center transition-colors " +
                   (view === "cards"
-                    ? "bg-foreground text-background"
+                    ? "bg-selection text-selection-foreground"
                     : "bg-transparent text-muted-foreground hover:text-foreground")
                 }
               >
@@ -345,7 +324,7 @@ export function FontLibrary() {
                 className={
                   "flex h-11 w-11 items-center justify-center border-l border-border transition-colors " +
                   (view === "list"
-                    ? "bg-foreground text-background"
+                    ? "bg-selection text-selection-foreground"
                     : "bg-transparent text-muted-foreground hover:text-foreground")
                 }
               >
@@ -394,7 +373,7 @@ export function FontLibrary() {
                       className={
                         "flex items-center justify-between rounded-lg px-3 py-2 text-left text-[13px] transition-colors " +
                         (sort === s.key
-                          ? "bg-foreground text-background"
+                          ? "bg-selection text-selection-foreground"
                           : "text-foreground hover:bg-secondary")
                       }
                     >

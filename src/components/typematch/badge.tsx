@@ -10,7 +10,7 @@ import { getBadgeVariant, type BadgeSize, type BadgeVariant } from "./badge-util
 const VARIANT_STYLES: Record<BadgeVariant, string> = {
   default: "border-border bg-secondary text-foreground",
   outline: "border-border bg-transparent text-muted-foreground",
-  accent: "border-accent bg-accent text-accent-foreground",
+  accent: "border-transparent bg-accent text-accent-foreground",
   muted: "border-border bg-muted text-muted-foreground",
   // Semantic tones — backed by CSS variables in styles.css
   safe: "border-[var(--badge-safe-border)] bg-[var(--badge-safe-bg)] text-[var(--badge-safe-fg)]",

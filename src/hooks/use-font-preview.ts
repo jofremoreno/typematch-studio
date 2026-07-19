@@ -2,55 +2,74 @@ import { useEffect, useMemo, useState } from "react";
 import type { FontRecord } from "@/data/fonts";
 
 const FALLBACK_FAMILY = "Inter, ui-sans-serif, system-ui, sans-serif";
-const STATIC_SOURCES = new Set([
-  "Fontshare",
-  "Official repository",
-  "Collletttivo",
-  "Velvetyne",
-  "The League of Moveable Type",
-  "Font Squirrel",
-]);
+export type FontPreviewStatus = "loading" | "ready" | "unavailable";
 
 function primaryFamily(font: FontRecord) {
   return font.family.split(",")[0]?.replace(/["']/g, "").trim() || font.name;
 }
 
 function stylesheetUrls(font: FontRecord, family: string) {
-  if (font.canPreviewInApp === false || STATIC_SOURCES.has(font.sourceName)) return [];
+  if (font.canPreviewInApp === false) return [];
   const google = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family).replace(/%20/g, "+")}&display=swap`;
-  const fontsource = `https://cdn.jsdelivr.net/fontsource/css/${encodeURIComponent(font.id)}@latest/index.min.css`;
-  return font.sourceName === "Google Fonts" ? [google, fontsource] : [fontsource, google];
+  const fontsource = `https://cdn.jsdelivr.net/fontsource/css/${encodeURIComponent(font.id)}@latest/index.css`;
+  return Array.from(
+    new Set(font.sourceName === "Google Fonts" ? [google, fontsource] : [fontsource, google]),
+  );
 }
 
 function loadStylesheet(id: string, url: string) {
-  return new Promise<void>((resolve) => {
-    const existing = document.getElementById(id) as HTMLLinkElement | null;
-    if (existing?.sheet) {
-      resolve();
+  return new Promise<boolean>((resolve) => {
+    let link = document.getElementById(id) as HTMLLinkElement | null;
+    let finished = false;
+    let timeout = 0;
+    const finish = (loaded: boolean) => {
+      if (finished) return;
+      finished = true;
+      window.clearTimeout(timeout);
+      link?.removeEventListener("load", onLoad);
+      link?.removeEventListener("error", onError);
+      resolve(loaded);
+    };
+    const onLoad = () => {
+      if (link) link.dataset.previewState = "ready";
+      finish(true);
+    };
+    const onError = () => {
+      if (link) link.dataset.previewState = "unavailable";
+      finish(false);
+    };
+
+    if (link?.dataset.previewState === "ready" || link?.sheet) {
+      finish(true);
+      return;
+    }
+    if (link?.dataset.previewState === "unavailable") {
+      finish(false);
       return;
     }
 
-    const link = existing ?? document.createElement("link");
-    const finish = () => resolve();
+    link ??= document.createElement("link");
     link.id = id;
     link.rel = "stylesheet";
     link.href = url;
-    link.addEventListener("load", finish, { once: true });
-    link.addEventListener("error", finish, { once: true });
-    if (!existing) document.head.appendChild(link);
-    window.setTimeout(finish, 5000);
+    link.addEventListener("load", onLoad);
+    link.addEventListener("error", onError);
+    if (!link.isConnected) document.head.appendChild(link);
+    timeout = window.setTimeout(() => finish(false), 8000);
   });
 }
 
 export function useFontPreview(font: FontRecord) {
   const familyName = primaryFamily(font);
   const urls = useMemo(() => stylesheetUrls(font, familyName), [familyName, font]);
-  const [available, setAvailable] = useState(font.canPreviewInApp !== false);
+  const [status, setStatus] = useState<FontPreviewStatus>(() =>
+    font.canPreviewInApp === false ? "unavailable" : "loading",
+  );
 
   useEffect(() => {
     let cancelled = false;
+    setStatus(font.canPreviewInApp === false ? "unavailable" : "loading");
     if (font.canPreviewInApp === false) {
-      setAvailable(false);
       return;
     }
 
@@ -65,17 +84,18 @@ export function useFontPreview(font: FontRecord) {
 
     const run = async () => {
       if (await verify()) {
-        if (!cancelled) setAvailable(true);
+        if (!cancelled) setStatus("ready");
         return;
       }
       for (const [index, url] of urls.entries()) {
-        await loadStylesheet(`font-detail-${font.id}-${index}`, url);
-        if (await verify()) {
-          if (!cancelled) setAvailable(true);
+        const loaded = await loadStylesheet(`font-preview-${font.id}-${index}`, url);
+        if (cancelled) return;
+        if (loaded && (await verify())) {
+          if (!cancelled) setStatus("ready");
           return;
         }
       }
-      if (!cancelled) setAvailable(false);
+      if (!cancelled) setStatus("unavailable");
     };
 
     void run();
@@ -85,7 +105,8 @@ export function useFontPreview(font: FontRecord) {
   }, [familyName, font.canPreviewInApp, font.id, urls]);
 
   return {
-    family: available ? font.family : FALLBACK_FAMILY,
-    available,
+    family: status === "unavailable" ? FALLBACK_FAMILY : font.family,
+    available: status === "ready",
+    status,
   };
 }

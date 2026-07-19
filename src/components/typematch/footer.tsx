@@ -2,10 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
 const footerLinks = [
-  { label: "Catalogue", to: "/catalogue" },
-  { label: "Analyze", to: "/analyze" },
-  { label: "Method", to: "/method" },
-  { label: "Licensing", to: "/licensing" },
+  { label: "Catalogue", to: "/", hash: "catalogue" },
+  { label: "Foundries", to: "/foundries", hash: undefined },
+  { label: "Method", to: "/method", hash: undefined },
+  { label: "Licensing", to: "/licensing", hash: undefined },
 ] as const;
 
 const footerImages = [
@@ -68,7 +68,8 @@ export function Footer() {
           <div>
             <p className="tm-site-footer-kicker">Make type choices with intention.</p>
             <Link
-              to="/catalogue"
+              to="/"
+              hash="catalogue"
               className="tm-site-footer-title"
               aria-label="Explore the TypeMatch catalogue"
             >
@@ -80,7 +81,7 @@ export function Footer() {
           <nav className="tm-site-footer-nav" aria-label="Footer navigation">
             <span className="tm-site-footer-label">Explore</span>
             {footerLinks.map((link) => (
-              <Link key={link.to} to={link.to} className="tm-site-footer-link">
+              <Link key={link.label} to={link.to} hash={link.hash} className="tm-site-footer-link">
                 {link.label}
                 <ArrowUpRight size={16} aria-hidden="true" />
               </Link>

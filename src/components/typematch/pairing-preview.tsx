@@ -151,12 +151,10 @@ function WebsiteHero({ primary, secondary }: { primary: string; secondary: strin
         Selected projects, 2017 — present.
       </p>
       <div className="tm-context-actions" style={{ fontFamily: secondary }}>
-        <button className="rounded-lg bg-foreground px-4 py-2 text-sm text-background">
+        <span className="rounded-lg bg-foreground px-4 py-2 text-sm text-background">
           See selected work
-        </button>
-        <button className="rounded-lg border border-border px-4 py-2 text-sm">
-          About the studio
-        </button>
+        </span>
+        <span className="rounded-lg border border-border px-4 py-2 text-sm">About the studio</span>
       </div>
     </div>
   );
@@ -211,12 +209,10 @@ function UICard({ primary, secondary }: { primary: string; secondary: string }) 
           from the workspace settings.
         </p>
         <div className="flex gap-2 pt-2">
-          <button className="rounded-lg bg-foreground px-3 py-2 text-xs text-background">
+          <span className="rounded-lg bg-foreground px-3 py-2 text-xs text-background">
             Manage seats
-          </button>
-          <button className="rounded-lg border border-border px-3 py-2 text-xs">
-            View invoice
-          </button>
+          </span>
+          <span className="rounded-lg border border-border px-3 py-2 text-xs">View invoice</span>
         </div>
       </div>
       <div
