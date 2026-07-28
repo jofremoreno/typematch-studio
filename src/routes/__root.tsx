@@ -6,6 +6,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { Analytics } from "@vercel/analytics/react";
 
 import appCss from "../styles.css?url";
 import { CompareTray } from "@/components/typematch/compare-tray";
@@ -156,6 +157,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
       <body suppressHydrationWarning>
         {children}
         <Scripts />
+        <Analytics />
       </body>
     </html>
   );
